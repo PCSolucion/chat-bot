@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quién Quiere Ser Millonario?</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="light-beam" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="light-beam" style="left: 25%; animation-delay: 1s;"></div>
+        <div class="light-beam" style="left: 40%; animation-delay: 2s;"></div>
+        <div class="light-beam" style="left: 55%; animation-delay: 0.5s;"></div>
+        <div class="light-beam" style="left: 70%; animation-delay: 1.5s;"></div>
+        <div class="light-beam" style="left: 85%; animation-delay: 2.5s;"></div>
+    </div>
+
+    <div class="game-container">
+        <div class="game-content">
+            <div class="question-section">
+                <div class="question-container">
+                    <div class="timer">30</div>
+                    <div class="question-text" id="question">Pregunta aparecerá aquí</div>
+                </div>
+                
+                <div class="answers-container">
+                    <button class="answer-btn" data-option="A"><div></div><span class="answer-text"></span></button>
+                    <button class="answer-btn" data-option="B"><div></div><span class="answer-text"></span></button>
+                    <button class="answer-btn" data-option="C"><div></div><span class="answer-text"></span></button>
+                    <button class="answer-btn" data-option="D"><div></div><span class="answer-text"></span></button>
+                </div>
+
+                <div class="lifelines">
+                    <button id="fifty" class="lifeline-btn" title="50:50"></button>
+                    <button id="audience" class="lifeline-btn" title="Ayuda del Público"></button>
+                    <button id="phone" class="lifeline-btn" title="Llamada a un Amigo"></button>
+                </div>
+            </div>
+
+            <div class="money-tree">
+                <div class="money-level" data-level="15">1.000.000 €</div>
+                <div class="money-level" data-level="14">300.000 €</div>
+                <div class="money-level" data-level="13">100.000 €</div>
+                <div class="money-level" data-level="12">50.000 €</div>
+                <div class="money-level" data-level="11">30.000 €</div>
+                <div class="money-level" data-level="10">20.000 €</div>
+                <div class="money-level" data-level="9">15.000 €</div>
+                <div class="money-level" data-level="8">10.000 €</div>
+                <div class="money-level" data-level="7">5.000 €</div>
+                <div class="money-level" data-level="6">2.500 €</div>
+                <div class="money-level" data-level="5">1.500 €</div>
+                <div class="money-level" data-level="4">750 €</div>
+                <div class="money-level" data-level="3">500 €</div>
+                <div class="money-level" data-level="2">250 €</div>
+                <div class="money-level" data-level="1">100 €</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Efectos de sonido -->
+    <audio id="tickSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3"></audio>
+    <audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
+    <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-11.mp3"></audio>
+    <audio id="lifelineSound" src="https://www.soundjay.com/buttons/sounds/button-12.mp3"></audio>
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="game.js"></script>
+</body>
+</html> 
