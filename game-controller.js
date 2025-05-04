@@ -202,8 +202,63 @@ class GameController {
         this.wrongAnswers = 0;
         this.currentPrize = 0;
         
-        // Barajar preguntas
-        this.questions = this.shuffleArray([...questions]);
+        // Cargar y agrupar las preguntas por dificultad
+        const allQuestions = [...questions];
+        this.questionsByDifficulty = {
+            1: allQuestions.filter(q => q.difficulty === 1),
+            2: allQuestions.filter(q => q.difficulty === 2),
+            3: allQuestions.filter(q => q.difficulty === 3)
+        };
+        
+        // Barajar cada grupo de preguntas
+        for (let difficulty in this.questionsByDifficulty) {
+            this.questionsByDifficulty[difficulty] = this.shuffleArray(this.questionsByDifficulty[difficulty]);
+        }
+        
+        // Preparar el array final de preguntas
+        this.questions = [];
+        
+        // Llenar con preguntas según el nivel:
+        // Niveles 1-4: dificultad 1
+        // Niveles 5-9: dificultad 2
+        // Niveles 10-14: dificultad 3
+        // Nivel 15: la pregunta más difícil (dificultad 3 especial)
+        for (let i = 1; i <= 15; i++) {
+            if (i <= 4) {
+                // Para niveles 1-4, usar dificultad 1 si hay suficientes
+                if (this.questionsByDifficulty[1].length > 0) {
+                    this.questions.push(this.questionsByDifficulty[1].pop());
+                } else {
+                    // Si no hay suficientes de dificultad 1, usar de otra dificultad
+                    this.questions.push(allQuestions[Math.floor(Math.random() * allQuestions.length)]);
+                }
+            } else if (i >= 5 && i <= 9) {
+                // Para niveles 5-9, usar dificultad 2 si hay suficientes
+                if (this.questionsByDifficulty[2].length > 0) {
+                    this.questions.push(this.questionsByDifficulty[2].pop());
+                } else {
+                    // Si no hay suficientes de dificultad 2, usar de otra dificultad
+                    this.questions.push(allQuestions[Math.floor(Math.random() * allQuestions.length)]);
+                }
+            } else if (i >= 10 && i <= 14) {
+                // Para niveles 10-14, usar dificultad 3
+                if (this.questionsByDifficulty[3].length > 0) {
+                    this.questions.push(this.questionsByDifficulty[3].pop());
+                } else {
+                    // Si no hay suficientes de dificultad 3, usar de otra dificultad
+                    this.questions.push(allQuestions[Math.floor(Math.random() * allQuestions.length)]);
+                }
+            } else if (i === 15) {
+                // Para el nivel 15, seleccionar una pregunta especial de dificultad 3
+                if (this.questionsByDifficulty[3].length > 0) {
+                    // Si aún quedan preguntas de dificultad 3, tomar la primera
+                    this.questions.push(this.questionsByDifficulty[3].shift());
+                } else {
+                    // Si no hay suficientes, usar una pregunta aleatoria
+                    this.questions.push(allQuestions[Math.floor(Math.random() * allQuestions.length)]);
+                }
+            }
+        }
         
         // Actualizar árbol de premios
         this.uiController.updateMoneyTree(this.currentLevel);
@@ -399,6 +454,19 @@ class GameController {
                 this.lifelineManager.useAudienceHelp();
                 break;
             case 'phone':
+                // Detener el temporizador mientras se usa el comodín de la llamada
+                if (this.timerManager && !this.timerManager.isStopped) {
+                    this.timerManager.stop();
+                    
+                    // Reiniciar el temporizador después de que termine la llamada (aproximadamente 12 segundos)
+                    setTimeout(() => {
+                        // Solo reiniciar si el juego aún está activo (no ha terminado)
+                        if (this.uiController.isGameVisible()) {
+                            this.timerManager.start();
+                        }
+                    }, 12000); // 3s para iniciar llamada + 9s para mensaje
+                }
+                
                 this.lifelineManager.usePhoneFriend();
                 break;
         }

@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿Quién Quiere Ser Millonario?</title>
+    <title>Quien Quiere Ser Legendario</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Menú de inicio -->
     <div id="startMenu" class="start-menu">
         <div class="menu-content">
-            <h1>¿Quién Quiere Ser Millonario?</h1>
+            <h1>¿Quién Quiere Ser Legendarioo?</h1>
             <div class="menu-options">
                 <div class="menu-option" id="userMode">
                     <div class="option-icon">👤</div>
@@ -46,10 +46,13 @@
 
     <!-- Modal para nombre de usuario -->
     <div id="usernameModal" class="modal" style="display: none;">
-        <div class="modal-content">
+        <div class="modal-content dark-theme">
             <h2>Ingresa tu nombre de usuario</h2>
             <input type="text" id="usernameInput" placeholder="Nombre de usuario">
-            <button id="startGame" class="menu-btn">Comenzar</button>
+            <div class="username-buttons">
+                <button id="backToMenuBtn" class="menu-btn menu-btn-secondary">Volver</button>
+                <button id="startGame" class="menu-btn">Comenzar</button>
+            </div>
         </div>
     </div>
 
@@ -169,6 +172,12 @@
     </div>
 
     <div class="game-container" style="display: none;">
+        <!-- Título del juego -->
+        <div class="game-title">
+            <div class="flux">Quien quiere ser</div>
+            <div class="neon">legendario</div>
+        </div>
+        
         <div class="game-controls">
             <button id="exitGameBtn" class="game-control-btn exit-btn" title="Volver al menú principal">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

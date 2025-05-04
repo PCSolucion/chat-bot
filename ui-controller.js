@@ -131,6 +131,15 @@ class UIController {
             });
         }
 
+        // Botón para volver al menú principal desde el modal de usuario
+        const backToMenuBtn = document.getElementById('backToMenuBtn');
+        if (backToMenuBtn) {
+            backToMenuBtn.addEventListener('click', () => {
+                this.hideUsernameModal();
+                this.showStartMenu();
+            });
+        }
+
         if (this.elements.startGameButton) {
             this.elements.startGameButton.addEventListener('click', () => {
                 const username = this.elements.usernameInput.value.trim();
