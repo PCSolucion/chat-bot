@@ -7,6 +7,54 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Menú de inicio -->
+    <div id="startMenu" class="start-menu">
+        <div class="menu-content">
+            <h1>¿Quién Quiere Ser Millonario?</h1>
+            <div class="menu-options">
+                <div class="menu-option" id="userMode">
+                    <div class="option-icon">👤</div>
+                    <div class="option-text">
+                        <h2>Modo Usuario</h2>
+                        <p>Juega y guarda tus estadísticas</p>
+                    </div>
+                </div>
+                <div class="menu-option" id="guestMode">
+                    <div class="option-icon">🎮</div>
+                    <div class="option-text">
+                        <h2>Modo Invitado</h2>
+                        <p>Juega sin guardar estadísticas</p>
+                    </div>
+                </div>
+                <a href="stats.html" class="menu-option">
+                    <div class="option-icon">📊</div>
+                    <div class="option-text">
+                        <h2>Estadísticas</h2>
+                        <p>Ver estadísticas detalladas</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para nombre de usuario -->
+    <div id="usernameModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Ingresa tu nombre de usuario</h2>
+            <input type="text" id="usernameInput" placeholder="Nombre de usuario">
+            <button id="startGame" class="menu-btn">Comenzar</button>
+        </div>
+    </div>
+
+    <!-- Modal de estadísticas -->
+    <div id="statsModal" class="modal" style="display: none;">
+        <div class="modal-content stats-content">
+            <span class="close" id="closeStats">&times;</span>
+            <h2>Estadísticas</h2>
+            <div id="statsContent"></div>
+        </div>
+    </div>
+
     <div class="background-effects">
         <div class="light-beam" style="left: 10%; animation-delay: 0s;"></div>
         <div class="light-beam" style="left: 25%; animation-delay: 1s;"></div>
@@ -16,12 +64,20 @@
         <div class="light-beam" style="left: 85%; animation-delay: 2.5s;"></div>
     </div>
 
-    <div class="game-container">
+    <div class="game-container" style="display: none;">
         <div class="game-content">
             <div class="question-section">
+                <!-- Gráfica del público (ahora arriba) -->
+                <div id="audienceChart" class="audience-chart" style="display: none;"></div>
+
+                <!-- Mensaje Comodín Llamada (Ahora encima de la pregunta) -->
+                <div id="phoneMessageContainer" class="phone-message-container" style="display: none;"></div>
+                
                 <div class="question-container">
-                    <div class="timer">30</div>
-                    <div class="question-text" id="question">Pregunta aparecerá aquí</div>
+                    <div class="timer" id="timer">30</div>
+                    <div class="inner-container">
+                        <div class="question-text" id="question">Pregunta aparecerá aquí</div>
+                    </div>
                 </div>
                 
                 <div class="answers-container">
@@ -30,15 +86,14 @@
                     <button class="answer-btn" data-option="C"><div></div><span class="answer-text"></span></button>
                     <button class="answer-btn" data-option="D"><div></div><span class="answer-text"></span></button>
                 </div>
+            </div>
 
+            <div class="money-tree">
                 <div class="lifelines">
                     <button id="fifty" class="lifeline-btn" title="50:50"></button>
                     <button id="audience" class="lifeline-btn" title="Ayuda del Público"></button>
                     <button id="phone" class="lifeline-btn" title="Llamada a un Amigo"></button>
                 </div>
-            </div>
-
-            <div class="money-tree">
                 <div class="money-level" data-level="15">1.000.000 €</div>
                 <div class="money-level" data-level="14">300.000 €</div>
                 <div class="money-level" data-level="13">100.000 €</div>
@@ -66,7 +121,24 @@
     <audio id="backgroundMusic" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
+    <audio id="suspenseMusic" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746251483/Who_Wants_to_be_a_Millionaire_Suspense_-_Sound_Effect_HD_bevuyz.mp3"></audio>
+    <audio id="win1000Music" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746251907/1_000_Win_-_Who_Wants_to_Be_a_Millionaire__fxo7e0.mp3"></audio>
+    <audio id="firstQuestionsMusic" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746252694/100-_1000_Questions_-_Who_Wants_to_Be_a_Millionaire__bvtpis.mp3"></audio>
+    <audio id="wrongAnswerMusic" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746253105/Who_Wants_to_Be_a_Millionaire__-_100_500_Wrong_Answer_SOUND_EFFECT_ojyzma.mp3"></audio>
+    <audio id="correctAnswerMusic" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746253391/correct-answer-101soundboards_xldr4h.mp3"></audio>
 
+    <!-- Sonido de llamada para comodín -->
+    <audio id="phoneCallSound" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746332872/phone-calling-1b_c8mxkd.mp3"></audio>
+
+    <!-- Modal para la llamada a un amigo -->
+    <div id="phoneModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span id="closePhoneModal" class="close">&times;</span>
+            <div id="phoneModalMessage"></div>
+        </div>
+    </div>
+
+    <script src="users.js"></script>
     <script src="game.js"></script>
 </body>
 </html> 

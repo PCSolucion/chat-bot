@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas - ¿Quién Quiere Ser Millonario?</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="stats.css">
+</head>
+<body>
+    <div class="stats-page">
+        <header class="stats-header">
+            <h1>Estadísticas del Juego</h1>
+            <a href="index.html" class="back-btn">Volver al Juego</a>
+        </header>
+
+        <div class="stats-container">
+            <div class="stats-sidebar">
+                <div class="user-search">
+                    <input type="text" id="userSearch" placeholder="Buscar usuario...">
+                </div>
+                <div class="users-list" id="usersList">
+                    <!-- Lista de usuarios se cargará dinámicamente -->
+                </div>
+            </div>
+
+            <div class="stats-content">
+                <div class="stats-overview">
+                    <div class="stat-card total-games">
+                        <h3>Total Partidas</h3>
+                        <div class="stat-value" id="totalGames">0</div>
+                    </div>
+                    <div class="stat-card total-players">
+                        <h3>Total Jugadores</h3>
+                        <div class="stat-value" id="totalPlayers">0</div>
+                    </div>
+                    <div class="stat-card highest-prize">
+                        <h3>Premio Más Alto</h3>
+                        <div class="stat-value" id="highestPrize">0 €</div>
+                    </div>
+                </div>
+
+                <div class="stats-details">
+                    <div class="stats-section">
+                        <h2>Estadísticas Generales</h2>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <h3>Precisión Global</h3>
+                                <div class="stat-value" id="globalAccuracy">0%</div>
+                                <div class="stat-chart" id="accuracyChart"></div>
+                            </div>
+                            <div class="stat-item">
+                                <h3>Distribución de Premios</h3>
+                                <div class="stat-chart" id="prizeDistribution"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-section">
+                        <h2>Historial de Partidas</h2>
+                        <div class="games-history" id="gamesHistory">
+                            <!-- Historial de partidas se cargará dinámicamente -->
+                        </div>
+                    </div>
+
+                    <div class="stats-section">
+                        <h2>Análisis de Preguntas</h2>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <h3>Preguntas más Falladas</h3>
+                                <div class="questions-list" id="mostFailedQuestions"></div>
+                            </div>
+                            <div class="stat-item">
+                                <h3>Nivel más Común de Victoria</h3>
+                                <div class="stat-value" id="mostCommonWinLevel">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="users.js"></script>
+    <script src="stats.js"></script>
+</body>
+</html> 
