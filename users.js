@@ -64,4 +64,7 @@ class UserManager {
     getCurrentUser() {
         return this.currentUser;
     }
-} 
+}
+
+// Exportar la clase para poder importarla en otros archivos
+export default UserManager; 

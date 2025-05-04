@@ -33,6 +33,13 @@
                         <p>Ver estadísticas detalladas</p>
                     </div>
                 </a>
+                <div class="menu-option" id="settingsBtn">
+                    <div class="option-icon">⚙️</div>
+                    <div class="option-text">
+                        <h2>Ajustes</h2>
+                        <p>Personaliza el juego</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -43,6 +50,103 @@
             <h2>Ingresa tu nombre de usuario</h2>
             <input type="text" id="usernameInput" placeholder="Nombre de usuario">
             <button id="startGame" class="menu-btn">Comenzar</button>
+        </div>
+    </div>
+
+    <!-- Modal de ajustes -->
+    <div id="settingsModal" class="modal" style="display: none;">
+        <div class="modal-content settings-modal">
+            <span class="close" id="closeSettings">&times;</span>
+            <h2>Ajustes del Juego</h2>
+            
+            <div class="settings-section">
+                <h3>Temporizador</h3>
+                <div class="setting-item">
+                    <label for="timerDuration">Duración (segundos):</label>
+                    <input type="number" id="timerDuration" min="10" max="120" value="45">
+                </div>
+                <div class="setting-item">
+                    <label for="showTimer">Mostrar temporizador:</label>
+                    <input type="checkbox" id="showTimer" checked>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>Premios</h3>
+                <div class="prize-settings">
+                    <div class="prize-column">
+                        <div class="setting-item">
+                            <label for="prize1">Nivel 1:</label>
+                            <input type="number" id="prize1" min="1" step="1" value="100">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize2">Nivel 2:</label>
+                            <input type="number" id="prize2" min="1" step="1" value="250">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize3">Nivel 3:</label>
+                            <input type="number" id="prize3" min="1" step="1" value="500">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize4">Nivel 4:</label>
+                            <input type="number" id="prize4" min="1" step="1" value="750">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize5">Nivel 5 (Seguro):</label>
+                            <input type="number" id="prize5" min="1" step="1" value="1500">
+                        </div>
+                    </div>
+                    <div class="prize-column">
+                        <div class="setting-item">
+                            <label for="prize6">Nivel 6:</label>
+                            <input type="number" id="prize6" min="1" step="1" value="2500">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize7">Nivel 7:</label>
+                            <input type="number" id="prize7" min="1" step="1" value="5000">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize8">Nivel 8:</label>
+                            <input type="number" id="prize8" min="1" step="1" value="10000">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize9">Nivel 9:</label>
+                            <input type="number" id="prize9" min="1" step="1" value="15000">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize10">Nivel 10 (Seguro):</label>
+                            <input type="number" id="prize10" min="1" step="1" value="20000">
+                        </div>
+                    </div>
+                    <div class="prize-column">
+                        <div class="setting-item">
+                            <label for="prize11">Nivel 11:</label>
+                            <input type="number" id="prize11" min="1" step="1" value="30000">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize12">Nivel 12:</label>
+                            <input type="number" id="prize12" min="1" step="1" value="50000">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize13">Nivel 13:</label>
+                            <input type="number" id="prize13" min="1" step="1" value="100000">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize14">Nivel 14:</label>
+                            <input type="number" id="prize14" min="1" step="1" value="300000">
+                        </div>
+                        <div class="setting-item">
+                            <label for="prize15">Nivel 15 (Final):</label>
+                            <input type="number" id="prize15" min="1" step="1" value="1000000">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-buttons">
+                <button id="saveSettings" class="menu-btn">Guardar</button>
+                <button id="resetSettings" class="menu-btn menu-btn-danger">Restablecer</button>
+            </div>
         </div>
     </div>
 
@@ -130,6 +234,9 @@
     <!-- Sonido de llamada para comodín -->
     <audio id="phoneCallSound" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746332872/phone-calling-1b_c8mxkd.mp3"></audio>
 
+    <!-- Música para preguntas medias/altas -->
+    <audio id="midGameMusic" loop src="https://res.cloudinary.com/pcsolucion/video/upload/v1746333914/125_000_Question_-_Who_Wants_to_Be_a_Millionaire__jwdees.mp3"></audio>
+
     <!-- Modal para la llamada a un amigo -->
     <div id="phoneModal" class="modal" style="display:none;">
         <div class="modal-content">
@@ -138,7 +245,7 @@
         </div>
     </div>
 
-    <script src="users.js"></script>
-    <script src="game.js"></script>
+    <!-- Cambiar a módulos ES6 -->
+    <script type="module" src="main.js"></script>
 </body>
 </html> 
