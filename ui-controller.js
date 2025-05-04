@@ -30,7 +30,9 @@ class UIController {
             userModeButton: null,
             guestModeButton: null,
             startGameButton: null,
-            usernameInput: null
+            usernameInput: null,
+            exitGameButton: null,
+            gameSettingsButton: null
         };
         
         // Callbacks
@@ -39,7 +41,9 @@ class UIController {
             onLifelineSelected: options.onLifelineSelected || (() => {}),
             onUserModeSelected: options.onUserModeSelected || (() => {}),
             onGuestModeSelected: options.onGuestModeSelected || (() => {}),
-            onStartGame: options.onStartGame || (() => {})
+            onStartGame: options.onStartGame || (() => {}),
+            onExitGame: options.onExitGame || (() => {}),
+            onOpenSettings: options.onOpenSettings || (() => {})
         };
     }
 
@@ -85,6 +89,8 @@ class UIController {
         this.elements.guestModeButton = document.getElementById('guestMode');
         this.elements.startGameButton = document.getElementById('startGame');
         this.elements.usernameInput = document.getElementById('usernameInput');
+        this.elements.exitGameButton = document.getElementById('exitGameBtn');
+        this.elements.gameSettingsButton = document.getElementById('gameSettingsBtn');
     }
 
     /**
@@ -118,7 +124,10 @@ class UIController {
         if (this.elements.guestModeButton) {
             this.elements.guestModeButton.addEventListener('click', () => {
                 this.hideStartMenu();
-                this.callbacks.onGuestModeSelected();
+                // Asegurarnos de que no hay problemas con la visibilidad
+                setTimeout(() => {
+                    this.callbacks.onGuestModeSelected();
+                }, 300); // Pequeño retraso para asegurar que la transición ha terminado
             });
         }
 
@@ -127,10 +136,29 @@ class UIController {
                 const username = this.elements.usernameInput.value.trim();
                 if (username) {
                     this.hideUsernameModal();
-                    this.callbacks.onStartGame(username);
+                    // Pequeño retraso para asegurar que la transición ha terminado
+                    setTimeout(() => {
+                        this.callbacks.onStartGame(username);
+                    }, 300);
                 } else {
                     alert('Por favor, ingresa un nombre de usuario');
                 }
+            });
+        }
+        
+        // Listener para el botón de salir (sin confirmación)
+        if (this.elements.exitGameButton) {
+            this.elements.exitGameButton.addEventListener('click', () => {
+                this.hideGameContainer();
+                this.showStartMenu();
+                this.callbacks.onExitGame();
+            });
+        }
+        
+        // Listener para el botón de ajustes en el juego
+        if (this.elements.gameSettingsButton) {
+            this.elements.gameSettingsButton.addEventListener('click', () => {
+                this.callbacks.onOpenSettings();
             });
         }
     }
@@ -168,6 +196,16 @@ class UIController {
     hideStartMenu() {
         if (this.elements.startMenu) {
             this.elements.startMenu.classList.add('hidden');
+            
+            // Asegurarnos de que las propiedades se apliquen correctamente
+            this.elements.startMenu.style.opacity = '0';
+            this.elements.startMenu.style.visibility = 'hidden';
+            
+            // Limpiar cualquier estilo inline residual del juego
+            if (this.elements.gameContainer) {
+                this.elements.gameContainer.style.opacity = '1';
+                this.elements.gameContainer.style.visibility = 'visible';
+            }
         }
     }
 
@@ -185,7 +223,23 @@ class UIController {
      */
     showGameContainer() {
         if (this.elements.gameContainer) {
+            // Asegurarnos de que el contenedor esté visible
             this.elements.gameContainer.style.display = 'flex';
+            
+            // Restablecer visibilidad de elementos internos
+            if (this.elements.questionSection) {
+                this.elements.questionSection.style.display = 'flex';
+            }
+            
+            if (this.elements.moneyTree) {
+                this.elements.moneyTree.style.display = 'flex';
+            }
+            
+            // Si hay otros elementos ocultos, mostrarlos
+            const gameContent = this.elements.gameContainer.querySelector('.game-content');
+            if (gameContent) {
+                gameContent.style.display = 'flex';
+            }
         }
     }
 
@@ -348,6 +402,35 @@ class UIController {
      */
     showAlert(message) {
         alert(message);
+    }
+
+    /**
+     * Oculta el contenedor principal del juego
+     */
+    hideGameContainer() {
+        if (this.elements.gameContainer) {
+            this.elements.gameContainer.style.display = 'none';
+        }
+    }
+    
+    /**
+     * Muestra el menú principal
+     */
+    showStartMenu() {
+        if (this.elements.startMenu) {
+            this.elements.startMenu.classList.remove('hidden');
+            this.elements.startMenu.style.opacity = '1';
+            this.elements.startMenu.style.visibility = 'visible';
+        }
+    }
+
+    /**
+     * Revisa si el juego está visible actualmente
+     * @returns {boolean} true si el juego está visible
+     */
+    isGameVisible() {
+        return this.elements.gameContainer && 
+               this.elements.gameContainer.style.display !== 'none';
     }
 }
 

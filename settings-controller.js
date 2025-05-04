@@ -72,6 +72,9 @@ class SettingsController {
     closeSettingsModal() {
         if (this.settingsModal) {
             this.settingsModal.style.display = 'none';
+            
+            // Disparar evento para notificar que se cerró el modal
+            document.dispatchEvent(new CustomEvent('settingsClosed'));
         }
     }
     

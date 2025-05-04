@@ -32,7 +32,9 @@ class GameController {
             onLifelineSelected: this.useLifeline.bind(this),
             onUserModeSelected: this.handleUserMode.bind(this),
             onGuestModeSelected: this.handleGuestMode.bind(this),
-            onStartGame: this.startGame.bind(this)
+            onStartGame: this.startGame.bind(this),
+            onExitGame: this.handleExitGame.bind(this),
+            onOpenSettings: this.handleOpenSettings.bind(this)
         });
         
         this.timerManager = new TimerManager({
@@ -57,6 +59,9 @@ class GameController {
         this.lifelineManager = new LifelineManager({
             onLifelineUsed: this.handleLifelineUsed.bind(this)
         });
+        
+        // Referencia al settingsController (se asignará en main.js)
+        this.settingsController = null;
     }
 
     /**
@@ -170,6 +175,11 @@ class GameController {
             this.userManager.createUser(username);
         }
         
+        // Asegurarse de que cualquier modal esté cerrado
+        if (this.settingsController) {
+            this.settingsController.closeSettingsModal();
+        }
+        
         // Mostrar el contenedor del juego
         this.uiController.showGameContainer();
         
@@ -200,6 +210,12 @@ class GameController {
         
         // Reiniciar comodines
         this.lifelineManager.resetLifelines();
+        
+        // Detener y limpiar temporizador
+        if (this.timerManager) {
+            this.timerManager.stop();
+            this.timerManager.reset();
+        }
     }
 
     /**
@@ -409,6 +425,72 @@ class GameController {
             [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
         }
         return newArray;
+    }
+
+    /**
+     * Maneja la acción de salir del juego
+     */
+    handleExitGame() {
+        // Detener temporizador
+        if (this.timerManager) {
+            this.timerManager.stop();
+        }
+        
+        // Detener todos los sonidos
+        if (this.audioManager) {
+            // Detener todos los sonidos
+            const sounds = this.audioManager.getSounds();
+            for (const key in sounds) {
+                if (sounds[key]) {
+                    this.audioManager.stopSound(key);
+                }
+            }
+        }
+        
+        // Cancelar cualquier síntesis de voz en curso
+        if (this.speechManager) {
+            this.speechManager.cancel();
+        }
+        
+        // Reiniciar el estado del juego
+        this.resetGame();
+        
+        console.log('Juego finalizado y volviendo al menú principal');
+    }
+
+    /**
+     * Maneja la apertura de ajustes desde el juego
+     */
+    handleOpenSettings() {
+        // Pausar el juego (detener temporizador)
+        if (this.timerManager && !this.timerManager.isStopped) {
+            this.timerManager.stop();
+            
+            // Bajar volumen de la música temporalmente
+            if (this.audioManager) {
+                this.audioManager.lowerMusicVolume(0.8);
+            }
+        }
+        
+        // Mostrar modal de ajustes
+        if (this.settingsController) {
+            this.settingsController.openSettingsModal();
+            
+            // Agregar listener una vez para cuando se cierre el modal
+            const onSettingsClosed = () => {
+                // Restaurar volumen
+                if (this.audioManager) {
+                    this.audioManager.restoreMusicVolume();
+                }
+                
+                // Aplicar nuevos ajustes si han cambiado
+                this.updateConfig(configManager.getConfig());
+                
+                document.removeEventListener('settingsClosed', onSettingsClosed);
+            };
+            
+            document.addEventListener('settingsClosed', onSettingsClosed);
+        }
     }
 }
 

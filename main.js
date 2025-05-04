@@ -14,6 +14,11 @@ window.addEventListener('load', () => {
     const gameController = new GameController({
         config: configManager.getConfig()
     });
+    
+    // Asignar la referencia del controlador de ajustes al controlador del juego
+    gameController.settingsController = settingsController;
+    
+    // Inicializar el juego
     gameController.setupGame();
     
     // Escuchar cambios en la configuración
