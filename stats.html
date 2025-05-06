@@ -3,22 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estadísticas - ¿Quién Quiere Ser Millonario?</title>
+    <title>Estadísticas - ¿Quién Quiere Ser Legendario?</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="stats.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="stats-page">
         <header class="stats-header">
-            <h1>Estadísticas del Juego</h1>
-            <a href="index.html" class="back-btn">Volver al Juego</a>
+            <h1><i class="fas fa-trophy"></i> Estadísticas del Juego</h1>
+            <a href="index.html" class="back-btn"><i class="fas fa-home"></i> Volver al Juego</a>
         </header>
 
         <div class="stats-container">
             <div class="stats-sidebar">
+                <div class="user-profile">
+                    <div class="avatar-container">
+                        <i class="fas fa-user-circle avatar-icon"></i>
+                    </div>
+                    <h2 id="profileUsername">Selecciona un usuario</h2>
+                </div>
+                
                 <div class="user-search">
+                    <i class="fas fa-search search-icon"></i>
                     <input type="text" id="userSearch" placeholder="Buscar usuario...">
                 </div>
+                
+                <h3 class="sidebar-title"><i class="fas fa-users"></i> Jugadores</h3>
                 <div class="users-list" id="usersList">
                     <!-- Lista de usuarios se cargará dinámicamente -->
                 </div>
@@ -27,61 +39,305 @@
             <div class="stats-content">
                 <div class="stats-overview">
                     <div class="stat-card total-games">
+                        <i class="fas fa-gamepad card-icon"></i>
+                        <div class="card-content">
                         <h3>Total Partidas</h3>
                         <div class="stat-value" id="totalGames">0</div>
                     </div>
-                    <div class="stat-card total-players">
-                        <h3>Total Jugadores</h3>
-                        <div class="stat-value" id="totalPlayers">0</div>
                     </div>
                     <div class="stat-card highest-prize">
+                        <i class="fas fa-euro-sign card-icon"></i>
+                        <div class="card-content">
                         <h3>Premio Más Alto</h3>
                         <div class="stat-value" id="highestPrize">0 €</div>
+                        </div>
+                    </div>
+                    <div class="stat-card accuracy">
+                        <i class="fas fa-bullseye card-icon"></i>
+                        <div class="card-content">
+                            <h3>Precisión</h3>
+                            <div class="stat-value" id="userAccuracy">0%</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="stats-details">
                     <div class="stats-section">
-                        <h2>Estadísticas Generales</h2>
+                    <h2><i class="fas fa-chart-line"></i> Resumen de desempeño</h2>
                         <div class="stats-grid">
-                            <div class="stat-item">
-                                <h3>Precisión Global</h3>
-                                <div class="stat-value" id="globalAccuracy">0%</div>
-                                <div class="stat-chart" id="accuracyChart"></div>
+                        <div class="chart-container">
+                            <h3>Progresión de premios</h3>
+                            <canvas id="prizeProgressChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Distribución de respuestas</h3>
+                            <canvas id="answersDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <h2><i class="fas fa-medal"></i> Logros del jugador</h2>
+                    <div class="achievements-filter">
+                        <button class="filter-btn active" data-filter="all">Todos</button>
+                        <button class="filter-btn" data-filter="unlocked">Desbloqueados</button>
+                        <button class="filter-btn" data-filter="locked">Bloqueados</button>
+                    </div>
+                    <div class="achievements-grid" id="achievements">
+                        <div class="achievement-item locked" id="firstWin">
+                            <i class="fas fa-trophy"></i>
+                            <div class="achievement-details">
+                                <h3>Primera Victoria</h3>
+                                <p>Completar tu primera partida</p>
                             </div>
-                            <div class="stat-item">
-                                <h3>Distribución de Premios</h3>
-                                <div class="stat-chart" id="prizeDistribution"></div>
+                        </div>
+                        <div class="achievement-item locked" id="millionaireClub">
+                            <i class="fas fa-crown"></i>
+                            <div class="achievement-details">
+                                <h3>Club de Legendarios</h3>
+                                <p>Ganar 1.000.000 €</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="perfectAccuracy">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="achievement-details">
+                                <h3>Precisión Perfecta</h3>
+                                <p>Completar una partida sin errores</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="frequentPlayer">
+                            <i class="fas fa-gamepad"></i>
+                            <div class="achievement-details">
+                                <h3>Jugador Frecuente</h3>
+                                <p>Jugar 10 o más partidas</p>
+                            </div>
+                        </div>
+                        <!-- Nuevos logros -->
+                        <div class="achievement-item locked" id="safeguardMaster">
+                            <i class="fas fa-shield-alt"></i>
+                            <div class="achievement-details">
+                                <h3>Maestro de Seguridad</h3>
+                                <p>Alcanzar nivel 10 (20.000€) en 5 partidas diferentes</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="speedDemon">
+                            <i class="fas fa-bolt"></i>
+                            <div class="achievement-details">
+                                <h3>Velocista</h3>
+                                <p>Responder 5 preguntas en menos de 10 segundos cada una</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="fiftyFiftyMaster">
+                            <i class="fas fa-percentage"></i>
+                            <div class="achievement-details">
+                                <h3>Maestro del 50:50</h3>
+                                <p>Ganar una partida usando solo el comodín 50:50</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="audienceTrust">
+                            <i class="fas fa-users"></i>
+                            <div class="achievement-details">
+                                <h3>Confianza en el Público</h3>
+                                <p>Acertar 10 preguntas siguiendo al público</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="phoneAFriend">
+                            <i class="fas fa-phone-alt"></i>
+                            <div class="achievement-details">
+                                <h3>Teléfono Amigo</h3>
+                                <p>Ganar una pregunta de nivel 12+ con el comodín de la llamada</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="noLifelines">
+                            <i class="fas fa-ban"></i>
+                            <div class="achievement-details">
+                                <h3>Sin Ayuda</h3>
+                                <p>Alcanzar el nivel 10 sin usar ningún comodín</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="comebackKing">
+                            <i class="fas fa-undo"></i>
+                            <div class="achievement-details">
+                                <h3>Rey del Regreso</h3>
+                                <p>Ganar después de haber perdido 3 partidas seguidas</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="luckySeven">
+                            <i class="fas fa-dice"></i>
+                            <div class="achievement-details">
+                                <h3>Siete de la Suerte</h3>
+                                <p>Ganar 7.777€ exactos</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="secondChance">
+                            <i class="fas fa-sync"></i>
+                            <div class="achievement-details">
+                                <h3>Segunda Oportunidad</h3>
+                                <p>Perder y volver a jugar inmediatamente</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="marathonRunner">
+                            <i class="fas fa-running"></i>
+                            <div class="achievement-details">
+                                <h3>Maratonista</h3>
+                                <p>Jugar 5 partidas en un solo día</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="closeCut">
+                            <i class="fas fa-clock"></i>
+                            <div class="achievement-details">
+                                <h3>Por los Pelos</h3>
+                                <p>Responder correctamente con menos de 3 segundos en el reloj</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="highStakes">
+                            <i class="fas fa-gem"></i>
+                            <div class="achievement-details">
+                                <h3>Alto Riesgo</h3>
+                                <p>Alcanzar nivel 15 sin usar ningún nivel de seguridad</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="threeInARow">
+                            <i class="fas fa-award"></i>
+                            <div class="achievement-details">
+                                <h3>Triplete</h3>
+                                <p>Ganar 3 partidas consecutivas</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="smartCookie">
+                            <i class="fas fa-brain"></i>
+                            <div class="achievement-details">
+                                <h3>Sabelotodo</h3>
+                                <p>Responder correctamente 50 preguntas en total</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="persistentPlayer">
+                            <i class="fas fa-hammer"></i>
+                            <div class="achievement-details">
+                                <h3>Persistente</h3>
+                                <p>Jugar 25 partidas en total</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="veteranStatus">
+                            <i class="fas fa-star"></i>
+                            <div class="achievement-details">
+                                <h3>Veterano</h3>
+                                <p>Jugar 50 partidas en total</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="quickLearner">
+                            <i class="fas fa-graduation-cap"></i>
+                            <div class="achievement-details">
+                                <h3>Aprendiz Rápido</h3>
+                                <p>Mejorar tu puntuación anterior 3 veces seguidas</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="steadyProgress">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="achievement-details">
+                                <h3>Progreso Constante</h3>
+                                <p>Alcanzar al menos el nivel 5 en 10 partidas consecutivas</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="jackpot">
+                            <i class="fas fa-coins"></i>
+                            <div class="achievement-details">
+                                <h3>Premio Gordo</h3>
+                                <p>Acumular 2.000.000€ en total entre todas tus partidas</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="brainiac">
+                            <i class="fas fa-lightbulb"></i>
+                            <div class="achievement-details">
+                                <h3>Cerebrito</h3>
+                                <p>Alcanzar una precisión del 90% después de 20+ partidas</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="legendaryStatus">
+                            <i class="fas fa-dragon"></i>
+                            <div class="achievement-details">
+                                <h3>Estado Legendario</h3>
+                                <p>Ganar el millón 3 veces</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked" id="onFire">
+                            <i class="fas fa-fire"></i>
+                            <div class="achievement-details">
+                                <h3>En Racha</h3>
+                                <p>Responder correctamente 15 preguntas consecutivas</p>
+                            </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="stats-section">
-                        <h2>Historial de Partidas</h2>
+                    <div class="section-header">
+                        <h2><i class="fas fa-history"></i> Historial de Partidas</h2>
+                        <div class="section-actions">
+                            <button id="sortByDate" class="sort-btn active"><i class="fas fa-calendar-alt"></i> Fecha</button>
+                            <button id="sortByPrize" class="sort-btn"><i class="fas fa-euro-sign"></i> Premio</button>
+                        </div>
+                    </div>
                         <div class="games-history" id="gamesHistory">
                             <!-- Historial de partidas se cargará dinámicamente -->
                         </div>
                     </div>
 
                     <div class="stats-section">
-                        <h2>Análisis de Preguntas</h2>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <h3>Preguntas más Falladas</h3>
-                                <div class="questions-list" id="mostFailedQuestions"></div>
-                            </div>
-                            <div class="stat-item">
-                                <h3>Nivel más Común de Victoria</h3>
-                                <div class="stat-value" id="mostCommonWinLevel">0</div>
-                            </div>
+                    <div class="section-header">
+                        <h2><i class="fas fa-info-circle"></i> Detalles del jugador</h2>
+                        <div class="section-actions">
+                            <button id="exportStats" class="action-btn"><i class="fas fa-download"></i> Exportar datos</button>
                         </div>
+                    </div>
+                    <div class="player-details-grid">
+                        <div class="player-detail-item">
+                            <div class="detail-label">Comodines favoritos:</div>
+                            <div class="detail-value" id="favoriteLifelines">-</div>
+                        </div>
+                        <div class="player-detail-item">
+                            <div class="detail-label">Mejor nivel alcanzado:</div>
+                            <div class="detail-value" id="highestLevel">-</div>
+                            </div>
+                        <div class="player-detail-item">
+                            <div class="detail-label">Primera partida:</div>
+                            <div class="detail-value" id="firstGame">-</div>
+                            </div>
+                        <div class="player-detail-item">
+                            <div class="detail-label">Última partida:</div>
+                            <div class="detail-value" id="lastGame">-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="reset-stats-container">
+                        <button id="resetStats" class="reset-stats-btn"><i class="fas fa-trash-alt"></i> Reiniciar estadísticas</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="users.js"></script>
-    <script src="stats.js"></script>
+    <!-- Modal de confirmación para reiniciar estadísticas -->
+    <div class="modal-overlay" id="confirmModal" style="display: none;">
+        <div class="confirm-modal">
+            <h3>¿Reiniciar estadísticas?</h3>
+            <p>Esta acción eliminará todas las estadísticas y el historial del jugador seleccionado. Esta acción no se puede deshacer.</p>
+            <div class="confirm-actions">
+                <button id="confirmReset" class="confirm-btn confirm">Sí, reiniciar</button>
+                <button id="cancelReset" class="confirm-btn cancel">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notificación elegante -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle" id="notificationIcon"></i>
+        <div class="notification-content">
+            <div class="notification-title" id="notificationTitle">Éxito</div>
+            <div class="notification-message" id="notificationMessage">Operación completada con éxito</div>
+        </div>
+    </div>
+
+    <script src="users.js" type="module"></script>
+    <script src="stats.js" type="module"></script>
 </body>
 </html> 

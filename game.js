@@ -678,7 +678,8 @@ class MillionaireGame {
         const gameResult = {
             correctAnswers: this.correctAnswers,
             wrongAnswers: this.wrongAnswers,
-            prize: isWin ? this.currentPrize : 0
+            prize: isWin ? this.currentPrize : 0,
+            highestLevelReached: this.currentLevel
         };
         
         this.userManager.updateStats(gameResult);

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quien Quiere Ser Legendario - Juego</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Script para evitar que el modal se cargue en modo invitado
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const gameMode = urlParams.get('mode');
+            
+            // Si es modo invitado, eliminar el modal de usuario del DOM
+            if (gameMode === 'guest') {
+                const modal = document.getElementById('usernameModal');
+                if (modal && modal.parentNode) {
+                    modal.parentNode.removeChild(modal);
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Contenedor del juego -->
+    <div id="usernameModal" class="modal">
+        <div class="modal-content dark-theme">
+            <h2>Ingresa tu nombre de usuario</h2>
+            <input type="text" id="usernameInput" placeholder="Nombre de usuario">
+            <div class="username-buttons">
+                <a href="index.html" class="menu-btn menu-btn-secondary">Volver</a>
+                <button id="startGame" class="menu-btn">Comenzar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <!-- Título del juego -->
+        <div class="game-title">
+            <div class="flux">Quien quiere ser</div>
+            <div class="neon">legendario</div>
+        </div>
+        
+        <div class="game-controls">
+            <a href="index.html" class="game-control-btn exit-btn" title="Volver al menú principal">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+            </a>
+            <button id="pauseGameBtn" class="game-control-btn pause-btn" title="Pausar temporizador">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+            </button>
+            <button id="gameSettingsBtn" class="game-control-btn settings-btn" title="Ajustes">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="game-content">
+            <div class="question-section">
+                <!-- Gráfica del público (ahora arriba) -->
+                <div id="audienceChart" class="audience-chart" style="display: none;"></div>
+
+                <!-- Mensaje Comodín Llamada (Ahora encima de la pregunta) -->
+                <div id="phoneMessageContainer" class="phone-message-container" style="display: none;"></div>
+                
+                <div class="question-container">
+                    <div class="timer" id="timer">30</div>
+                    <div class="inner-container">
+                        <div class="question-text" id="question">Pregunta aparecerá aquí</div>
+                    </div>
+                </div>
+                
+                <div class="answers-container">
+                    <button class="answer-btn" data-option="A"><div></div><span class="answer-text"></span></button>
+                    <button class="answer-btn" data-option="B"><div></div><span class="answer-text"></span></button>
+                    <button class="answer-btn" data-option="C"><div></div><span class="answer-text"></span></button>
+                    <button class="answer-btn" data-option="D"><div></div><span class="answer-text"></span></button>
+                </div>
+            </div>
+
+            <div class="money-tree">
+                <div class="lifelines">
+                    <button id="fifty" class="lifeline-btn" title="50:50"></button>
+                    <button id="audience" class="lifeline-btn" title="Ayuda del Público"></button>
+                    <button id="phone" class="lifeline-btn" title="Llamada a un Amigo"></button>
+                </div>
+                <div class="money-level" data-level="15">1.000.000 €</div>
+                <div class="money-level" data-level="14">300.000 €</div>
+                <div class="money-level" data-level="13">100.000 €</div>
+                <div class="money-level" data-level="12">50.000 €</div>
+                <div class="money-level" data-level="11">30.000 €</div>
+                <div class="money-level" data-level="10">20.000 €</div>
+                <div class="money-level" data-level="9">15.000 €</div>
+                <div class="money-level" data-level="8">10.000 €</div>
+                <div class="money-level" data-level="7">5.000 €</div>
+                <div class="money-level" data-level="6">2.500 €</div>
+                <div class="money-level" data-level="5">1.500 €</div>
+                <div class="money-level" data-level="4">750 €</div>
+                <div class="money-level" data-level="3">500 €</div>
+                <div class="money-level" data-level="2">250 €</div>
+                <div class="money-level" data-level="1">100 €</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Efectos de sonido -->
+    <audio id="tickSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3"></audio>
+    <audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
+    <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-11.mp3"></audio>
+    <audio id="lifelineSound" src="https://www.soundjay.com/buttons/sounds/button-12.mp3"></audio>
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="suspenseMusic" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746251483/Who_Wants_to_be_a_Millionaire_Suspense_-_Sound_Effect_HD_bevuyz.mp3"></audio>
+    <audio id="win1000Music" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746251907/1_000_Win_-_Who_Wants_to_Be_a_Millionaire__fxo7e0.mp3"></audio>
+    <audio id="firstQuestionsMusic" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746252694/100-_1000_Questions_-_Who_Wants_to_Be_a_Millionaire__bvtpis.mp3"></audio>
+    <audio id="wrongAnswerMusic" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746253105/Who_Wants_to_Be_a_Millionaire__-_100_500_Wrong_Answer_SOUND_EFFECT_ojyzma.mp3"></audio>
+    <audio id="correctAnswerMusic" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746253391/correct-answer-101soundboards_xldr4h.mp3"></audio>
+    <audio id="phoneCallSound" src="https://res.cloudinary.com/pcsolucion/video/upload/v1746332872/phone-calling-1b_c8mxkd.mp3"></audio>
+    <audio id="midGameMusic" loop src="https://res.cloudinary.com/pcsolucion/video/upload/v1746333914/125_000_Question_-_Who_Wants_to_Be_a_Millionaire__jwdees.mp3"></audio>
+
+    <!-- Modal para la llamada a un amigo -->
+    <div id="phoneModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span id="closePhoneModal" class="close">&times;</span>
+            <div id="phoneModalMessage"></div>
+        </div>
+    </div>
+
+    <!-- Modal de ajustes -->
+    <div id="settingsModal" class="modal" style="display: none;">
+        <div class="modal-content settings-modal">
+            <span class="close" id="closeSettings">&times;</span>
+            <h2>Ajustes del Juego</h2>
+            
+            <div class="settings-section">
+                <h3>Temporizador</h3>
+                <div class="setting-item">
+                    <label for="timerDuration">Duración (segundos):</label>
+                    <input type="number" id="timerDuration" min="10" max="120" value="45">
+                </div>
+                <div class="setting-item">
+                    <label for="showTimer">Mostrar temporizador:</label>
+                    <input type="checkbox" id="showTimer" checked>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>Premios</h3>
+                <div class="prize-settings">
+                    <!-- Contenido de los premios -->
+                    <div class="prize-column">
+                        <div class="setting-item">
+                            <label for="prize1">Nivel 1:</label>
+                            <input type="number" id="prize1" min="1" step="1" value="100">
+                        </div>
+                        <!-- ... otros premios ... -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-buttons">
+                <button id="saveSettings" class="menu-btn">Guardar</button>
+                <button id="resetSettings" class="menu-btn menu-btn-danger">Restablecer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript para el juego -->
+    <script type="module">
+        // Importar los módulos originales
+        import GameController from './game-controller.js';
+        import SettingsController from './settings-controller.js';
+        import configManager from './config.js';
+        import { questionsBase } from './questions.js';
+
+        // Variables globales
+        let gameController;
+        let settingsController;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Detectar el modo de juego desde la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const gameMode = urlParams.get('mode');
+            
+            const usernameModal = document.getElementById('usernameModal');
+            const gameContainer = document.querySelector('.game-container');
+            
+            // Forzar la eliminación del modal en modo invitado
+            if (gameMode === 'guest' && usernameModal && usernameModal.parentNode) {
+                console.log("Eliminando modal de usuario para modo invitado");
+                usernameModal.parentNode.removeChild(usernameModal);
+            }
+            
+            // Inicializar controladores
+            try {
+                // Crear e inicializar el controlador de ajustes
+                settingsController = new SettingsController();
+                
+                // Crear e inicializar el controlador del juego
+                gameController = new GameController({
+                    config: configManager.getConfig()
+                });
+                
+                // Asignar la referencia del controlador de ajustes al controlador del juego
+                gameController.settingsController = settingsController;
+                
+                console.log('Controladores inicializados correctamente');
+            } catch (error) {
+                console.error('Error al inicializar controladores:', error);
+            }
+            
+            // Ocultar el contenedor del juego inicialmente
+            if (gameContainer) gameContainer.style.display = 'none';
+            
+            console.log("Modo de juego:", gameMode);
+            
+            // Gestionar modos
+            if (gameMode === 'user') {
+                // MODO USUARIO: Mostrar modal de usuario si existe
+                console.log("Iniciando modo usuario");
+                if (usernameModal) {
+                    usernameModal.style.display = 'flex';
+                    
+                    // Configurar botón para iniciar juego con nombre de usuario
+                    const startGameBtn = document.getElementById('startGame');
+                    if (startGameBtn) {
+                        startGameBtn.addEventListener('click', function() {
+                            const username = document.getElementById('usernameInput').value.trim();
+                            if (username) {
+                                // Guardar nombre de usuario
+                                localStorage.setItem('playerName', username);
+                                
+                                // Ocultar modal
+                                usernameModal.style.display = 'none';
+                                
+                                // Iniciar juego con usuario
+                                if (gameController) {
+                                    // Mostrar video de intro
+                                    showIntroVideo(() => {
+                                        gameContainer.style.display = 'flex';
+                                        gameController.startGame(username);
+                                    });
+                                }
+                            } else {
+                                alert('Por favor, ingresa un nombre de usuario');
+                            }
+                        });
+                    }
+                } else {
+                    console.error("Error: Modal de usuario no encontrado");
+                }
+            } else if (gameMode === 'guest') {
+                // MODO INVITADO: Ir directo al video y juego
+                console.log("Iniciando modo invitado");
+                
+                // Mostrar video de introducción y luego iniciar juego
+                if (gameController) {
+                    showIntroVideo(() => {
+                        if (gameContainer) gameContainer.style.display = 'flex';
+                        gameController.handleGuestMode();
+                    });
+                }
+            } else {
+                // Modo no reconocido, redirigir al menú principal
+                window.location.href = 'index.html';
+            }
+            
+            // Configurar los eventos de los botones
+            setupButtonEvents();
+        });
+        
+        // Configura los eventos para los botones del juego
+        function setupButtonEvents() {
+            // Configurar botón de ajustes
+            const settingsBtn = document.getElementById('gameSettingsBtn');
+            const settingsModal = document.getElementById('settingsModal');
+            const closeSettings = document.getElementById('closeSettings');
+            
+            if (settingsBtn && settingsModal && closeSettings) {
+                settingsBtn.addEventListener('click', function() {
+                    if (gameController) {
+                        gameController.handleOpenSettings();
+                    } else {
+                        settingsModal.style.display = 'flex';
+                    }
+                });
+                
+                closeSettings.addEventListener('click', function() {
+                    settingsModal.style.display = 'none';
+                    if (gameController && gameController.timerManager && !gameController.timerManager.isStopped) {
+                        gameController.timerManager.start();
+                    }
+                });
+            }
+            
+            // Botón de pausa
+            const pauseBtn = document.getElementById('pauseGameBtn');
+            if (pauseBtn && gameController) {
+                pauseBtn.addEventListener('click', function() {
+                    gameController.handlePauseGame();
+                });
+            }
+            
+            // Configurar botones de comodín
+            const fiftyBtn = document.getElementById('fifty');
+            const audienceBtn = document.getElementById('audience');
+            const phoneBtn = document.getElementById('phone');
+            
+            if (fiftyBtn && gameController) {
+                fiftyBtn.addEventListener('click', function() {
+                    gameController.useLifeline('fifty');
+                });
+            }
+            
+            if (audienceBtn && gameController) {
+                audienceBtn.addEventListener('click', function() {
+                    gameController.useLifeline('audience');
+                });
+            }
+            
+            if (phoneBtn && gameController) {
+                phoneBtn.addEventListener('click', function() {
+                    gameController.useLifeline('phone');
+                });
+            }
+        }
+        
+        // Muestra el video de introducción
+        function showIntroVideo(onVideoEnd) {
+            // Crear el modal para el video
+            const videoModal = document.createElement('div');
+            videoModal.style.position = 'fixed';
+            videoModal.style.top = '0';
+            videoModal.style.left = '0';
+            videoModal.style.width = '100%';
+            videoModal.style.height = '100%';
+            videoModal.style.backgroundColor = 'rgba(0, 0, 0, 0.95)';
+            videoModal.style.zIndex = '9999';
+            videoModal.style.display = 'flex';
+            videoModal.style.justifyContent = 'center';
+            videoModal.style.alignItems = 'center';
+            
+            // Botón de saltar
+            const skipButton = document.createElement('button');
+            skipButton.textContent = 'Saltar Intro';
+            skipButton.style.position = 'absolute';
+            skipButton.style.bottom = '30px';
+            skipButton.style.padding = '12px 24px';
+            skipButton.style.backgroundColor = '#e50914';
+            skipButton.style.color = 'white';
+            skipButton.style.border = 'none';
+            skipButton.style.borderRadius = '5px';
+            skipButton.style.cursor = 'pointer';
+            skipButton.style.fontSize = '16px';
+            skipButton.style.fontWeight = 'bold';
+            skipButton.style.zIndex = '10000';
+            
+            // Crear iframe para YouTube
+            const iframe = document.createElement('iframe');
+            iframe.width = '80%';
+            iframe.height = '80%';
+            iframe.style.border = 'none';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.src = `https://www.youtube.com/embed/GAIpU21qSlo?autoplay=1&controls=0&rel=0`;
+            iframe.allowFullscreen = true;
+            
+            // Función para cerrar
+            const closeModal = () => {
+                if (document.body.contains(videoModal)) {
+                    document.body.removeChild(videoModal);
+                    if (onVideoEnd) onVideoEnd();
+                }
+            };
+            
+            // Evento para saltar
+            skipButton.addEventListener('click', closeModal);
+            
+            // Agregar elementos al modal
+            videoModal.appendChild(iframe);
+            videoModal.appendChild(skipButton);
+            document.body.appendChild(videoModal);
+            
+            // Cierre automático
+            setTimeout(closeModal, 30000);
+        }
+    </script>
+</body>
+</html> 

@@ -38,7 +38,19 @@ class UserManager {
         user.totalCorrect += gameResult.correctAnswers;
         user.totalWrong += gameResult.wrongAnswers;
         
-        if (gameResult.prize > user.highestPrize) {
+        if (gameResult.highestLevelReached > 0) {
+            const prizeLevels = {
+                1: 100, 2: 250, 3: 500, 4: 750, 5: 1500,
+                6: 2500, 7: 5000, 8: 10000, 9: 15000, 10: 20000,
+                11: 30000, 12: 50000, 13: 100000, 14: 300000, 15: 1000000
+            };
+            
+            const highestPrizeReached = prizeLevels[gameResult.highestLevelReached] || 0;
+            
+            if (highestPrizeReached > user.highestPrize) {
+                user.highestPrize = highestPrizeReached;
+            }
+        } else if (gameResult.prize > user.highestPrize) {
             user.highestPrize = gameResult.prize;
         }
 
@@ -46,11 +58,23 @@ class UserManager {
             date: new Date().toISOString(),
             prize: gameResult.prize,
             correctAnswers: gameResult.correctAnswers,
-            wrongAnswers: gameResult.wrongAnswers
+            wrongAnswers: gameResult.wrongAnswers,
+            highestLevelReached: gameResult.highestLevelReached || 0
         };
 
         user.games.push(user.lastGame);
         this.saveUsers();
+        
+        console.log("Estadísticas actualizadas:", {
+            usuario: this.currentUser,
+            partidasJugadas: user.gamesPlayed,
+            respuestasCorrectas: user.totalCorrect,
+            respuestasIncorrectas: user.totalWrong,
+            premioMásAlto: user.highestPrize,
+            precisión: user.totalCorrect > 0 ? 
+                ((user.totalCorrect / (user.totalCorrect + user.totalWrong)) * 100).toFixed(1) + "%" : 
+                "0%"
+        });
     }
 
     getStats(username) {
@@ -63,6 +87,23 @@ class UserManager {
 
     getCurrentUser() {
         return this.currentUser;
+    }
+
+    resetUserStats(username) {
+        if (this.users[username]) {
+            // Mantener el username pero reiniciar todas las estadísticas
+            this.users[username] = {
+                gamesPlayed: 0,
+                totalCorrect: 0,
+                totalWrong: 0,
+                highestPrize: 0,
+                lastGame: null,
+                games: []
+            };
+            this.saveUsers();
+            return true;
+        }
+        return false;
     }
 }
 

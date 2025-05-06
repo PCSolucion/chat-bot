@@ -32,7 +32,8 @@ class UIController {
             startGameButton: null,
             usernameInput: null,
             exitGameButton: null,
-            gameSettingsButton: null
+            gameSettingsButton: null,
+            startTimerButton: null
         };
         
         // Callbacks
@@ -43,7 +44,8 @@ class UIController {
             onGuestModeSelected: options.onGuestModeSelected || (() => {}),
             onStartGame: options.onStartGame || (() => {}),
             onExitGame: options.onExitGame || (() => {}),
-            onOpenSettings: options.onOpenSettings || (() => {})
+            onOpenSettings: options.onOpenSettings || (() => {}),
+            onStartTimer: options.onStartTimer || (() => {})
         };
     }
 
@@ -91,6 +93,7 @@ class UIController {
         this.elements.usernameInput = document.getElementById('usernameInput');
         this.elements.exitGameButton = document.getElementById('exitGameBtn');
         this.elements.gameSettingsButton = document.getElementById('gameSettingsBtn');
+        this.elements.startTimerButton = document.getElementById('startTimerBtn');
     }
 
     /**
@@ -124,10 +127,11 @@ class UIController {
         if (this.elements.guestModeButton) {
             this.elements.guestModeButton.addEventListener('click', () => {
                 this.hideStartMenu();
-                // Asegurarnos de que no hay problemas con la visibilidad
-                setTimeout(() => {
+                // Mostrar video de YouTube antes de iniciar el juego
+                this.showYoutubeVideo('https://youtu.be/GAIpU21qSlo?feature=shared', () => {
+                    // Callback que se ejecuta cuando termina el video
                     this.callbacks.onGuestModeSelected();
-                }, 300); // Pequeño retraso para asegurar que la transición ha terminado
+                });
             });
         }
 
@@ -168,6 +172,13 @@ class UIController {
         if (this.elements.gameSettingsButton) {
             this.elements.gameSettingsButton.addEventListener('click', () => {
                 this.callbacks.onOpenSettings();
+            });
+        }
+        
+        // Listener para el botón de inicio de temporizador
+        if (this.elements.startTimerButton) {
+            this.elements.startTimerButton.addEventListener('click', () => {
+                this.callbacks.onStartTimer();
             });
         }
     }
@@ -440,6 +451,98 @@ class UIController {
     isGameVisible() {
         return this.elements.gameContainer && 
                this.elements.gameContainer.style.display !== 'none';
+    }
+
+    /**
+     * Muestra un video de YouTube en pantalla completa y ejecuta un callback cuando finaliza
+     * @param {string} videoUrl - URL del video de YouTube
+     * @param {Function} onVideoEnd - Función a ejecutar cuando termina el video
+     */
+    showYoutubeVideo(videoUrl, onVideoEnd) {
+        // Crear el modal para el video
+        const videoModal = document.createElement('div');
+        videoModal.className = 'video-modal';
+        videoModal.style.position = 'fixed';
+        videoModal.style.top = '0';
+        videoModal.style.left = '0';
+        videoModal.style.width = '100%';
+        videoModal.style.height = '100%';
+        videoModal.style.backgroundColor = 'black';
+        videoModal.style.zIndex = '9999';
+        videoModal.style.display = 'flex';
+        videoModal.style.justifyContent = 'center';
+        videoModal.style.alignItems = 'center';
+        
+        // Extraer el ID del video de la URL
+        const videoId = this.extractYoutubeId(videoUrl);
+        
+        // Crear el iframe para el video
+        const iframe = document.createElement('iframe');
+        iframe.width = '80%';
+        iframe.height = '80%';
+        iframe.style.border = 'none';
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&rel=0`;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        
+        videoModal.appendChild(iframe);
+        document.body.appendChild(videoModal);
+        
+        // Cerrar el video después de que termine (aproximadamente)
+        // Nota: Esta es una solución aproximada ya que no podemos
+        // detectar directamente cuando termina el video por restricciones de seguridad
+        // Una alternativa mejor sería usar la API de YouTube, pero es más complejo
+        
+        // Se podría agregar un botón de "Saltar" para permitir al usuario continuar
+        const skipButton = document.createElement('button');
+        skipButton.textContent = 'Saltar';
+        skipButton.style.position = 'absolute';
+        skipButton.style.top = '20px';
+        skipButton.style.right = '20px';
+        skipButton.style.padding = '10px 20px';
+        skipButton.style.backgroundColor = '#e50914';
+        skipButton.style.color = 'white';
+        skipButton.style.border = 'none';
+        skipButton.style.borderRadius = '5px';
+        skipButton.style.cursor = 'pointer';
+        skipButton.style.fontSize = '16px';
+        skipButton.style.zIndex = '10';
+        
+        skipButton.addEventListener('click', () => {
+            console.log('Botón Saltar presionado'); // Log para depuración
+            if (videoModal && document.body.contains(videoModal)) {
+                document.body.removeChild(videoModal);
+                console.log('Modal del video eliminado por el botón Saltar'); // Log para depuración
+            } else {
+                console.warn('Modal del video no encontrado o ya eliminado al presionar Saltar'); // Log para depuración
+            }
+            if (onVideoEnd) {
+                console.log('Ejecutando callback onVideoEnd tras Saltar'); // Log para depuración
+                onVideoEnd();
+            }
+        });
+        
+        videoModal.appendChild(skipButton);
+        
+        // También podemos establecer un tiempo aproximado para cerrar automáticamente
+        // basado en la duración del video si la conocemos
+        setTimeout(() => {
+            if (document.body.contains(videoModal)) {
+                document.body.removeChild(videoModal);
+                if (onVideoEnd) onVideoEnd();
+            }
+        }, 30000); // 30 segundos o ajustar según la duración del video
+    }
+
+    /**
+     * Extrae el ID de un video de YouTube a partir de la URL
+     * @param {string} url - URL del video de YouTube
+     * @returns {string} ID del video
+     */
+    extractYoutubeId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : url;
     }
 }
 

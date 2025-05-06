@@ -7,7 +7,7 @@ import LifelineManager from './lifeline-manager.js';
 import UIController from './ui-controller.js';
 import AudioManager from './audio-manager.js';
 import SpeechManager from './speech-manager.js';
-import questions from './questions.js';
+import { questionsBase } from './questions.js';
 import configManager from './config.js';
 
 class GameController {
@@ -23,7 +23,7 @@ class GameController {
         this.correctAnswers = 0;
         this.wrongAnswers = 0;
         this.currentPrize = 0;
-        this.questions = [...questions]; // Copiar las preguntas para poder barajarlas
+        this.questions = [...questionsBase]; // Copiar las preguntas para poder barajarlas
         
         // Inicializar managers
         this.userManager = new UserManager();
@@ -34,7 +34,8 @@ class GameController {
             onGuestModeSelected: this.handleGuestMode.bind(this),
             onStartGame: this.startGame.bind(this),
             onExitGame: this.handleExitGame.bind(this),
-            onOpenSettings: this.handleOpenSettings.bind(this)
+            onOpenSettings: this.handleOpenSettings.bind(this),
+            onStartTimer: this.handleStartTimer.bind(this)
         });
         
         this.timerManager = new TimerManager({
@@ -203,7 +204,7 @@ class GameController {
         this.currentPrize = 0;
         
         // Cargar y agrupar las preguntas por dificultad
-        const allQuestions = [...questions];
+        const allQuestions = [...questionsBase];
         this.questionsByDifficulty = {
             1: allQuestions.filter(q => q.difficulty === 1),
             2: allQuestions.filter(q => q.difficulty === 2),
@@ -274,22 +275,34 @@ class GameController {
     }
 
     /**
-     * Carga la pregunta actual
+     * Carga una nueva pregunta
      */
     loadQuestion() {
-        const currentQuestion = this.getCurrentQuestion();
+        // Obtener pregunta actual
+        const currentQuestion = this.questions[this.currentLevel - 1];
         
-        // Actualizar UI con la pregunta
+        if (!currentQuestion) {
+            console.error('No hay más preguntas disponibles');
+            return;
+        }
+        
+        // Mostrar la pregunta y opciones - usar updateQuestion en lugar de displayQuestion
         this.uiController.updateQuestion(currentQuestion);
+        
+        // Resaltar el nivel actual en el árbol de premios
+        this.uiController.updateMoneyTree(this.currentLevel);
+        
+        // Actualizar premio actual
+        this.updatePrize();
+        
+        // Inicializar temporizador (no lo iniciamos automáticamente)
+        this.timerManager.reset();
+        
+        // Reproducir la música correspondiente según el nivel
+        this.playLevelAppropriateMusic();
         
         // Ocultar elementos auxiliares (gráfica público, mensaje llamada)
         this.uiController.hideHelperElements();
-        
-        // Iniciar temporizador
-        this.timerManager.start();
-        
-        // Reproducir música adecuada para el nivel
-        this.audioManager.playLevelMusic(this.currentLevel);
     }
 
     /**
@@ -334,18 +347,18 @@ class GameController {
                 this.correctAnswers++;
                 this.audioManager.playCorrectAnswerSound(this.currentLevel);
                 
+                // Avanzar automáticamente después de un tiempo
                 setTimeout(() => {
                     // Niveles asegurados (5, 10)
                     if (this.currentLevel === 5 || this.currentLevel === 10) {
-                        setTimeout(() => {
-                            this.audioManager.playGuaranteedPrizeSound(() => {
-                                this.advanceToNextLevel();
-                            });
-                        }, 1000);
+                        this.audioManager.playGuaranteedPrizeSound(() => {
+                            this.advanceToNextLevel();
+                        });
                     } else {
                         this.advanceToNextLevel();
                     }
-                }, 2000);
+                }, 3000); // Esperar 3 segundos antes de avanzar
+                
             } else {
                 // Respuesta incorrecta - marcar el botón como incorrecto
                 selectedButton.classList.add('wrong');
@@ -382,7 +395,7 @@ class GameController {
     }
 
     /**
-     * Maneja cuando se acaba el tiempo
+     * Maneja la acción cuando el tiempo se acaba
      */
     handleTimeUp() {
         // Detener la música actual
@@ -390,8 +403,7 @@ class GameController {
         this.audioManager.stopSound('firstQuestions');
         this.audioManager.stopSound('midGame');
         
-        // Final del juego (derrota por tiempo)
-        this.endGame(false);
+        // NO se muestra ninguna alerta ni se termina el juego cuando se acaba el tiempo
     }
 
     /**
@@ -402,7 +414,8 @@ class GameController {
         const gameResult = {
             correctAnswers: this.correctAnswers,
             wrongAnswers: this.wrongAnswers,
-            prize: isWin ? this.currentPrize : this.calculateGuaranteedPrize()
+            prize: isWin ? this.currentPrize : this.calculateGuaranteedPrize(),
+            highestLevelReached: this.currentLevel
         };
         
         // Actualizar estadísticas del usuario
@@ -558,6 +571,33 @@ class GameController {
             };
             
             document.addEventListener('settingsClosed', onSettingsClosed);
+        }
+    }
+
+    /**
+     * Maneja el inicio del temporizador
+     */
+    handleStartTimer() {
+        // Solo iniciar si el temporizador está detenido
+        if (this.timerManager && this.timerManager.isStopped) {
+            this.timerManager.start();
+        }
+    }
+
+    /**
+     * Método para reproducir la música adecuada según el nivel
+     */
+    playLevelAppropriateMusic() {
+        // Determinar qué música reproducir según el nivel
+        if (this.currentLevel <= 5) {
+            // Para los primeros 5 niveles, reproducir la música de preguntas iniciales
+            this.audioManager.playSound('firstQuestions');
+        } else if (this.currentLevel > 5 && this.currentLevel <= 10) {
+            // Para niveles 6-10, reproducir música de nivel medio
+            this.audioManager.playSound('midGame');
+        } else {
+            // Para niveles 11-15, reproducir música de nivel alto
+            this.audioManager.playSound('suspense');
         }
     }
 }

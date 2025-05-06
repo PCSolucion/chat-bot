@@ -10,7 +10,7 @@
     <!-- Menú de inicio -->
     <div id="startMenu" class="start-menu">
         <div class="menu-content">
-            <h1>¿Quién Quiere Ser Legendarioo?</h1>
+            <h1>¿Quién Quiere Ser Legendario?</h1>
             <div class="menu-options">
                 <div class="menu-option" id="userMode">
                     <div class="option-icon">👤</div>
@@ -31,6 +31,13 @@
                     <div class="option-text">
                         <h2>Estadísticas</h2>
                         <p>Ver estadísticas detalladas</p>
+                    </div>
+                </a>
+                <a href="questions-list.html" class="menu-option">
+                    <div class="option-icon">📝</div>
+                    <div class="option-text">
+                        <h2>Banco de Preguntas</h2>
+                        <p>Ver todas las preguntas organizadas</p>
                     </div>
                 </a>
                 <div class="menu-option" id="settingsBtn">
@@ -186,6 +193,12 @@
                     <line x1="21" y1="12" x2="9" y2="12"></line>
                 </svg>
             </button>
+            <button id="startTimerBtn" class="game-control-btn timer-btn" title="Iniciar temporizador">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </button>
             <button id="gameSettingsBtn" class="game-control-btn settings-btn" title="Ajustes">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
@@ -268,6 +281,10 @@
             <div id="phoneModalMessage"></div>
         </div>
     </div>
+
+    <!-- Script comentario sobre comportamiento de temporizador -->
+    <!-- El temporizador solo comenzará manualmente al presionar el botón de inicio -->
+    <!-- Cuando el temporizador llega a cero, no finaliza el juego ni tiene consecuencias -->
 
     <!-- Cambiar a módulos ES6 -->
     <script type="module" src="main.js"></script>

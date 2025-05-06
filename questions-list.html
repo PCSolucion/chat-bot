@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Preguntas - Quien Quiere Ser Legendario</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: #040425;
+            color: #fff;
+            background-image: url('fondomillonario.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+            display: block;
+            overflow-y: auto;
+        }
+        
+        .questions-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #fff;
+            position: relative;
+            z-index: 10;
+            min-height: calc(100vh - 40px);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(81, 137, 255, 0.7);
+            color: #fff;
+        }
+        
+        .question-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 12px;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.9);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #007bff;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(81, 137, 255, 0.5);
+        }
+        
+        .question-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .option {
+            padding: 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
+            border-left: 3px solid transparent;
+        }
+        
+        .option.correct {
+            background: rgba(40, 167, 69, 0.3);
+            border-left: 5px solid #28a745;
+            font-weight: bold;
+        }
+        
+        .question-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        
+        .difficulty-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .difficulty-1 {
+            background-color: rgba(40, 167, 69, 0.85);
+        }
+        
+        .difficulty-2 {
+            background-color: rgba(255, 193, 7, 0.85);
+            color: #000;
+        }
+        
+        .difficulty-3 {
+            background-color: rgba(220, 53, 69, 0.85);
+        }
+        
+        .difficulty-4 {
+            background-color: rgba(128, 0, 128, 0.85);
+        }
+        
+        .filter-section {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        
+        .category-filters, .difficulty-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 18px;
+            background: rgba(0, 123, 255, 0.5);
+            border: 2px solid #007bff;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+        }
+        
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(0, 123, 255, 0.7);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .filter-btn.active {
+            background: rgba(0, 123, 255, 0.9);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
+            transform: translateY(-2px);
+        }
+        
+        .back-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, #0069d9, #0049b3);
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+            border-color: #0069d9;
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .results-info {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            color: #fff;
+            background: rgba(0, 123, 255, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .page-btn {
+            padding: 8px 15px;
+            background: rgba(0, 123, 255, 0.5);
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .page-btn:hover, .page-btn.active {
+            background: rgba(0, 123, 255, 0.9);
+        }
+        
+        .loading-indicator {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        #questionsList {
+            position: relative;
+            z-index: 10;
+            min-height: 200px;
+        }
+        
+        .navigation-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .navigation-top .back-btn {
+            margin: 0;
+            padding: 8px 16px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-effects">
+        <div class="light-beam" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="light-beam" style="left: 25%; animation-delay: 1s;"></div>
+        <div class="light-beam" style="left: 40%; animation-delay: 2s;"></div>
+        <div class="light-beam" style="left: 55%; animation-delay: 0.5s;"></div>
+        <div class="light-beam" style="left: 70%; animation-delay: 1.5s;"></div>
+        <div class="light-beam" style="left: 85%; animation-delay: 2.5s;"></div>
+    </div>
+    
+    <div class="questions-container">
+        <h1>Banco de Preguntas</h1>
+        
+        <div class="navigation-top">
+            <button class="back-btn" id="backBtnTop">Volver al Menú</button>
+        </div>
+        
+        <div class="filter-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar preguntas...">
+            </div>
+            
+            <div class="difficulty-filters" id="difficultyFilters">
+                <!-- Se cargarán dinámicamente -->
+            </div>
+            
+            <div class="category-filters" id="categoryFilters">
+                <!-- Las categorías se cargarán dinámicamente -->
+            </div>
+        </div>
+        
+        <div class="results-info" id="resultsInfo">
+            Cargando preguntas...
+        </div>
+        
+        <div id="questionsList">
+            <!-- Las preguntas se cargarán dinámicamente aquí -->
+        </div>
+        
+        <div class="pagination" id="pagination">
+            <!-- Paginación se cargará dinámicamente -->
+        </div>
+        
+        <button class="back-btn" id="backBtn">Volver al Menú Principal</button>
+    </div>
+    
+    <script type="module">
+        import { questionsBase } from './questions.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const questionsList = document.getElementById('questionsList');
+            const searchInput = document.getElementById('searchInput');
+            const difficultyFilters = document.getElementById('difficultyFilters');
+            const categoryFilters = document.getElementById('categoryFilters');
+            const resultsInfo = document.getElementById('resultsInfo');
+            const pagination = document.getElementById('pagination');
+            const backBtn = document.getElementById('backBtn');
+            const backBtnTop = document.getElementById('backBtnTop');
+            
+            // Verificar que las preguntas se están cargando correctamente
+            console.log("Total de preguntas cargadas: ", questionsBase.length);
+            
+            // Configuración de paginación
+            const ITEMS_PER_PAGE = 20; // Aumentado para mostrar más preguntas por página
+            let currentPage = 1;
+            
+            let activeFilters = {
+                difficulty: 'all',
+                category: 'all'
+            };
+            
+            // Contar preguntas por dificultad
+            const difficultyCount = {
+                all: questionsBase.length,
+                1: questionsBase.filter(q => q.difficulty === 1).length,
+                2: questionsBase.filter(q => q.difficulty === 2).length,
+                3: questionsBase.filter(q => q.difficulty === 3).length,
+                4: questionsBase.filter(q => q.difficulty === 4).length
+            };
+            
+            // Crear botones para filtrar por dificultad
+            const difficulties = ['all', '1', '2', '3'];
+            if (difficultyCount['4'] > 0) {
+                difficulties.push('4');
+            }
+            
+            difficulties.forEach(difficulty => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn' + (difficulty === 'all' ? ' active' : '');
+                btn.setAttribute('data-difficulty', difficulty);
+                
+                let label = difficulty === 'all' ? 'Todas' : `Dificultad ${difficulty}`;
+                const count = difficultyCount[difficulty];
+                
+                btn.innerHTML = `${label} <span class="filter-count">${count}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-difficulty]').forEach(el => el.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeFilters.difficulty = difficulty;
+                    currentPage = 1;
+                    renderQuestions();
+                });
+                
+                difficultyFilters.appendChild(btn);
+            });
+            
+            // Extraer categorías únicas de las preguntas
+            const categories = ['all', ...new Set(questionsBase.map(q => q.category || 'general'))];
+            
+            // Contar preguntas por categoría
+            const categoryCount = {};
+            categories.forEach(category => {
+                if (category === 'all') {
+                    categoryCount[category] = questionsBase.length;
+                } else {
+                    categoryCount[category] = questionsBase.filter(q => (q.category || 'general') === category).length;
+                }
+            });
+            
+            // Crear botones para filtrar por categoría
+            categories.forEach(category => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn' + (category === 'all' ? ' active' : '');
+                btn.setAttribute('data-category', category);
+                
+                let label = category === 'all' ? 'Todas las categorías' : 
+                          category.charAt(0).toUpperCase() + category.slice(1);
+                const count = categoryCount[category];
+                
+                btn.innerHTML = `${label} <span class="filter-count">${count}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-category]').forEach(el => el.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeFilters.category = category;
+                    currentPage = 1;
+                    renderQuestions();
+                });
+                
+                categoryFilters.appendChild(btn);
+            });
+            
+            // Configurar búsqueda
+            searchInput.addEventListener('input', () => {
+                currentPage = 1;
+                renderQuestions();
+            });
+            
+            // Configurar botón de volver
+            backBtn.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+            
+            // Configurar botón superior de volver
+            backBtnTop.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+            
+            // Función para renderizar preguntas con filtros aplicados
+            function renderQuestions() {
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                // Filtrar preguntas según criterios actuales
+                const filteredQuestions = questionsBase.filter(q => {
+                    // Filtro de dificultad
+                    if (activeFilters.difficulty !== 'all' && q.difficulty != activeFilters.difficulty) {
+                        return false;
+                    }
+                    
+                    // Filtro de categoría
+                    if (activeFilters.category !== 'all' && (q.category || 'general') !== activeFilters.category) {
+                        return false;
+                    }
+                    
+                    // Búsqueda
+                    if (searchTerm && !q.question.toLowerCase().includes(searchTerm) && 
+                        !Object.values(q.options).some(option => option.toLowerCase().includes(searchTerm))) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+                
+                // Actualizar información de resultados
+                resultsInfo.textContent = `Mostrando ${Math.min(filteredQuestions.length, ITEMS_PER_PAGE)} de ${filteredQuestions.length} preguntas encontradas`;
+                
+                // Calcular paginación
+                const totalPages = Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE);
+                const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+                const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredQuestions.length);
+                const paginatedQuestions = filteredQuestions.slice(startIndex, endIndex);
+                
+                // Limpiar y reconstruir la lista
+                questionsList.innerHTML = '';
+                
+                if (filteredQuestions.length === 0) {
+                    const noResults = document.createElement('div');
+                    noResults.className = 'question-card';
+                    noResults.innerHTML = '<p style="text-align: center; font-size: 1.2rem; padding: 30px;">No se encontraron preguntas con los filtros actuales.</p>';
+                    questionsList.appendChild(noResults);
+                } else {
+                    // Mostrar preguntas filtradas y paginadas
+                    paginatedQuestions.forEach((question, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'question-card';
+                        
+                        // Crear encabezado
+                        const header = document.createElement('div');
+                        header.className = 'question-header';
+                        header.innerHTML = `<span>Pregunta #${startIndex + index + 1}</span>`;
+                        
+                        // Insignia de dificultad
+                        const difficultyBadge = document.createElement('div');
+                        difficultyBadge.className = `difficulty-badge difficulty-${question.difficulty}`;
+                        difficultyBadge.textContent = `Dificultad ${question.difficulty}`;
+                        
+                        // Texto de la pregunta
+                        const questionText = document.createElement('div');
+                        questionText.className = 'question-text';
+                        questionText.textContent = question.question;
+                        
+                        // Opciones
+                        const options = document.createElement('div');
+                        options.className = 'question-options';
+                        
+                        for (const [key, value] of Object.entries(question.options)) {
+                            const option = document.createElement('div');
+                            option.className = `option ${key === question.correct ? 'correct' : ''}`;
+                            option.innerHTML = `<strong>${key}:</strong> ${value}`;
+                            options.appendChild(option);
+                        }
+                        
+                        // Pie de la tarjeta con categoría
+                        const footer = document.createElement('div');
+                        footer.className = 'question-footer';
+                        footer.innerHTML = `<span>Categoría: ${question.category || 'General'}</span>`;
+                        
+                        // Ensamblar la tarjeta
+                        card.appendChild(header);
+                        card.appendChild(difficultyBadge);
+                        card.appendChild(questionText);
+                        card.appendChild(options);
+                        card.appendChild(footer);
+                        
+                        questionsList.appendChild(card);
+                    });
+                }
+                
+                // Actualizar URL con los parámetros de filtro para facilitar compartir o guardar búsquedas
+                const url = new URL(window.location.href);
+                url.searchParams.set('difficulty', activeFilters.difficulty);
+                url.searchParams.set('category', activeFilters.category);
+                url.searchParams.set('page', currentPage);
+                if (searchTerm) url.searchParams.set('search', searchTerm);
+                window.history.replaceState({}, '', url);
+                
+                // Renderizar controles de paginación
+                renderPagination(totalPages);
+            }
+            
+            // Función para renderizar la paginación
+            function renderPagination(totalPages) {
+                pagination.innerHTML = '';
+                
+                if (totalPages <= 1) {
+                    pagination.style.display = 'none';
+                    return;
+                }
+                
+                pagination.style.display = 'flex';
+                
+                // Botón de anterior
+                if (currentPage > 1) {
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className = 'page-btn';
+                    prevBtn.textContent = 'Anterior';
+                    prevBtn.addEventListener('click', () => {
+                        currentPage--;
+                        renderQuestions();
+                        window.scrollTo(0, 0);
+                    });
+                    pagination.appendChild(prevBtn);
+                }
+                
+                // Botones de página
+                const maxVisiblePages = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                
+                if (endPage - startPage + 1 < maxVisiblePages) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                }
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        renderQuestions();
+                        window.scrollTo(0, 0);
+                    });
+                    pagination.appendChild(pageBtn);
+                }
+                
+                // Botón de siguiente
+                if (currentPage < totalPages) {
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'page-btn';
+                    nextBtn.textContent = 'Siguiente';
+                    nextBtn.addEventListener('click', () => {
+                        currentPage++;
+                        renderQuestions();
+                        window.scrollTo(0, 0);
+                    });
+                    pagination.appendChild(nextBtn);
+                }
+            }
+            
+            // Recuperar filtros de URL si existen
+            function loadFiltersFromURL() {
+                const url = new URL(window.location.href);
+                const difficulty = url.searchParams.get('difficulty');
+                const category = url.searchParams.get('category');
+                const page = url.searchParams.get('page');
+                const search = url.searchParams.get('search');
+                
+                if (difficulty) {
+                    activeFilters.difficulty = difficulty;
+                    document.querySelectorAll('[data-difficulty]').forEach(el => {
+                        el.classList.toggle('active', el.dataset.difficulty === difficulty);
+                    });
+                }
+                
+                if (category) {
+                    activeFilters.category = category;
+                    document.querySelectorAll('[data-category]').forEach(el => {
+                        el.classList.toggle('active', el.dataset.category === category);
+                    });
+                }
+                
+                if (page) {
+                    currentPage = parseInt(page);
+                }
+                
+                if (search) {
+                    searchInput.value = search;
+                }
+            }
+            
+            // Cargar filtros de URL e inicializar la lista de preguntas
+            loadFiltersFromURL();
+            renderQuestions();
+            
+            // Mostrar mensaje en consola para confirmar que el script se ha cargado completamente
+            console.log('Página de banco de preguntas inicializada correctamente');
+        });
+    </script>
+</body>
+</html>

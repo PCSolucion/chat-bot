@@ -223,13 +223,13 @@ body::before {
     top: 50%;
     transform: translateY(-50%);
     right: 25px;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
     color: #fff;
     background: radial-gradient(circle, rgba(8,90,200,0.5) 0%, rgba(25,25,25,0.8) 60%, rgba(25,25,25,0) 70%);
@@ -241,15 +241,15 @@ body::before {
 .timer::before {
     content: '';
     position: absolute;
-    top: -4px;
-    left: -4px;
-    width: calc(100% + 8px);
-    height: calc(100% + 8px);
+    top: -3px;
+    left: -3px;
+    width: calc(100% + 6px);
+    height: calc(100% + 6px);
     border-radius: 50%;
     background: conic-gradient(from 90deg, #FFD700 0% var(--progress, 100%), transparent var(--progress, 100%) 100%);
     mask-image: radial-gradient(transparent 65%, black 66%);
     -webkit-mask-image: radial-gradient(transparent 65%, black 66%);
-    filter: blur(3px) brightness(1.5);
+    filter: blur(2px) brightness(1.5);
     z-index: -1;
     transition: --progress 1s linear;
 }
@@ -987,13 +987,12 @@ body::before {
 
 /* Botones de control del juego */
 .game-controls {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+    position: absolute;
+    top: 20px;
+    right: 310px;
+    z-index: 100;
     display: flex;
-    flex-direction: column;
     gap: 10px;
-    z-index: 50;
 }
 
 .game-control-btn {
@@ -1033,6 +1032,16 @@ body::before {
 .settings-btn:hover {
     background-color: rgba(240, 150, 0, 0.8);
     box-shadow: 0 0 10px rgba(240, 150, 0, 0.5);
+}
+
+.pause-btn:hover {
+    background-color: rgba(0, 130, 200, 0.8);
+    box-shadow: 0 0 10px rgba(0, 130, 200, 0.5);
+}
+
+.timer-btn:hover {
+    background-color: rgba(0, 170, 0, 0.8);
+    box-shadow: 0 0 10px rgba(0, 170, 0, 0.5);
 }
 
 .game-control-btn:hover svg {
@@ -1160,5 +1169,43 @@ body::before {
     .game-title {
         left: 20px;
         top: 20px;
+    }
+}
+
+/* Estilos para el botón de siguiente pregunta */
+.next-question-btn {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #28a745, #20883a);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    animation: pulse 1.5s infinite;
+    z-index: 100;
+    transition: all 0.3s;
+}
+
+.next-question-btn:hover {
+    background: linear-gradient(135deg, #2dc653, #259c46);
+    transform: translateX(-50%) translateY(3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
     }
 }
