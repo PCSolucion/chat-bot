@@ -296,12 +296,210 @@ export const questionsBase = [
         difficulty: 3
     },
     {
-        question: "¿Qué tipo de daño NO hace Isabella en Dinastía?",
+        question: "¿De que arma es la habilidad pasivaque es capaz de recuperar 8 de vitalidad por segundo durante 10 segundos?",
         options: {
-            A: "Estocada",
-            B: "Corte",
-            C: "Arcano",
-            D: "Vacío"
+            A: "Espada",
+            B: "Mangual",
+            C: "Trabuco",
+            D: "Estoque"
+        },
+        correct: "C",
+        difficulty: 3
+    },
+    {
+        question: "¿En que parte del mapa está la zona llamada Los Gemelos?",
+        options: {
+            A: "Cayos de Alfanje",
+            B: "Altos de Escamanegra",
+            C: "Riscos del Monarca",
+            D: "Arenas de Azufre"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿En que parte del mapa está la zona llamada Reposortiga?",
+        options: {
+            A: "Cayos de Alfanje",
+            B: "Altos de Escamanegra",
+            C: "Ocaso",
+            D: "Arenas de Azufre"
+        },
+        correct: "C",
+        difficulty: 3
+    },
+    {
+        question: "¿Como se llama la embarcación de Isabella?",
+        options: {
+            A: "San Cristóbal",
+            B: "San Mateo",
+            C: "Santa María",
+            D: "Santiago"
+        },
+        correct: "C",
+        difficulty: 3
+    },
+    {
+        question: "¿Qué cantidad de almacenamiento nos proporciona el Cofre de almacenamiento de la liebre profanado?",
+        options: {
+            A: "850",
+            B: "1050",
+            C: "1100",
+            D: "1150"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿En que año salió por primera vez la máscara de conejo corrupt?",
+        options: {
+            A: "2022",
+            B: "2023",
+            C: "2024",
+            D: "2025"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Que tipo de límite tenía el Monedero con blasón de transformación?",
+        options: {
+            A: "Diario",
+            B: "Semanal",
+            C: "Máximo 2 al día",
+            D: "Máximo 2 a la semana"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿Cuál de los siguientes artefactos viene con la perk de Aversión física?",
+        options: {
+            A: "Guantes de duelo",
+            B: "Zapatos de cuero alados",
+            C: "Sombrero de mago gris",
+            D: "Guantes de gul"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Como se llama el artefacto que si nos golpean deja sangrado en el enemigo?",
+        options: {
+            A: "Michael",
+            B: "Gladiador",
+            C: "Inexpugnable",
+            D: "Carnicera"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿Qué artefacto tiene la condición de ir en armadura pesada para que funcione su perk exclusiva?",
+        options: {
+            A: "Cogulla de poder",
+            B: "Botras del credo",
+            C: "Manoplas de gravedad de Gilli",
+            D: "Corazón de hierro"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿Como se llama el mangual exclusivo del evento de los conejos?",
+        options: {
+            A: "Madriguera",
+            B: "Ira blanca",
+            C: "Pico de la corrupción",
+            D: "Punta de la corrupción"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cada botella de sal de Azoth contiene...?",
+        options: {
+            A: "500 de sal de Azoth",
+            B: "1000 de sal de Azoth",
+            C: "1500 de sal de Azoth",
+            D: "2000 de sal de Azoth"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes nameds pertenece a la mazmorra de Amrine?",
+        options: {
+            A: "Zippy",
+            B: "Boor",
+            C: "Kotemos",
+            D: "Benat"
+        },
+        correct: "A",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuántos puntos de atributos para que podamos distribuir nos dá tener nivel 65 (sin comida ni ropa, solo el nivel)?",
+        options: {
+            A: "220",
+            B: "240",
+            C: "260",
+            D: "280"
+        },
+        correct: "A",
+        difficulty: 2
+    },
+    {
+        question: "¿A qué nivel se desbloquea la posibilidad de dar duelo?",
+        options: {
+            A: "Desde nivel 1",
+            B: "Desde nivel 10",
+            C: "Desde nivel 20",
+            D: "Desde nivel 30"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuántas profesiones de refinería tenemos en el juego?",
+        options: {
+            A: "3",
+            B: "4",
+            C: "5",
+            D: "6"
+        },
+        correct: "C",
+        difficulty: 1
+    },
+    {
+        question: "¿Cuántas profesiones de recolección tenemos en el juego?",
+        options: {
+            A: "3",
+            B: "5",
+            C: "7",
+            D: "6"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes territorios tiene un nivel recomendado superior?",
+        options: {
+            A: "Aguas Fétidas",
+            B: "Altos de Escamanegra",
+            C: "Arboleda del Éden",
+            D: "Cayos de Alfanje"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuántas profesiones de crafteo tenemos en el juego?",
+        options: {
+            A: "3",
+            B: "5",
+            C: "7",
+            D: "9"
         },
         correct: "C",
         difficulty: 2
