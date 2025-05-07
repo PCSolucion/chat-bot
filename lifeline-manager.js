@@ -255,6 +255,18 @@ class LifelineManager {
         let message;
         let textToSpeak;
         
+        // Frases para cuando el amigo está seguro
+        const confidentPhrases = [
+            `Estoy ${Math.floor(confidence * 90) + 10}% seguro de que la respuesta es ${correctOption}`,
+            `¡Sin duda! La respuesta es ${correctOption}`,
+            `Me lo ha confirmado Scot Lane, es ${correctOption}`,
+            `¡La tengo! Es ${correctOption}, seguro seguro`,
+            `Acabo de consultarlo y es ${correctOption}`,
+            `¡Esa me la sé! Es ${correctOption}`,
+            `No tengo ninguna duda, es ${correctOption}`,
+            `¡La ${correctOption}! ¡La ${correctOption}! ¡La ${correctOption}!`
+        ];
+
         // Frases para cuando el amigo no está seguro
         const unsurePhrases = [
             "Uff, me pillas en el baño... diría que... ¿la A? No sé.",
@@ -262,22 +274,74 @@ class LifelineManager {
             "Mi gato se acaba de subir al teclado y ha marcado la B. ¡Hazle caso a él!",
             "Mmm, eso me suena... ¿Era de un anuncio? Prueba con la D, ¡a lo loco!",
             "Estoy 99% seguro de que no es la A... o sí... ¡Qué lío!",
-            // ... (más frases)
+            "Diría que la C, pero mi conexión es malísima, igual entendí otra cosa.",
+            "¡Buf! Ni idea. Lanza una moneda, ¡es más fiable que yo ahora mismo!",
+            "Espera que le pregunto a Google... Ah, no, ¡que eso no vale! Pues ni idea.",
+            "¿Seguro que esa pregunta no la ha puesto ChatGPT? Suena rara... Quizás la D.",
+            "Justo me estaba echando la siesta, todavía estoy medio dormido... ¿la B?",
+            "Creo que vi la respuesta en un meme el otro día... pero no me acuerdo. ¿La A?",
+            "Me suena a chino mandarín... ¿Has probado a usar el comodín del público?",
+            "Le preguntaría a mi cuñado, que lo sabe todo, pero ahora no está. Yo diría la C.",
+            "¡Esa me la sabía! Pero se me acaba de olvidar... Qué rabia. Prueba la D.",
+            "¿No tendrás por ahí la respuesta oculta? Es que no me suena de nada. ¿La B?",
+            "Mi bola de cristal dice... 'error 404, respuesta no encontrada'. Lo siento.",
+            "Si aciertas, me debes una cena. Yo apuesto por la A.",
+            "Déjame pensar... Pienso que... ¡mejor no pienses lo que pienso! Ni idea.",
+            "La B de 'Bonita pregunta, pero ni idea'.",
+            "Podría ser la D... o la C... o la A... ¡Vaya lío!",
+            "¿Has considerado que todas podrían ser incorrectas? Es broma... creo. ¿La C?",
+            "Justo estaba jugando al Wordle y me has desconcentrado. Diría la A.",
+            "Si te digo la B y fallas, ¿me echas la culpa?",
+            "Me suena de haberlo estudiado en el colegio, pero de eso hace mucho... ¿La D?",
+            "¿No puedes cambiar de pregunta? Esta es muy difícil. Venga, la C.",
+            "Estoy entre la A y la D... pero mi perro acaba de ladrar, ¡así que la A!",
+            "¿Scot Lane no te dio una pista antes? Jeje. Ni idea, la verdad.",
+            "Creo que la respuesta está en mi corazón... pero no la encuentro. ¿La B?",
+            "Suena a respuesta trampa... Ten cuidado. Yo me la jugaría con la D.",
+            "¿Te vale si te digo que me suena muchísimo? Porque saberla, no la sé. ¿La C?",
+            "El 50:50 te vendría bien ahora, ¿eh? Yo diría la A.",
+            "¡Qué difícil! Casi prefiero enfrentarme a un jefe final. Prueba la B.",
+            "Estoy consultando con mis fuentes... y mis fuentes dicen que no tienen ni idea.",
+            "Si esto fuera un examen, la dejaba en blanco. Pero como no lo es... ¡la D!",
+            "¿No es la misma pregunta de la semana pasada? Qué memoria tengo... Ah, no. Ni idea.",
+            "Mi cerebro acaba de hacer 'pantallazo azul'. Reiniciando... mientras tanto, ¿la A?",
+            "Esa es de cultura general... y yo soy más de cultura 'particular'. Ni idea.",
+            "Podría buscarla en mi enciclopedia... si estuviéramos en 1998. Prueba la B.",
+            "Teléfono equivocado, prueba a llamar a un concursante de verdad. ¿La C?",
+            "Mmm... ¿No será una de esas preguntas con doble sentido? Yo diría la D.",
+            "Justo estaba haciendo la compra online... ¿Necesitas algo? Ah, la respuesta... la A.",
+            "Si digo la B, ¿me das un comodín a mí para la próxima?",
+            "¡La C! Seguro. Bueno, seguro seguro... tampoco. Pero tiene buena pinta.",
+            "Esa pregunta es más vieja que Internet Explorer. No me acuerdo. ¿La D?",
+            "¿Te has fijado en la cara que ha puesto el presentador? Yo creo que es la A.",
+            "Me pica la nariz... dicen que eso significa que es la B. ¡O que tengo alergia!",
+            "Estoy viendo la respuesta en mi sopa de letras... ¡Ah, no, son fideos! La C.",
+            "Podría ser la D... pero no pongas la mano en el fuego por mí.",
+            "Si tuviera que apostar mi colección de chapas, diría la A.",
+            "¿Has probado a tararear la pregunta? A veces funciona. Mientras, la B.",
+            "¡La C! Me lo ha chivado un pajarito... o igual era el vecino gritando.",
+            "Esa pregunta ofende mi inteligencia... porque no tengo ni idea. ¿La D?",
+            "Podría ser la A, pero no te fíes, que hoy no he tomado café.",
+            "La B suena bien, ¿verdad? Pues eso.",
+            "¿No hay opción E: 'Ninguna de las anteriores'? Vaya... Pues la C.",
+            "Me suena a nombre de grupo de música indie. ¿La D?",
+            "Si aciertas con la A, prométeme que no dirás que te ayudé.",
+            "¡La B! Y si no es, hacemos como si no hubiera llamado.",
+            "Estoy viendo el futuro... y veo... que necesitas otro comodín. ¿La C?",
+            "¿No te sabes esa? ¡Pero si es súper fácil!... para el que la sepa. Ni idea. ¿La D?",
+            "Diría la A, pero solo porque empieza por A de 'A ver si aciertas'.",
+            "La B suena bien, ¿verdad? Pues eso.",
+            "Me la juego: ¡La C! Si fallo, mala suerte.",
+            "¿Y si llamas a tu madre? Las madres lo saben todo. Yo, mientras, digo la D.",
+            "Creo que la respuesta correcta es... ¡seguir tu instinto! El mío no funciona hoy."
         ];
 
+        // Seleccionar respuesta basada en la confianza
         if (confidence > 0.7) {
             // El amigo está bastante seguro (70% del tiempo da la respuesta correcta)
-            const baseMessage = `Estoy ${Math.floor(confidence * 90) + 10}% seguro de que la respuesta es ${correctOption}`;
-            const displayMessage = `📞 Amigo: Estoy ${Math.floor(confidence * 90) + 10}% seguro de que la respuesta es <b>${correctOption}</b>`;
-            
-            if (Math.random() < 0.33) {
-                const scotLanePart = "Scot Lane me lo confirmó, jeje";
-                textToSpeak = `${baseMessage}. ${scotLanePart}`;
-                message = `${displayMessage}. ${scotLanePart} 😉`;
-            } else {
-                textToSpeak = baseMessage;
-                message = displayMessage;
-            }
+            const phrase = confidentPhrases[Math.floor(Math.random() * confidentPhrases.length)];
+            textToSpeak = phrase;
+            message = `📞 Amigo: ${phrase}`;
         } else {
             // El amigo no está seguro (respuesta aleatoria con frases graciosas)
             const phrase = unsurePhrases[Math.floor(Math.random() * unsurePhrases.length)];
@@ -292,9 +356,8 @@ class LifelineManager {
             setTimeout(() => this.phoneMessageContainer.classList.add('visible'), 10);
         }
 
-        // Atenuar música y hablar
+        // Hablar
         if (textToSpeak !== undefined && this.speechSynthesis && this.speechSynthesis.speak) {
-            // Ya no intentamos bajar el volumen de la música de fondo, ya que no debe estar reproduciéndose
             this.speechSynthesis.speak(textToSpeak);
         }
 

@@ -285,11 +285,11 @@ export const questionsBase = [
         difficulty: 2
     },
     {
-        question: "¿Qué tipo de daño las habilidades del Comandante Chen de Dinastía?",
+        question: "¿Qué tipo de daño las hacen las habilidades del Comandante Chen de Dinastía?",
         options: {
             A: "Estocada",
             B: "Corte",
-            C: "Impacto y corte",
+            C: "Estocada y corte",
             D: "Corte e impacto"
         },
         correct: "D",
@@ -384,7 +384,7 @@ export const questionsBase = [
         difficulty: 3
     },
     {
-        question: "¿Quñe habilidad de Báculo Ígneo tiene un mayor coste de maná?",
+        question: "¿Qué habilidad de Báculo Ígneo tiene un mayor coste de maná?",
         options: {
             A: "Bola de fuego",
             B: "Recalentamiento",
@@ -395,7 +395,7 @@ export const questionsBase = [
         difficulty: 2
     },
     {
-        question: "¿Que habilidad de la manopla de hielo no tiene coste de maná al usarla?",
+        question: "¿Qué habilidad de la manopla de hielo no tiene coste de maná al usarla?",
         options: {
             A: "Poste de hielo",
             B: "Sepultura",
@@ -804,6 +804,61 @@ export const questionsBase = [
         difficulty: 3
     },
     {
+        question: "¿Como se llama el enemigo que nos puede dar el ítem para forjar el trofeo de humanos?",
+        options: {
+            A: "Sir Lot",
+            B: "Sir Juni",
+            C: "Sir Zhotna",
+            D: "Capitán Drakongard"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿De que color es la barra de vida lateralde los miembros del grupo al que pertenecemos?",
+        options: {
+            A: "Rojo",
+            B: "Azul",
+            C: "Verde",
+            D: "Amarillo"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿De que color es el apartado de ayuda del chat del juego?",
+        options: {
+            A: "Rojo",
+            B: "Azul",
+            C: "Verde",
+            D: "Naranja"
+        },
+        correct: "D",
+        difficulty: 1
+    },
+    {
+        question: "¿Cuantos caracteres puedes usar de máximo a la hora de escribir en el chat ingame del juego?",
+        options: {
+            A: "120",
+            B: "200",
+            C: "240",
+            D: "90"
+        },
+        correct: "B",
+        difficulty: 3
+    },
+    {
+        question: "¿De que color son las velas y estandartes de los varegos?",
+        options: {
+            A: "Rojos",
+            B: "Azules",
+            C: "Verdes",
+            D: "Amarillos"
+        },
+        correct: "D",
+        difficulty: 1
+    },
+    {
         question: "¿Cuantos Sellos cromáticos podemos conseguir tras superer la raid de la Gorgona?",
         options: {
             A: "Ninguno",
@@ -813,6 +868,50 @@ export const questionsBase = [
         },
         correct: "D",
         difficulty: 1
+    },
+    {
+        question: "¿A partir de que peso de armadura se considera Peso pesado?",
+        options: {
+            A: "21,9",
+            B: "22,9",
+            C: "23,9",
+            D: "24,9"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Además de Profundidades y al principio del juego, en que ubicación nos podemos encontrar al Capitán Thorpe?",
+        options: {
+            A: "ílurmin",
+            B: "Ascenso Solitario",
+            C: "El Ascenso",
+            D: "Encrucijada de la Batalla"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿A que elemento es más vulnerable la Baronesa Hain?",
+        options: {
+            A: "Fuego",
+            B: "Hielo",
+            C: "Naturaleza",
+            D: "Viento"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué cantidad de Esencia de Azoth recibimos tras matar a la Baronesa Hain?",
+        options: {
+            A: "100",
+            B: "50",
+            C: "20",
+            D: "150"
+        },
+        correct: "C",
+        difficulty: 2
     },
     {
         question: "¿Cuántos jugadores como mínimo tiene que una raid para poder entrar en la raid de la Gorgona?",
@@ -947,7 +1046,7 @@ export const questionsBase = [
         difficulty: 3
     },
     {
-        question: "¿A que arma pertenece la habilidad Contra todo pronóstico o Agains All Ods?",
+        question: "¿A que arma pertenece la habilidad Contra todo pronóstico o Against All Odds?",
         options: {
             A: "Espada",
             B: "Martillo",

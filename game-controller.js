@@ -211,53 +211,85 @@ class GameController {
             3: allQuestions.filter(q => q.difficulty === 3)
         };
         
-        // Barajar cada grupo de preguntas
+        // Barajar cada grupo de preguntas usando el algoritmo Fisher-Yates
         for (let difficulty in this.questionsByDifficulty) {
-            this.questionsByDifficulty[difficulty] = this.shuffleArray(this.questionsByDifficulty[difficulty]);
+            this.questionsByDifficulty[difficulty] = this.shuffleArray([...this.questionsByDifficulty[difficulty]]);
         }
         
         // Preparar el array final de preguntas
         this.questions = [];
         
-        // Llenar con preguntas según el nivel:
-        // Niveles 1-4: dificultad 1
-        // Niveles 5-9: dificultad 2
-        // Niveles 10-14: dificultad 3
-        // Nivel 15: la pregunta más difícil (dificultad 3 especial)
+        // Función para obtener una pregunta aleatoria de una dificultad específica
+        const getRandomQuestion = (difficulty) => {
+            const questions = this.questionsByDifficulty[difficulty];
+            if (questions.length === 0) return null;
+            return questions[Math.floor(Math.random() * questions.length)];
+        };
+        
+        // Función para remover una pregunta de su grupo de dificultad
+        const removeQuestion = (question, difficulty) => {
+            const index = this.questionsByDifficulty[difficulty].indexOf(question);
+            if (index > -1) {
+                this.questionsByDifficulty[difficulty].splice(index, 1);
+            }
+        };
+        
+        // Llenar con preguntas según el nivel
         for (let i = 1; i <= 15; i++) {
+            let selectedQuestion = null;
+            
             if (i <= 4) {
-                // Para niveles 1-4, usar dificultad 1 si hay suficientes
-                if (this.questionsByDifficulty[1].length > 0) {
-                    this.questions.push(this.questionsByDifficulty[1].pop());
+                // Para niveles 1-4, usar dificultad 1
+                selectedQuestion = getRandomQuestion(1);
+                if (selectedQuestion) {
+                    removeQuestion(selectedQuestion, 1);
                 } else {
-                    // Si no hay suficientes de dificultad 1, usar de otra dificultad
-                    this.questions.push(allQuestions[Math.floor(Math.random() * allQuestions.length)]);
+                    // Si no hay más preguntas de dificultad 1, usar una aleatoria de cualquier dificultad
+                    const availableQuestions = allQuestions.filter(q => !this.questions.includes(q));
+                    if (availableQuestions.length > 0) {
+                        selectedQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                    }
                 }
             } else if (i >= 5 && i <= 9) {
-                // Para niveles 5-9, usar dificultad 2 si hay suficientes
-                if (this.questionsByDifficulty[2].length > 0) {
-                    this.questions.push(this.questionsByDifficulty[2].pop());
+                // Para niveles 5-9, usar dificultad 2
+                selectedQuestion = getRandomQuestion(2);
+                if (selectedQuestion) {
+                    removeQuestion(selectedQuestion, 2);
                 } else {
-                    // Si no hay suficientes de dificultad 2, usar de otra dificultad
-                    this.questions.push(allQuestions[Math.floor(Math.random() * allQuestions.length)]);
+                    // Si no hay más preguntas de dificultad 2, usar una aleatoria de cualquier dificultad
+                    const availableQuestions = allQuestions.filter(q => !this.questions.includes(q));
+                    if (availableQuestions.length > 0) {
+                        selectedQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                    }
                 }
             } else if (i >= 10 && i <= 14) {
                 // Para niveles 10-14, usar dificultad 3
-                if (this.questionsByDifficulty[3].length > 0) {
-                    this.questions.push(this.questionsByDifficulty[3].pop());
+                selectedQuestion = getRandomQuestion(3);
+                if (selectedQuestion) {
+                    removeQuestion(selectedQuestion, 3);
                 } else {
-                    // Si no hay suficientes de dificultad 3, usar de otra dificultad
-                    this.questions.push(allQuestions[Math.floor(Math.random() * allQuestions.length)]);
+                    // Si no hay más preguntas de dificultad 3, usar una aleatoria de cualquier dificultad
+                    const availableQuestions = allQuestions.filter(q => !this.questions.includes(q));
+                    if (availableQuestions.length > 0) {
+                        selectedQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                    }
                 }
             } else if (i === 15) {
                 // Para el nivel 15, seleccionar una pregunta especial de dificultad 3
-                if (this.questionsByDifficulty[3].length > 0) {
-                    // Si aún quedan preguntas de dificultad 3, tomar la primera
-                    this.questions.push(this.questionsByDifficulty[3].shift());
+                selectedQuestion = getRandomQuestion(3);
+                if (selectedQuestion) {
+                    removeQuestion(selectedQuestion, 3);
                 } else {
-                    // Si no hay suficientes, usar una pregunta aleatoria
-                    this.questions.push(allQuestions[Math.floor(Math.random() * allQuestions.length)]);
+                    // Si no hay más preguntas de dificultad 3, usar una aleatoria de cualquier dificultad
+                    const availableQuestions = allQuestions.filter(q => !this.questions.includes(q));
+                    if (availableQuestions.length > 0) {
+                        selectedQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                    }
                 }
+            }
+            
+            if (selectedQuestion) {
+                this.questions.push(selectedQuestion);
             }
         }
         
@@ -589,11 +621,11 @@ class GameController {
      */
     playLevelAppropriateMusic() {
         // Determinar qué música reproducir según el nivel
-        if (this.currentLevel <= 5) {
-            // Para los primeros 5 niveles, reproducir la música de preguntas iniciales
+        if (this.currentLevel < 5) {
+            // Para los primeros 4 niveles, reproducir la música de preguntas iniciales
             this.audioManager.playSound('firstQuestions');
-        } else if (this.currentLevel > 5 && this.currentLevel <= 10) {
-            // Para niveles 6-10, reproducir música de nivel medio
+        } else if (this.currentLevel >= 5 && this.currentLevel <= 10) {
+            // Para niveles 5-10, reproducir música de nivel medio
             this.audioManager.playSound('midGame');
         } else {
             // Para niveles 11-15, reproducir música de nivel alto
