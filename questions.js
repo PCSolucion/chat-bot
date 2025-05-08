@@ -461,6 +461,248 @@ export const questionsBase = [
         difficulty: 2
     },
     {
+        question: "¿Que tipo de daño hace el ataque del mordisco de Typhon, el segundo jefe de la raid de Nido de Gorgonas?",
+        options: {
+            A: "Impacto",
+            B: "Corte",
+            C: "Estocada",
+            D: "Fuego"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Además de un martillo y un anillo, que otro artefacto sale en la raid de Nido de Gorgonas?",
+        options: {
+            A: "Guantes",
+            B: "Botas",
+            C: "Estoque",
+            D: "Pantalones"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguiente ítems es parte de las recompensas de la Prueba de Alma El sueño de una madre?",
+        options: {
+            A: "Guantes de emperatríz",
+            B: "Chen Yue",
+            C: "Zhou Liang",
+            D: "Paz interior"
+        },
+        correct: "B",
+        difficulty: 3
+    },
+    {
+        question: "¿Qué mejora nos dá la perk de la habilidad de Mazazo del martillo?",
+        options: {
+            A: "Aplica fortalecimiento",
+            B: "Recarga de habilidades",
+            C: "Desgarro",
+            D: "Debilitamiento"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué mejora nos dá la perk del torrente de la hachuela?",
+        options: {
+            A: "Aplica fortalecimiento",
+            B: "Desgarro",
+            C: "Recarga de habilidades",
+            D: "Debilitamiento"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué mejora nos dá la perk del Distanciamiento social de la hachuela?",
+        options: {
+            A: "Aplica fortalecimiento",
+            B: "Desgarro",
+            C: "Recarga de habilidades",
+            D: "Debilitamiento"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué mejora nos dá la perk de la Senda del destino del martillo?",
+        options: {
+            A: "Aplica fortificación",
+            B: "Desgarro",
+            C: "Recuperación de vida",
+            D: "Debilitamiento"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué mejora nos dá la perk de la Quemadura de pólvora del mosquete?",
+        options: {
+            A: "Aplica lentitud",
+            B: "Desgarro",
+            C: "Recuperación de vida",
+            D: "Debilitamiento"
+        },
+        correct: "A",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué mejora nos dá la perk de Tiro potente del mosquete?",
+        options: {
+            A: "Aplica lentitud",
+            B: "Desgarro",
+            C: "Recuperación de vida",
+            D: "Recarga de habilidades"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué mejora nos dá la perk de Postura de tirador del mosquete?",
+        options: {
+            A: "Aplica fortalecimiento",
+            B: "Desgarro",
+            C: "Recuperación de vida",
+            D: "Debilitamiento"
+        },
+        correct: "A",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué mejora nos dá la perk de Potencia de frenado del mosquete?",
+        options: {
+            A: "Aplica lentitud",
+            B: "Recarga de habilidades",
+            C: "Recuperación de vida",
+            D: "Debilitamiento"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué mejora nos dá la perk de las Trampas del mosquete?",
+        options: {
+            A: "Celeridad",
+            B: "Fortalecimiento",
+            C: "Nos ralentiza",
+            D: "Fortificación"
+        },
+        correct: "A",
+        difficulty: 1
+    },
+    {
+        question: "¿Qué mejora nos dá la perk de Bomba pegajosa del mosquete?",
+        options: {
+            A: "Aplica lentitud",
+            B: "Desgarro",
+            C: "Recuperación de vida",
+            D: "Debilitamiento"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Como se llama la perk que hace lo contrario al Odio?",
+        options: {
+            A: "Calma",
+            B: "Amabilidad",
+            C: "Tranquilidad",
+            D: "Karma"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿Como se llama la perk de PVP que te protege de armas como las torretas?",
+        options: {
+            A: "Protección de asedio",
+            B: "Ruina",
+            C: "Roca endurecida",
+            D: "Muro protector"
+        },
+        correct: "A",
+        difficulty: 1
+    },
+    {
+        question: "¿Qué ítem necesitamos para craftear una armadura con la perk que hace que nos curemos después de recolectar un nodo ?",
+        options: {
+            A: "Resina de parca",
+            B: "Trago de savia de madera",
+            C: "Vial de sabia de madera",
+            D: "Gota de esencia Lobuna"
+        },
+        correct: "C",
+        difficulty: 4
+    },
+    {
+        question: "¿Cuanto puede durar una OPR como máximo?",
+        options: {
+            A: "20 minutos",
+            B: "25 minutos",
+            C: "30 minutos",
+            D: "45 minutos"
+        },
+        correct: "D",
+        difficulty: 1
+    },
+    {
+        question: "¿Como se llama la única pieza de ropa que puede tener la perk de Salvación?",
+        options: {
+            A: "Capullo de seda",
+            B: "Casco de seda",
+            C: "Litham de seda",
+            D: "Cercos de seda"
+        },
+        correct: "C",
+        difficulty: 1
+    },
+    {
+        question: "¿Como se llama la perk que nos da más estatus en el territorio ?",
+        options: {
+            A: "Lealtad",
+            B: "Lealtad entre pueblos",
+            C: "Armonía con la naturaleza",
+            D: "Armonía con el territorio"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿La perk de la habilidad vórtice nos dá... ?",
+        options: {
+            A: "Recarga de habilidades",
+            B: "Fortificación",
+            C: "Regeneración de vida",
+            D: "Fortalecimiento"
+        },
+        correct: "C",
+        difficulty: 1
+    },
+    {
+        question: "¿Qué perk de habilidad del mangual tiene penetración de armadura ?",
+        options: {
+            A: "Testarazo",
+            B: "Vórtice",
+            C: "Erupción",
+            D: "Aniquilación"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes manguales GS700 viene con la perk Críticos de la plaga ?",
+        options: {
+            A: "Romperramas",
+            B: "Kraken furioso",
+            C: "Fusta gamberra",
+            D: "Espiritualidad"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
         question: "¿Cuántas profesiones de refinería tenemos en el juego?",
         options: {
             A: "3",

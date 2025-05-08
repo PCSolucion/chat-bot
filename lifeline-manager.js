@@ -258,10 +258,10 @@ class LifelineManager {
         // Frases para cuando el amigo está seguro
         const confidentPhrases = [
             `Estoy ${Math.floor(confidence * 90) + 10}% seguro de que la respuesta es ${correctOption}`,
-            `¡Sin duda! La respuesta es ${correctOption}`,
+            `¡Sin duda! La respuesta es ${correctOption} se lo escuché a Yisus en un directo`,
             `Me lo ha confirmado Scot Lane, es ${correctOption}`,
-            `¡La tengo! Es ${correctOption}, seguro seguro`,
-            `Acabo de consultarlo y es ${correctOption}`,
+            `¡La tengo! Acabo de preguntarle a Takeru. Es ${correctOption}, seguro seguro`,
+            `Esa me la sé desde la época de Cabolo en New World, es ${correctOption}`,
             `¡Esa me la sé! Es ${correctOption}`,
             `No tengo ninguna duda, es ${correctOption}`,
             `¡La ${correctOption}! ¡La ${correctOption}! ¡La ${correctOption}!`
@@ -331,7 +331,7 @@ class LifelineManager {
             "¿No te sabes esa? ¡Pero si es súper fácil!... para el que la sepa. Ni idea. ¿La D?",
             "Diría la A, pero solo porque empieza por A de 'A ver si aciertas'.",
             "La B suena bien, ¿verdad? Pues eso.",
-            "Me la juego: ¡La C! Si fallo, mala suerte.",
+            "Me la juego: ¡La C! Si fallo, mala suerte. Culpa del healer",
             "¿Y si llamas a tu madre? Las madres lo saben todo. Yo, mientras, digo la D.",
             "Creo que la respuesta correcta es... ¡seguir tu instinto! El mío no funciona hoy."
         ];

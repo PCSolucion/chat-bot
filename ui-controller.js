@@ -149,10 +149,11 @@ class UIController {
                 const username = this.elements.usernameInput.value.trim();
                 if (username) {
                     this.hideUsernameModal();
-                    // Pequeño retraso para asegurar que la transición ha terminado
-                    setTimeout(() => {
+                    // Mostrar video de YouTube antes de iniciar el juego
+                    this.showYoutubeVideo('https://youtu.be/GAIpU21qSlo?feature=shared', () => {
+                        // Callback que se ejecuta cuando termina el video
                         this.callbacks.onStartGame(username);
-                    }, 300);
+                    });
                 } else {
                     alert('Por favor, ingresa un nombre de usuario');
                 }
