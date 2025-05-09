@@ -1931,7 +1931,7 @@ export const questionsBase = [
             A: "Fuego",
             B: "Alma",
             C: "Muerte",
-            D: "Fuego"
+            D: "Tierra"
         },
         correct: "B",
         difficulty: 2
@@ -2102,7 +2102,128 @@ export const questionsBase = [
         correct: "C",
         difficulty: 1
     },
-    
+    {
+        question: "¿Cuál es la cantidad máxima de atributo que nos puede dar una pieza de ropa?",
+        options: {
+            A: "32",
+            B: "36",
+            C: "38",
+            D: "45"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿Además de la habilidad Tajo volador, que otra habilidad de la espada puede causar Lentitud?",
+        options: {
+            A: "Escudazo",
+            B: "Ariete",
+            C: "Torbellino",
+            D: "Alzamiento"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades del Martillo NO tiene coraje o no puede llgar a tenerlo mediante ninguna mejora?",
+        options: {
+            A: "Senda del destino",
+            B: "Mazazo",
+            C: "Frenesí demoledor",
+            D: "Sacudida"
+        },
+        correct: "A",
+        difficulty: 2
+    },
+    {
+        question: "¿Un ataque pesado del Filo de la manopla de vacío hace daño de...?",
+        options: {
+            A: "Vacío",
+            B: "Corte",
+            C: "Estocada",
+            D: "Impacto"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Además de aplicar fortalecimiento al equipo, la habilidad de Olvido hace que...?",
+        options: {
+            A: "Si nos golpean restauramos vida",
+            B: "Si golpeamos restauramos vida",
+            C: "Si golpeamos debilitamos al enemigo",
+            D: "Si golpeamos causamos lentitud al enemigo"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades del mangual no es compatible con gemas de provocación o no provoca amenaza?",
+        options: {
+            A: "Testarazo",
+            B: "Zancadilla",
+            C: "Embestida",
+            D: "Ninguna provoca amenaza"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades del Mangual NO tiene Coraje?",
+        options: {
+            A: "Aniquilación arcana",
+            B: "Vórtice arcano",
+            C: "Erupción arcana",
+            D: "Testarazo"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes artefactos nos manda hacer las mazmorras de Enéada y Profundidades para desbloquearlo?",
+        options: {
+            A: "La Carnicera",
+            B: "Filo de Dorgort",
+            C: "Congelación Letal",
+            D: "Chispa de Mjölnir"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál de los siguientes artefactos nos manda matar al Alto sacerdote Oseguera para desbloquearlo?",
+        options: {
+            A: "Inexpugnable",
+            B: "Otzi",
+            C: "Heceta",
+            D: "Trsna"
+        },
+        correct: "C",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál de los siguientes artefactos nos manda matar derrotar a Chardis para desbloquearlo?",
+        options: {
+            A: "Conductores de Azoth",
+            B: "Sombrero de mago Gris",
+            C: "Vendas para los pies de acróbata",
+            D: "Cronómetro perdido"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál es la rareza máxima de los trofeos?",
+        options: {
+            A: "Tier II Poco común ",
+            B: "Tier III Raro",
+            C: "Tier IV Épico",
+            D: "Tier V Legendario"
+        },
+        correct: "D",
+        difficulty: 1
+    },
+
     {
         question: "¿A que tipo de daño es más débil el enemigo Matriarca Medusa?",
         options: {
