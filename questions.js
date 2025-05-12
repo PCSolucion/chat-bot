@@ -979,6 +979,28 @@ export const questionsBase = [
         difficulty: 2
     },
     {
+        question: "¿A qué nivel desbloqueamos la última mejora de velocidad de montura en la profesión de Monta?",
+        options: {
+            A: "150",
+            B: "200",
+            C: "250",
+            D: "225"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "Cuál es el nivel máximo de territorio que podemos tener en el juego?",
+        options: {
+            A: "100",
+            B: "200",
+            C: "300",
+            D: "400"
+        },
+        correct: "C",
+        difficulty: 1
+    },
+    {
         question: "¿Quién suelta el artefacto del estoque llamado Filo de Dorgort?",
         options: {
             A: "Crasus",
@@ -1550,6 +1572,28 @@ export const questionsBase = [
         },
         correct: "D",
         difficulty: 2
+    },
+    {
+        question: "¿Cuántas casillas tiene una tarjeta de actividad del pase de Temporada?",
+        options: {
+            A: "9",
+            B: "12",
+            C: "15",
+            D: "16"
+        },
+        correct: "D",
+        difficulty: 1
+    },
+    {
+        question: "¿Completando los capítulos de Aventura del pase de temporada podemos obtener un trofeo que nos dará un buff de experiencia de Temporada. De cuánto es este buff?",
+        options: {
+            A: "5%",
+            B: "10%",
+            C: "15%",
+            D: "20%"
+        },
+        correct: "A",
+        difficulty: 3
     },
     {
         question: "¿Cual de los siguientes artefactos viene con la perk Alma de curación o Healing Heart?",
