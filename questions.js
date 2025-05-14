@@ -912,17 +912,6 @@ export const questionsBase = [
         difficulty: 1
     },
     {
-        question: "¿En cuál de las siguientes ciudades NO se puede recoger plátanos?",
-        options: {
-            A: "Riscos del Monarca",
-            B: "Altos de Escamanegra",
-            C: "Cayos de Alfanje",
-            D: "Tierras Salvajes Elíseas"
-        },
-        correct: "A",
-        difficulty: 1
-    },
-    {
         question: "¿Que porcentaje reduce la duración de daño con el tiempo el Amanecer del Desierto?",
         options: {
             A: "22 %",
@@ -1277,7 +1266,7 @@ export const questionsBase = [
         difficulty: 1
     },
     {
-        question: "¿De que color es la barra de vida lateralde los miembros del grupo al que pertenecemos?",
+        question: "¿De que color es la barra de vida lateral de los miembros del grupo al que pertenecemos?",
         options: {
             A: "Rojo",
             B: "Azul",
@@ -1406,17 +1395,6 @@ export const questionsBase = [
             D: "Uno"
         },
         correct: "A",
-        difficulty: 1
-    },
-    {
-        question: "¿Typhon, el segundo jefe de la raid de la Gorgona, a cuantas personas marca en la fase de las espinas ?",
-        options: {
-            A: "Una",
-            B: "Tres",
-            C: "Ninguna",
-            D: "A todos"
-        },
-        correct: "B",
         difficulty: 1
     },
     {

@@ -205,15 +205,39 @@ class GameController {
         
         // Cargar y agrupar las preguntas por dificultad
         const allQuestions = [...questionsBase];
+        
+        // Crear un registro para las preguntas usadas recientemente (entre sesiones)
+        if (!window.recentlyUsedQuestions) {
+            window.recentlyUsedQuestions = [];
+        }
+        
+        // Limitar el tamaño del historial de preguntas recientes (mantener solo las últimas 30)
+        if (window.recentlyUsedQuestions.length > 30) {
+            window.recentlyUsedQuestions = window.recentlyUsedQuestions.slice(-30);
+        }
+        
+        // Filtrar preguntas para excluir las usadas recientemente
+        const availableQuestions = allQuestions.filter(q => 
+            !window.recentlyUsedQuestions.some(usedQ => 
+                usedQ.question === q.question
+            )
+        );
+        
+        // Si quedan muy pocas preguntas disponibles, reiniciar el historial
+        if (availableQuestions.length < 20) {
+            window.recentlyUsedQuestions = [];
+        }
+        
+        // Agrupar las preguntas disponibles por dificultad
         this.questionsByDifficulty = {
-            1: allQuestions.filter(q => q.difficulty === 1),
-            2: allQuestions.filter(q => q.difficulty === 2),
-            3: allQuestions.filter(q => q.difficulty === 3)
+            1: availableQuestions.filter(q => q.difficulty === 1),
+            2: availableQuestions.filter(q => q.difficulty === 2),
+            3: availableQuestions.filter(q => q.difficulty === 3)
         };
         
-        // Barajar cada grupo de preguntas usando el algoritmo Fisher-Yates
+        // Barajar cada grupo de preguntas usando el algoritmo Fisher-Yates con más entropía
         for (let difficulty in this.questionsByDifficulty) {
-            this.questionsByDifficulty[difficulty] = this.shuffleArray([...this.questionsByDifficulty[difficulty]]);
+            this.questionsByDifficulty[difficulty] = this.shuffleArrayEnhanced([...this.questionsByDifficulty[difficulty]]);
         }
         
         // Preparar el array final de preguntas
@@ -223,7 +247,17 @@ class GameController {
         const getRandomQuestion = (difficulty) => {
             const questions = this.questionsByDifficulty[difficulty];
             if (questions.length === 0) return null;
-            return questions[Math.floor(Math.random() * questions.length)];
+            
+            // Usar un índice verdaderamente aleatorio
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            const selected = questions[randomIndex];
+            
+            // Registrar esta pregunta como usada recientemente
+            if (selected && !window.recentlyUsedQuestions.some(q => q.question === selected.question)) {
+                window.recentlyUsedQuestions.push(selected);
+            }
+            
+            return selected;
         };
         
         // Función para remover una pregunta de su grupo de dificultad
@@ -244,10 +278,16 @@ class GameController {
                 if (selectedQuestion) {
                     removeQuestion(selectedQuestion, 1);
                 } else {
-                    // Si no hay más preguntas de dificultad 1, usar una aleatoria de cualquier dificultad
-                    const availableQuestions = allQuestions.filter(q => !this.questions.includes(q));
-                    if (availableQuestions.length > 0) {
-                        selectedQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                    // Si no hay más preguntas de dificultad 1, usar una aleatoria de dificultad 2
+                    selectedQuestion = getRandomQuestion(2);
+                    if (selectedQuestion) {
+                        removeQuestion(selectedQuestion, 2);
+                    } else {
+                        // Si no hay de dificultad 2, intentar con dificultad 3
+                        selectedQuestion = getRandomQuestion(3);
+                        if (selectedQuestion) {
+                            removeQuestion(selectedQuestion, 3);
+                        }
                     }
                 }
             } else if (i >= 5 && i <= 9) {
@@ -256,41 +296,48 @@ class GameController {
                 if (selectedQuestion) {
                     removeQuestion(selectedQuestion, 2);
                 } else {
-                    // Si no hay más preguntas de dificultad 2, usar una aleatoria de cualquier dificultad
-                    const availableQuestions = allQuestions.filter(q => !this.questions.includes(q));
-                    if (availableQuestions.length > 0) {
-                        selectedQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                    // Si no hay más preguntas de dificultad 2, probar con 1 o 3
+                    selectedQuestion = getRandomQuestion(1) || getRandomQuestion(3);
+                    if (selectedQuestion) {
+                        const difficulty = selectedQuestion.difficulty;
+                        removeQuestion(selectedQuestion, difficulty);
                     }
                 }
-            } else if (i >= 10 && i <= 14) {
-                // Para niveles 10-14, usar dificultad 3
+            } else if (i >= 10) {
+                // Para niveles 10-15, usar dificultad 3
                 selectedQuestion = getRandomQuestion(3);
                 if (selectedQuestion) {
                     removeQuestion(selectedQuestion, 3);
                 } else {
-                    // Si no hay más preguntas de dificultad 3, usar una aleatoria de cualquier dificultad
-                    const availableQuestions = allQuestions.filter(q => !this.questions.includes(q));
-                    if (availableQuestions.length > 0) {
-                        selectedQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                    // Si no hay más preguntas de dificultad 3, probar con 2 o 1
+                    selectedQuestion = getRandomQuestion(2) || getRandomQuestion(1);
+                    if (selectedQuestion) {
+                        const difficulty = selectedQuestion.difficulty;
+                        removeQuestion(selectedQuestion, difficulty);
                     }
                 }
-            } else if (i === 15) {
-                // Para el nivel 15, seleccionar una pregunta especial de dificultad 3
-                selectedQuestion = getRandomQuestion(3);
-                if (selectedQuestion) {
-                    removeQuestion(selectedQuestion, 3);
-                } else {
-                    // Si no hay más preguntas de dificultad 3, usar una aleatoria de cualquier dificultad
-                    const availableQuestions = allQuestions.filter(q => !this.questions.includes(q));
-                    if (availableQuestions.length > 0) {
-                        selectedQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
-                    }
+            }
+            
+            // Si aún no hay pregunta seleccionada, usar cualquier pregunta disponible de questionsBase
+            if (!selectedQuestion) {
+                const availableQuestions = allQuestions.filter(q => !this.questions.includes(q));
+                if (availableQuestions.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                    selectedQuestion = availableQuestions[randomIndex];
                 }
             }
             
             if (selectedQuestion) {
                 this.questions.push(selectedQuestion);
             }
+        }
+        
+        // Asegurarse de que no haya preguntas repetidas en la misma partida
+        const uniqueQuestions = [...new Set(this.questions.map(q => q.question))];
+        if (uniqueQuestions.length !== this.questions.length) {
+            console.warn('Se detectaron preguntas repetidas, realizando segundo barajado');
+            this.resetGame(); // Intentar de nuevo
+            return;
         }
         
         // Actualizar árbol de premios
@@ -527,17 +574,37 @@ class GameController {
     }
 
     /**
+     * Mezcla un array aleatoriamente con mayor entropía
+     * @param {Array} array - Array a mezclar
+     * @returns {Array} Array mezclado
+     */
+    shuffleArrayEnhanced(array) {
+        const newArray = [...array];
+        // Implementación de Fisher-Yates con más aleatoriedad
+        for (let i = newArray.length - 1; i > 0; i--) {
+            // Usar una fuente de aleatoriedad diferente
+            let j;
+            if (window.crypto && window.crypto.getRandomValues) {
+                const randArray = new Uint32Array(1);
+                window.crypto.getRandomValues(randArray);
+                j = Math.floor((randArray[0] / (0xffffffff + 1)) * (i + 1));
+            } else {
+                // Fallback a Math.random() con timestamp adicional
+                const timestamp = new Date().getTime() % 1000 / 1000;
+                j = Math.floor(((Math.random() + timestamp) / 2) * (i + 1));
+            }
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
+    }
+
+    /**
      * Mezcla un array aleatoriamente
      * @param {Array} array - Array a mezclar
      * @returns {Array} Array mezclado
      */
     shuffleArray(array) {
-        const newArray = [...array];
-        for (let i = newArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-        }
-        return newArray;
+        return this.shuffleArrayEnhanced(array); // Usar la versión mejorada
     }
 
     /**
