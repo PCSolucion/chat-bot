@@ -477,24 +477,16 @@ class UIController {
         // Extraer el ID del video de la URL
         const videoId = this.extractYoutubeId(videoUrl);
         
-        // Crear el iframe para el video
-        const iframe = document.createElement('iframe');
-        iframe.width = '80%';
-        iframe.height = '80%';
-        iframe.style.border = 'none';
-        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&rel=0`;
-        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-        iframe.allowFullscreen = true;
+        // Crear un div para el reproductor de YouTube
+        const playerDiv = document.createElement('div');
+        playerDiv.id = 'youtube-player';
+        playerDiv.style.width = '80%';
+        playerDiv.style.height = '80%';
         
-        videoModal.appendChild(iframe);
+        videoModal.appendChild(playerDiv);
         document.body.appendChild(videoModal);
         
-        // Cerrar el video después de que termine (aproximadamente)
-        // Nota: Esta es una solución aproximada ya que no podemos
-        // detectar directamente cuando termina el video por restricciones de seguridad
-        // Una alternativa mejor sería usar la API de YouTube, pero es más complejo
-        
-        // Se podría agregar un botón de "Saltar" para permitir al usuario continuar
+        // Botón de saltar
         const skipButton = document.createElement('button');
         skipButton.textContent = 'Saltar';
         skipButton.style.position = 'absolute';
@@ -509,30 +501,71 @@ class UIController {
         skipButton.style.fontSize = '16px';
         skipButton.style.zIndex = '10';
         
-        skipButton.addEventListener('click', () => {
-            console.log('Botón Saltar presionado'); // Log para depuración
-            if (videoModal && document.body.contains(videoModal)) {
-                document.body.removeChild(videoModal);
-                console.log('Modal del video eliminado por el botón Saltar'); // Log para depuración
-            } else {
-                console.warn('Modal del video no encontrado o ya eliminado al presionar Saltar'); // Log para depuración
-            }
-            if (onVideoEnd) {
-                console.log('Ejecutando callback onVideoEnd tras Saltar'); // Log para depuración
-                onVideoEnd();
-            }
-        });
-        
         videoModal.appendChild(skipButton);
         
-        // También podemos establecer un tiempo aproximado para cerrar automáticamente
-        // basado en la duración del video si la conocemos
-        setTimeout(() => {
-            if (document.body.contains(videoModal)) {
+        // Función para cerrar el modal
+        const closeModal = () => {
+            if (videoModal && document.body.contains(videoModal)) {
                 document.body.removeChild(videoModal);
-                if (onVideoEnd) onVideoEnd();
+                console.log('Modal del video eliminado');
+                
+                if (onVideoEnd) {
+                    console.log('Ejecutando callback onVideoEnd');
+                    onVideoEnd();
+                }
             }
-        }, 30000); // 30 segundos o ajustar según la duración del video
+        };
+        
+        skipButton.addEventListener('click', closeModal);
+        
+        // Cargar la API de YouTube
+        if (!window.YT) {
+            // Si la API de YouTube no está cargada, cargarla
+            const tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            const firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            
+            // Definir la función onYouTubeIframeAPIReady
+            window.onYouTubeIframeAPIReady = () => {
+                this.createYouTubePlayer(videoId, closeModal);
+            };
+        } else {
+            // Si ya está cargada, crear el reproductor directamente
+            this.createYouTubePlayer(videoId, closeModal);
+        }
+        
+        // También establecemos un tiempo para cerrar automáticamente
+        setTimeout(closeModal, 30000); // 30 segundos
+    }
+    
+    /**
+     * Crea el reproductor de YouTube con la API de IFrame
+     * @param {string} videoId - ID del video de YouTube
+     * @param {Function} closeModal - Función para cerrar el modal
+     */
+    createYouTubePlayer(videoId, closeModal) {
+        const player = new YT.Player('youtube-player', {
+            videoId: videoId,
+            playerVars: {
+                'autoplay': 1,
+                'controls': 0,
+                'rel': 0,
+                'showinfo': 0
+            },
+            events: {
+                'onReady': (event) => {
+                    // Establecer el volumen al 30% (0.3)
+                    event.target.setVolume(30);
+                },
+                'onStateChange': (event) => {
+                    // Si el video termina, cerrar el modal
+                    if (event.data === YT.PlayerState.ENDED) {
+                        closeModal();
+                    }
+                }
+            }
+        });
     }
 
     /**
