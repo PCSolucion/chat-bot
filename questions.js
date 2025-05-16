@@ -1233,6 +1233,61 @@ export const questionsBase = [
         difficulty: 1
     },
     {
+        question: "¿Cómo se llama el recolectable que nos permite abrir la primera puerta de la mazmorra de Génesis?",
+        options: {
+            A: "Infectita",
+            B: "Plaga concentrada",
+            C: "Roca de la plaga",
+            D: "Piedra sin purificar"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿Cómo se llama el ítem de hace que salga el árbol instantáneo que debemos defender en la mazmorra de Génesis?",
+        options: {
+            A: "Semilla Infecta",
+            B: "Semilla de Azoth",
+            C: "Semilla de la plaga",
+            D: "Semilla purificada"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cómo se llama el enemigo con nombre de la habitación extra de Génesis?",
+        options: {
+            A: "O'Dus",
+            B: "Tolos",
+            C: "Kotemos",
+            D: "Morphian"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuántos enemigos debemos derrotar en Génesis para obtener el multiplicador en Génesis?",
+        options: {
+            A: "100",
+            B: "60",
+            C: "75",
+            D: "80"
+        },
+        correct: "B",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuántos recursos o gatherables tenemos que recoger en Génesis para que nos cuente ese multiplicador?",
+        options: {
+            A: "10",
+            B: "14",
+            C: "12",
+            D: "8"
+        },
+        correct: "A",
+        difficulty: 3
+    },
+    {
         question: "¿Como se llama el último jefe de la raid de Winter?",
         options: {
             A: "Constructo Invernal",
