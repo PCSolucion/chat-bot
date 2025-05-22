@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas - ¿Quién Quiere Ser Legendario?</title>
+    <!-- Favicon -->
+    <link rel="icon" href="favicon-darker.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="favicon.ico" type="image/x-icon">
+    <!-- Estilos base -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="stats-shadcn.css">
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="stats-page">
+        <!-- Encabezado -->
+        <header class="stats-header">
+            <div class="header-content">
+                <h1>Estadísticas</h1>
+                <p class="header-description">Explora tu rendimiento en el juego</p>
+            </div>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Volver al juego</span>
+            </a>
+        </header>
+
+        <div class="stats-container">
+            <!-- Sidebar con lista de usuarios -->
+            <aside class="stats-sidebar">
+                <div class="user-profile">
+                    <div class="avatar-container">
+                        <i class="fas fa-user avatar-icon"></i>
+                    </div>
+                    <h2 id="profileUsername">Selecciona un usuario</h2>
+                </div>
+                
+                <div class="user-search">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="userSearch" placeholder="Buscar usuario...">
+                </div>
+                
+                <h3 class="sidebar-title">
+                    <i class="fas fa-users"></i>
+                    <span>Jugadores</span>
+                </h3>
+                
+                <div class="users-list" id="usersList">
+                    <!-- Lista de usuarios se cargará dinámicamente -->
+                </div>
+            </aside>
+
+            <!-- Contenido principal -->
+            <div class="stats-content">
+                <!-- Tarjetas de resumen -->
+                <div class="stats-overview">
+                    <div class="stat-card total-games">
+                        <div class="card-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Partidas</h3>
+                            <div class="stat-value" id="totalGames">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card highest-prize">
+                        <div class="card-icon">
+                            <i class="fas fa-euro-sign"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Premio Más Alto</h3>
+                            <div class="stat-value" id="highestPrize">0 €</div>
+                        </div>
+                    </div>
+                    <div class="stat-card accuracy">
+                        <div class="card-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Precisión</h3>
+                            <div class="stat-value" id="userAccuracy">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección de gráficos -->
+                <section class="stats-section">
+                    <div class="section-header">
+                        <h2>
+                            <i class="fas fa-chart-line"></i>
+                            Resumen de desempeño
+                        </h2>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="chart-container">
+                            <h3>Progresión de premios</h3>
+                            <canvas id="prizeProgressChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Distribución de respuestas</h3>
+                            <canvas id="answersDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección de logros -->
+                <section class="stats-section">
+                    <div class="section-header">
+                        <h2>
+                            <i class="fas fa-medal"></i>
+                            Logros del jugador
+                        </h2>
+                        <div class="section-actions">
+                            <div class="tabs">
+                                <button class="tab active" data-filter="all">Todos</button>
+                                <button class="tab" data-filter="unlocked">Desbloqueados</button>
+                                <button class="tab" data-filter="locked">Bloqueados</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="achievements-grid" id="achievements">
+                        <!-- Los logros se cargarán dinámicamente -->
+                    </div>
+                </section>
+
+                <!-- Historial de partidas -->
+                <section class="stats-section">
+                    <div class="section-header">
+                        <h2>
+                            <i class="fas fa-history"></i>
+                            Historial de Partidas
+                        </h2>
+                        <div class="section-actions">
+                            <button id="sortByDate" class="tab active">
+                                <i class="fas fa-calendar-alt"></i>
+                                Fecha
+                            </button>
+                            <button id="sortByPrize" class="tab">
+                                <i class="fas fa-euro-sign"></i>
+                                Premio
+                            </button>
+                        </div>
+                    </div>
+                    <div class="games-history" id="gamesHistory">
+                        <!-- Historial de partidas se cargará dinámicamente -->
+                    </div>
+                </section>
+
+                <!-- Detalles del jugador -->
+                <section class="stats-section">
+                    <div class="section-header">
+                        <h2>
+                            <i class="fas fa-info-circle"></i>
+                            Detalles del jugador
+                        </h2>
+                        <div class="section-actions">
+                            <button id="exportStats" class="btn btn-secondary">
+                                <i class="fas fa-download"></i>
+                                Exportar datos
+                            </button>
+                        </div>
+                    </div>
+                    <div class="player-details-grid">
+                        <div class="player-detail-item">
+                            <div class="detail-label">Comodines favoritos:</div>
+                            <div class="detail-value" id="favoriteLifelines">-</div>
+                        </div>
+                        <div class="player-detail-item">
+                            <div class="detail-label">Mejor nivel alcanzado:</div>
+                            <div class="detail-value" id="highestLevel">-</div>
+                        </div>
+                        <div class="player-detail-item">
+                            <div class="detail-label">Primera partida:</div>
+                            <div class="detail-value" id="firstGame">-</div>
+                        </div>
+                        <div class="player-detail-item">
+                            <div class="detail-label">Última partida:</div>
+                            <div class="detail-value" id="lastGame">-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="reset-stats-container">
+                        <button id="resetStats" class="btn btn-destructive">
+                            <i class="fas fa-trash-alt"></i>
+                            Reiniciar estadísticas
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-container">
+            <div class="modal-content">
+                <h3 class="modal-title">¿Reiniciar estadísticas?</h3>
+                <p class="modal-description">
+                    Esta acción eliminará todas las estadísticas y el historial del jugador seleccionado. Esta acción no se puede deshacer.
+                </p>
+                <div class="modal-actions">
+                    <button id="cancelReset" class="btn btn-secondary">Cancelar</button>
+                    <button id="confirmReset" class="btn btn-destructive">Sí, reiniciar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast de notificación -->
+    <div class="toast-container">
+        <div class="toast" id="notification">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle" id="notificationIcon"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title" id="notificationTitle">Éxito</div>
+                <div class="toast-message" id="notificationMessage">Operación completada</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="users.js" type="module"></script>
+    <script src="stats.js" type="module"></script>
+</body>
+</html> 

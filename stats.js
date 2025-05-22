@@ -63,7 +63,7 @@ class StatsManager {
         });
 
         // Filtrado de logros
-        const filterButtons = document.querySelectorAll('.filter-btn');
+        const filterButtons = document.querySelectorAll('.tab[data-filter]');
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const filter = button.dataset.filter;
@@ -200,210 +200,260 @@ class StatsManager {
             return 0;
         });
         
-        games.forEach(game => gamesHistory.appendChild(game));
+        games.forEach(game => {
+            gamesHistory.appendChild(game);
+        });
     }
 
     updatePlayerDetails(stats) {
-        // Mejor nivel alcanzado
+        if (!stats) return;
+        
+        // Fecha primer juego
+        const firstGame = stats.games.length > 0 
+            ? new Date(stats.games[stats.games.length - 1].date).toLocaleDateString() 
+            : '-';
+        document.getElementById('firstGame').textContent = firstGame;
+        
+        // Fecha último juego
+        const lastGame = stats.lastGame 
+            ? new Date(stats.lastGame.date).toLocaleDateString() 
+            : '-';
+        document.getElementById('lastGame').textContent = lastGame;
+        
+        // Nivel más alto alcanzado
         const highestLevel = this.getPrizeLevel(stats.highestPrize);
         document.getElementById('highestLevel').textContent = `Nivel ${highestLevel}`;
         
-        // Fechas de partidas
-        if (stats.games && stats.games.length > 0) {
-            const sortedGames = [...stats.games].sort((a, b) => new Date(a.date) - new Date(b.date));
-            document.getElementById('firstGame').textContent = new Date(sortedGames[0].date).toLocaleDateString();
-            document.getElementById('lastGame').textContent = new Date(sortedGames[sortedGames.length - 1].date).toLocaleDateString();
-        } else {
-            document.getElementById('firstGame').textContent = '-';
-            document.getElementById('lastGame').textContent = '-';
-        }
+        // Comodines favoritos (pendiente de implementar)
+        document.getElementById('favoriteLifelines').textContent = 'No disponible';
         
-        // Calcular estadísticas adicionales
-        if (stats.games && stats.games.length > 0) {
-            // Determinar comodines favoritos (cuando tengamos esos datos)
-            document.getElementById('favoriteLifelines').textContent = 'Público (simulado)';
-            
-            // Otras estadísticas que podrían ser útiles
-            const totalQuestionsAnswered = stats.totalCorrect + stats.totalWrong;
-            const averageCorrectPerGame = stats.gamesPlayed > 0 
-                ? (stats.totalCorrect / stats.gamesPlayed).toFixed(1) 
-                : 0;
-                
-            // Estas podrían ser añadidas a la interfaz si hay elementos para mostrarlas
-            console.log("Estadísticas adicionales:", {
-                totalPreguntas: totalQuestionsAnswered,
-                promedioPreguntasCorrectas: averageCorrectPerGame
+        // Exportar estadísticas (pendiente de implementar)
+        const exportBtn = document.getElementById('exportStats');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => {
+                this.exportUserStats(stats);
             });
-        } else {
-            document.getElementById('favoriteLifelines').textContent = '-';
         }
     }
 
     updateAchievements(stats) {
-        // Logros originales
+        const achievementsContainer = document.getElementById('achievements');
         
-        // Logro: Primera Victoria
-        const firstWin = document.getElementById('firstWin');
-        if (stats.gamesPlayed > 0) {
-            firstWin.classList.remove('locked');
-        } else {
-            firstWin.classList.add('locked');
+        if (!stats) {
+            achievementsContainer.innerHTML = '<div class="no-achievements">No hay logros disponibles</div>';
+            return;
         }
         
-        // Logro: Club de Legendarios
-        const millionaireClub = document.getElementById('millionaireClub');
-        if (stats.highestPrize >= 1000000) {
-            millionaireClub.classList.remove('locked');
-        } else {
-            millionaireClub.classList.add('locked');
-        }
+        // Definición de los logros y sus condiciones
+        const achievements = [
+            {
+                id: 'firstWin',
+                title: 'Primera Victoria',
+                description: 'Completar tu primera partida',
+                icon: 'fas fa-trophy',
+                check: stats => stats.gamesPlayed >= 1
+            },
+            {
+                id: 'millionaireClub',
+                title: 'Club de Legendarios',
+                description: 'Ganar 1.000.000 €',
+                icon: 'fas fa-crown',
+                check: stats => stats.highestPrize >= 1000000
+            },
+            {
+                id: 'perfectAccuracy',
+                title: 'Precisión Perfecta',
+                description: 'Completar una partida sin errores',
+                icon: 'fas fa-check-circle',
+                check: stats => stats.games.some(game => game.correctAnswers > 0 && game.wrongAnswers === 0)
+            },
+            {
+                id: 'frequentPlayer',
+                title: 'Jugador Frecuente',
+                description: 'Jugar 10 o más partidas',
+                icon: 'fas fa-gamepad',
+                check: stats => stats.gamesPlayed >= 10
+            },
+            {
+                id: 'safeguardMaster',
+                title: 'Maestro de Seguridad',
+                description: 'Alcanzar nivel 10 (20.000€) en 5 partidas diferentes',
+                icon: 'fas fa-shield-alt',
+                check: stats => stats.games.filter(game => this.getPrizeLevel(game.prize) >= 10).length >= 5
+            },
+            {
+                id: 'speedDemon',
+                title: 'Velocista',
+                description: 'Responder 5 preguntas en menos de 10 segundos cada una',
+                icon: 'fas fa-bolt',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'fiftyFiftyMaster',
+                title: 'Maestro del 50:50',
+                description: 'Ganar una partida usando solo el comodín 50:50',
+                icon: 'fas fa-percentage',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'audienceTrust',
+                title: 'Confianza en el Público',
+                description: 'Acertar 10 preguntas siguiendo al público',
+                icon: 'fas fa-users',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'phoneAFriend',
+                title: 'Teléfono Amigo',
+                description: 'Ganar una pregunta de nivel 12+ con el comodín de la llamada',
+                icon: 'fas fa-phone-alt',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'noLifelines',
+                title: 'Sin Ayuda',
+                description: 'Alcanzar el nivel 10 sin usar ningún comodín',
+                icon: 'fas fa-ban',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'comebackKing',
+                title: 'Rey del Regreso',
+                description: 'Ganar después de haber perdido 3 partidas seguidas',
+                icon: 'fas fa-undo',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'luckySeven',
+                title: 'Siete de la Suerte',
+                description: 'Ganar 7.777€ exactos',
+                icon: 'fas fa-dice',
+                check: stats => stats.games.some(game => game.prize === 7777)
+            },
+            {
+                id: 'secondChance',
+                title: 'Segunda Oportunidad',
+                description: 'Perder y volver a jugar inmediatamente',
+                icon: 'fas fa-sync',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'marathonRunner',
+                title: 'Maratonista',
+                description: 'Jugar 5 partidas en un solo día',
+                icon: 'fas fa-running',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'closeCut',
+                title: 'Por los Pelos',
+                description: 'Responder correctamente con menos de 3 segundos en el reloj',
+                icon: 'fas fa-clock',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'highStakes',
+                title: 'Alto Riesgo',
+                description: 'Alcanzar nivel 15 sin usar ningún nivel de seguridad',
+                icon: 'fas fa-gem',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'threeInARow',
+                title: 'Triplete',
+                description: 'Ganar 3 partidas consecutivas',
+                icon: 'fas fa-award',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'smartCookie',
+                title: 'Sabelotodo',
+                description: 'Responder correctamente 50 preguntas en total',
+                icon: 'fas fa-brain',
+                check: stats => stats.totalCorrect >= 50
+            },
+            {
+                id: 'persistentPlayer',
+                title: 'Persistente',
+                description: 'Jugar 25 partidas en total',
+                icon: 'fas fa-hammer',
+                check: stats => stats.gamesPlayed >= 25
+            },
+            {
+                id: 'veteranStatus',
+                title: 'Veterano',
+                description: 'Jugar 50 partidas en total',
+                icon: 'fas fa-star',
+                check: stats => stats.gamesPlayed >= 50
+            },
+            {
+                id: 'quickLearner',
+                title: 'Aprendiz Rápido',
+                description: 'Mejorar tu puntuación anterior 3 veces seguidas',
+                icon: 'fas fa-graduation-cap',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'steadyProgress',
+                title: 'Progreso Constante',
+                description: 'Alcanzar al menos el nivel 5 en 10 partidas consecutivas',
+                icon: 'fas fa-chart-line',
+                check: () => false // Pendiente de implementar
+            },
+            {
+                id: 'jackpot',
+                title: 'Premio Gordo',
+                description: 'Acumular 2.000.000€ en total entre todas tus partidas',
+                icon: 'fas fa-coins',
+                check: stats => {
+                    const totalPrize = stats.games.reduce((sum, game) => sum + game.prize, 0);
+                    return totalPrize >= 2000000;
+                }
+            },
+            {
+                id: 'brainiac',
+                title: 'Cerebrito',
+                description: 'Alcanzar una precisión del 90% después de 20+ partidas',
+                icon: 'fas fa-lightbulb',
+                check: stats => {
+                    const totalAnswers = stats.totalCorrect + stats.totalWrong;
+                    const accuracy = totalAnswers > 0 
+                        ? ((stats.totalCorrect / totalAnswers) * 100)
+                        : 0;
+                    return accuracy >= 90 && stats.gamesPlayed >= 20;
+                }
+            },
+            {
+                id: 'legendaryStatus',
+                title: 'Estado Legendario',
+                description: 'Ganar el millón 3 veces',
+                icon: 'fas fa-dragon',
+                check: stats => stats.games.filter(game => game.prize >= 1000000).length >= 3
+            },
+            {
+                id: 'onFire',
+                title: 'En Racha',
+                description: 'Responder correctamente 15 preguntas consecutivas',
+                icon: 'fas fa-fire',
+                check: () => false // Pendiente de implementar
+            }
+        ];
         
-        // Logro: Precisión Perfecta
-        const perfectAccuracy = document.getElementById('perfectAccuracy');
-        const hasPerfectGame = stats.games && stats.games.some(game => game.correctAnswers > 0 && game.wrongAnswers === 0);
-        if (hasPerfectGame) {
-            perfectAccuracy.classList.remove('locked');
-        } else {
-            perfectAccuracy.classList.add('locked');
-        }
+        // Generar HTML para cada logro
+        const achievementsHTML = achievements.map(achievement => {
+            const unlocked = achievement.check(stats);
+            return `
+                <div class="achievement-item ${unlocked ? '' : 'locked'}" id="${achievement.id}">
+                    <i class="${achievement.icon}"></i>
+                    <div class="achievement-details">
+                        <h3>${achievement.title}</h3>
+                        <p>${achievement.description}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
         
-        // Logro: Jugador Frecuente
-        const frequentPlayer = document.getElementById('frequentPlayer');
-        if (stats.gamesPlayed >= 10) {
-            frequentPlayer.classList.remove('locked');
-        } else {
-            frequentPlayer.classList.add('locked');
-        }
-        
-        // Nuevos logros
-        
-        // Logro: Maestro de Seguridad
-        const safeguardMaster = document.getElementById('safeguardMaster');
-        const level10Games = stats.games && stats.games.filter(game => game.highestLevelReached >= 10).length;
-        if (level10Games >= 5) {
-            safeguardMaster.classList.remove('locked');
-        } else {
-            safeguardMaster.classList.add('locked');
-        }
-        
-        // Logro: Velocista (simulado, no se guarda el tiempo de respuesta)
-        const speedDemon = document.getElementById('speedDemon');
-        speedDemon.classList.add('locked');
-        
-        // Logro: Maestro del 50:50 (simulado, no se guarda el uso de comodines)
-        const fiftyFiftyMaster = document.getElementById('fiftyFiftyMaster');
-        fiftyFiftyMaster.classList.add('locked');
-        
-        // Logro: Confianza en el Público (simulado)
-        const audienceTrust = document.getElementById('audienceTrust');
-        audienceTrust.classList.add('locked');
-        
-        // Logro: Teléfono Amigo (simulado)
-        const phoneAFriend = document.getElementById('phoneAFriend');
-        phoneAFriend.classList.add('locked');
-        
-        // Logro: Sin Ayuda (simulado)
-        const noLifelines = document.getElementById('noLifelines');
-        noLifelines.classList.add('locked');
-        
-        // Logro: Rey del Regreso
-        // Simulado, se podría implementar analizando el historial de partidas
-        const comebackKing = document.getElementById('comebackKing');
-        comebackKing.classList.add('locked');
-        
-        // Logro: Siete de la Suerte
-        const luckySeven = document.getElementById('luckySeven');
-        const has7777Prize = stats.games && stats.games.some(game => game.prize === 7777);
-        if (has7777Prize) {
-            luckySeven.classList.remove('locked');
-        } else {
-            luckySeven.classList.add('locked');
-        }
-        
-        // Logro: Segunda Oportunidad (simulado)
-        const secondChance = document.getElementById('secondChance');
-        secondChance.classList.add('locked');
-        
-        // Logro: Maratonista (simulado, no guardamos timestamp de partidas)
-        const marathonRunner = document.getElementById('marathonRunner');
-        marathonRunner.classList.add('locked');
-        
-        // Logro: Por los Pelos (simulado)
-        const closeCut = document.getElementById('closeCut');
-        closeCut.classList.add('locked');
-        
-        // Logro: Alto Riesgo (simulado)
-        const highStakes = document.getElementById('highStakes');
-        highStakes.classList.add('locked');
-        
-        // Logro: Triplete (simulado, requiere análisis de partidas consecutivas)
-        const threeInARow = document.getElementById('threeInARow');
-        threeInARow.classList.add('locked');
-        
-        // Logro: Sabelotodo
-        const smartCookie = document.getElementById('smartCookie');
-        if (stats.totalCorrect >= 50) {
-            smartCookie.classList.remove('locked');
-        } else {
-            smartCookie.classList.add('locked');
-        }
-        
-        // Logro: Persistente
-        const persistentPlayer = document.getElementById('persistentPlayer');
-        if (stats.gamesPlayed >= 25) {
-            persistentPlayer.classList.remove('locked');
-        } else {
-            persistentPlayer.classList.add('locked');
-        }
-        
-        // Logro: Veterano
-        const veteranStatus = document.getElementById('veteranStatus');
-        if (stats.gamesPlayed >= 50) {
-            veteranStatus.classList.remove('locked');
-        } else {
-            veteranStatus.classList.add('locked');
-        }
-        
-        // Logro: Aprendiz Rápido (simulado, requiere análisis de mejora consecutiva)
-        const quickLearner = document.getElementById('quickLearner');
-        quickLearner.classList.add('locked');
-        
-        // Logro: Progreso Constante (simulado)
-        const steadyProgress = document.getElementById('steadyProgress');
-        steadyProgress.classList.add('locked');
-        
-        // Logro: Premio Gordo
-        const jackpot = document.getElementById('jackpot');
-        const totalPrize = stats.games ? stats.games.reduce((sum, game) => sum + game.prize, 0) : 0;
-        if (totalPrize >= 2000000) {
-            jackpot.classList.remove('locked');
-        } else {
-            jackpot.classList.add('locked');
-        }
-        
-        // Logro: Cerebrito
-        const brainiac = document.getElementById('brainiac');
-        const accuracy = stats.totalCorrect + stats.totalWrong > 0 
-            ? (stats.totalCorrect / (stats.totalCorrect + stats.totalWrong)) * 100
-            : 0;
-        if (accuracy >= 90 && stats.gamesPlayed >= 20) {
-            brainiac.classList.remove('locked');
-        } else {
-            brainiac.classList.add('locked');
-        }
-        
-        // Logro: Estado Legendario
-        const legendaryStatus = document.getElementById('legendaryStatus');
-        const millionWins = stats.games ? stats.games.filter(game => game.prize >= 1000000).length : 0;
-        if (millionWins >= 3) {
-            legendaryStatus.classList.remove('locked');
-        } else {
-            legendaryStatus.classList.add('locked');
-        }
-        
-        // Logro: En Racha (simulado, requiere análisis de respuestas consecutivas)
-        const onFire = document.getElementById('onFire');
-        onFire.classList.add('locked');
+        achievementsContainer.innerHTML = achievementsHTML;
     }
 
     createCharts(stats) {
@@ -412,47 +462,62 @@ class StatsManager {
     }
 
     createPrizeProgressChart(stats) {
-        const ctx = document.getElementById('prizeProgressChart').getContext('2d');
+        if (!stats || !stats.games || stats.games.length === 0) {
+            return;
+        }
+        
+        const ctx = document.getElementById('prizeProgressChart');
         
         // Destruir gráfico anterior si existe
         if (this.charts.prizeProgress) {
             this.charts.prizeProgress.destroy();
         }
         
-        if (!stats.games || stats.games.length === 0) {
-            ctx.font = '16px Arial';
-            ctx.fillStyle = 'white';
-            ctx.textAlign = 'center';
-            ctx.fillText('No hay datos disponibles', ctx.canvas.width / 2, ctx.canvas.height / 2);
-            return;
-        }
+        // Obtener últimas 10 partidas (o menos si no hay suficientes)
+        const recentGames = [...stats.games].sort((a, b) => new Date(a.date) - new Date(b.date)).slice(-10);
         
-        // Preparar datos para el gráfico
-        const sortedGames = [...stats.games].sort((a, b) => new Date(a.date) - new Date(b.date));
-        const labels = sortedGames.map((_, index) => `Partida ${index + 1}`);
-        const data = sortedGames.map(game => game.prize);
+        const data = {
+            labels: recentGames.map((_, index) => `Partida ${index + 1}`),
+            datasets: [{
+                label: 'Premio (€)',
+                data: recentGames.map(game => game.prize),
+                backgroundColor: 'rgba(59, 130, 246, 0.3)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2,
+                tension: 0.4,
+                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                pointBorderColor: '#fff',
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                fill: true
+            }]
+        };
         
-        // Crear gráfico
-        this.charts.prizeProgress = new Chart(ctx, {
+        const config = {
             type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Premio (€)',
                     data: data,
-                    backgroundColor: 'rgba(241, 143, 1, 0.2)',
-                    borderColor: '#f18f01',
-                    borderWidth: 2,
-                    tension: 0.1,
-                    fill: true,
-                    pointBackgroundColor: '#f18f01',
-                    pointRadius: 5,
-                    pointHoverRadius: 7
-                }]
-            },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                return `Premio: ${context.raw.toLocaleString()} €`;
+                            }
+                        }
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -460,7 +525,18 @@ class StatsManager {
                             color: 'rgba(255, 255, 255, 0.1)'
                         },
                         ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
+                            callback: function(value) {
+                                if (value >= 1000000) {
+                                    return (value / 1000000).toFixed(1) + 'M €';
+                                } else if (value >= 1000) {
+                                    return (value / 1000).toFixed(1) + 'K €';
+                                }
+                                return value + ' €';
+                            },
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            font: {
+                                size: 12
+                            }
                         }
                     },
                     x: {
@@ -468,55 +544,51 @@ class StatsManager {
                             color: 'rgba(255, 255, 255, 0.1)'
                         },
                         ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
-                        }
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            font: {
+                                size: 12
                     }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
                         }
                     }
                 }
             }
-        });
+        };
+        
+        this.charts.prizeProgress = new Chart(ctx, config);
     }
 
     createAnswersDistributionChart(stats) {
-        const ctx = document.getElementById('answersDistributionChart').getContext('2d');
+        if (!stats) return;
+        
+        const ctx = document.getElementById('answersDistributionChart');
         
         // Destruir gráfico anterior si existe
         if (this.charts.answersDistribution) {
             this.charts.answersDistribution.destroy();
         }
         
-        if (!stats || (stats.totalCorrect === 0 && stats.totalWrong === 0)) {
-            ctx.font = '16px Arial';
-            ctx.fillStyle = 'white';
-            ctx.textAlign = 'center';
-            ctx.fillText('No hay datos disponibles', ctx.canvas.width / 2, ctx.canvas.height / 2);
-            return;
-        }
+        const correctAnswers = stats.totalCorrect || 0;
+        const wrongAnswers = stats.totalWrong || 0;
         
-        // Crear gráfico
-        this.charts.answersDistribution = new Chart(ctx, {
-            type: 'pie',
-            data: {
+        const data = {
                 labels: ['Correctas', 'Incorrectas'],
                 datasets: [{
-                    data: [stats.totalCorrect, stats.totalWrong],
+                data: [correctAnswers, wrongAnswers],
                     backgroundColor: [
-                        'rgba(76, 175, 80, 0.8)',
-                        'rgba(244, 67, 54, 0.8)'
+                    'rgba(52, 211, 153, 0.85)',
+                    'rgba(239, 68, 68, 0.85)'
                     ],
                     borderColor: [
-                        'rgba(76, 175, 80, 1)',
-                        'rgba(244, 67, 54, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
+                    'rgba(52, 211, 153, 1)',
+                    'rgba(239, 68, 68, 1)'
+                ],
+                borderWidth: 2
+            }]
+        };
+        
+        const config = {
+            type: 'pie',
+            data: data,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -524,121 +596,140 @@ class StatsManager {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: 'white',
-                            padding: 15
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            padding: 15,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: {
+                                size: 13,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.raw;
+                                const total = correctAnswers + wrongAnswers;
+                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) + '%' : '0%';
+                                return `${context.label}: ${value} (${percentage})`;
+                            }
                         }
                     }
                 }
             }
-        });
+        };
+        
+        this.charts.answersDistribution = new Chart(ctx, config);
     }
 
     getPrizeLevel(prize) {
-        // Asociar el premio con su nivel aproximado
-        const prizeLevels = [
-            { level: 1, prize: 100 },
-            { level: 2, prize: 250 },
-            { level: 3, prize: 500 },
-            { level: 4, prize: 750 },
-            { level: 5, prize: 1500 },
-            { level: 6, prize: 2500 },
-            { level: 7, prize: 5000 },
-            { level: 8, prize: 10000 },
-            { level: 9, prize: 15000 },
-            { level: 10, prize: 20000 },
-            { level: 11, prize: 30000 },
-            { level: 12, prize: 50000 },
-            { level: 13, prize: 100000 },
-            { level: 14, prize: 300000 },
-            { level: 15, prize: 1000000 }
-        ];
+        const prizeLevels = {
+            100: 1, 250: 2, 500: 3, 750: 4, 1500: 5,
+            2500: 6, 5000: 7, 10000: 8, 15000: 9, 20000: 10,
+            30000: 11, 50000: 12, 100000: 13, 300000: 14, 1000000: 15
+        };
         
-        // Encontrar el nivel más cercano
-        for (let i = prizeLevels.length - 1; i >= 0; i--) {
-            if (prize >= prizeLevels[i].prize) {
-                return prizeLevels[i].level;
+        // Buscar el nivel exacto
+        if (prizeLevels[prize] !== undefined) {
+            return prizeLevels[prize];
+        }
+        
+        // Si no hay un nivel exacto, encontrar el nivel más cercano por debajo
+        const levels = Object.keys(prizeLevels).map(Number).sort((a, b) => a - b);
+        let levelFound = 0;
+        
+        for (let i = 0; i < levels.length; i++) {
+            if (prize >= levels[i]) {
+                levelFound = prizeLevels[levels[i]];
+            } else {
+                break;
             }
         }
         
-        return 0;
+        return levelFound;
     }
 
     showConfirmModal() {
-        document.getElementById('confirmModal').style.display = 'flex';
+        const modal = document.getElementById('confirmModal');
+        modal.classList.add('show');
     }
 
     hideConfirmModal() {
-        document.getElementById('confirmModal').style.display = 'none';
+        const modal = document.getElementById('confirmModal');
+        modal.classList.remove('show');
     }
 
     resetUserStats() {
         if (!this.currentUser) return;
         
-        // Reiniciar estadísticas del usuario actual
-        this.userManager.resetUserStats(this.currentUser);
+        const success = this.userManager.resetUserStats(this.currentUser);
         
-        // Actualizar la interfaz
+        if (success) {
         this.updateUserStats(this.currentUser);
-        this.updateGlobalStats();
-        
-        // Mostrar notificación al usuario
-        this.showNotification('success', 'Estadísticas reiniciadas', `Las estadísticas de ${this.currentUser} se han reiniciado correctamente.`);
+            this.showNotification('success', 'Éxito', 'Estadísticas reiniciadas correctamente');
+        } else {
+            this.showNotification('error', 'Error', 'No se pudieron reiniciar las estadísticas');
+        }
     }
     
     showNotification(type, title, message) {
         const notification = document.getElementById('notification');
-        const notificationIcon = document.getElementById('notificationIcon');
         const notificationTitle = document.getElementById('notificationTitle');
         const notificationMessage = document.getElementById('notificationMessage');
+        const notificationIcon = document.getElementById('notificationIcon');
         
-        // Configurar tipo de notificación
-        notification.className = 'notification';
-        notification.classList.add(type);
-        
-        // Actualizar icono según el tipo
-        if (type === 'success') {
-            notificationIcon.className = 'fas fa-check-circle';
-        } else if (type === 'error') {
-            notificationIcon.className = 'fas fa-exclamation-circle';
-        }
-        
-        // Actualizar contenido
+        // Configurar la notificación
         notificationTitle.textContent = title;
         notificationMessage.textContent = message;
         
-        // Mostrar notificación
+        // Configurar el icono según el tipo
+        if (type === 'success') {
+            notification.classList.remove('error');
+            notificationIcon.className = 'fas fa-check-circle';
+        } else if (type === 'error') {
+            notification.classList.add('error');
+            notificationIcon.className = 'fas fa-exclamation-circle';
+        }
+        
+        // Mostrar la notificación
         notification.classList.add('show');
         
-        // Ocultar después de 4 segundos
+        // Ocultar la notificación después de 3 segundos
         setTimeout(() => {
             notification.classList.remove('show');
-        }, 4000);
+        }, 3000);
     }
 
-    // Nueva función para filtrar logros
     filterAchievements(filter) {
         const achievements = document.querySelectorAll('.achievement-item');
         
         achievements.forEach(achievement => {
-            const isLocked = achievement.classList.contains('locked');
-            
-            if (filter === 'all') {
+            switch (filter) {
+                case 'unlocked':
+                    achievement.style.display = achievement.classList.contains('locked') ? 'none' : 'flex';
+                    break;
+                case 'locked':
+                    achievement.style.display = achievement.classList.contains('locked') ? 'flex' : 'none';
+                    break;
+                default: // 'all'
                 achievement.style.display = 'flex';
-            } else if (filter === 'unlocked' && !isLocked) {
-                achievement.style.display = 'flex';
-            } else if (filter === 'locked' && isLocked) {
-                achievement.style.display = 'flex';
-            } else {
-                achievement.style.display = 'none';
             }
         });
     }
 }
 
+// Importar UserManager
+import UserManager from './users.js';
+
+// Inicializar la aplicación cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    // Importar UserManager primero
-    import('./users.js').then(module => {
-        window.UserManager = module.default;
     new StatsManager();
-    });
 }); 
