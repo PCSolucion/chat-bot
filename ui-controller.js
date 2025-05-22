@@ -206,7 +206,7 @@ class UIController {
         // Esperar a que termine la transición para mostrar el modal
         setTimeout(() => {
             if (this.elements.usernameModal) {
-                this.elements.usernameModal.style.display = 'flex';
+                this.elements.usernameModal.classList.add('visible');
             }
         }, 500);
     }
@@ -235,7 +235,7 @@ class UIController {
      */
     hideUsernameModal() {
         if (this.elements.usernameModal) {
-            this.elements.usernameModal.style.display = 'none';
+            this.elements.usernameModal.classList.remove('visible');
         }
     }
 
@@ -455,111 +455,109 @@ class UIController {
     }
 
     /**
-     * Muestra un video de YouTube en pantalla completa y ejecuta un callback cuando finaliza
+     * Muestra un video de YouTube en un modal
      * @param {string} videoUrl - URL del video de YouTube
-     * @param {Function} onVideoEnd - Función a ejecutar cuando termina el video
+     * @param {Function} onVideoEnd - Callback al finalizar el video
      */
     showYoutubeVideo(videoUrl, onVideoEnd) {
-        // Crear el modal para el video
+        // Crear modal de video
         const videoModal = document.createElement('div');
-        videoModal.className = 'video-modal';
-        videoModal.style.position = 'fixed';
-        videoModal.style.top = '0';
-        videoModal.style.left = '0';
-        videoModal.style.width = '100%';
-        videoModal.style.height = '100%';
-        videoModal.style.backgroundColor = 'black';
-        videoModal.style.zIndex = '9999';
-        videoModal.style.display = 'flex';
-        videoModal.style.justifyContent = 'center';
-        videoModal.style.alignItems = 'center';
+        videoModal.id = 'videoModal';
+        videoModal.classList.add('modal', 'visible');
         
         // Extraer el ID del video de la URL
         const videoId = this.extractYoutubeId(videoUrl);
-        
-        // Crear un div para el reproductor de YouTube
-        const playerDiv = document.createElement('div');
-        playerDiv.id = 'youtube-player';
-        playerDiv.style.width = '80%';
-        playerDiv.style.height = '80%';
-        
-        videoModal.appendChild(playerDiv);
         document.body.appendChild(videoModal);
         
-        // Botón de saltar
+        // Añadir botón para saltar video
         const skipButton = document.createElement('button');
         skipButton.textContent = 'Saltar';
-        skipButton.style.position = 'absolute';
-        skipButton.style.top = '20px';
-        skipButton.style.right = '20px';
-        skipButton.style.padding = '10px 20px';
-        skipButton.style.backgroundColor = '#e50914';
-        skipButton.style.color = 'white';
-        skipButton.style.border = 'none';
-        skipButton.style.borderRadius = '5px';
-        skipButton.style.cursor = 'pointer';
-        skipButton.style.fontSize = '16px';
-        skipButton.style.zIndex = '10';
-        
+        skipButton.className = 'skip-video-btn';
         videoModal.appendChild(skipButton);
         
         // Función para cerrar el modal
         const closeModal = () => {
-            if (videoModal && document.body.contains(videoModal)) {
+            videoModal.classList.remove('visible');
+            setTimeout(() => {
                 document.body.removeChild(videoModal);
-                console.log('Modal del video eliminado');
-                
-                if (onVideoEnd) {
-                    console.log('Ejecutando callback onVideoEnd');
+                if (typeof onVideoEnd === 'function') {
                     onVideoEnd();
                 }
-            }
+            }, 300);
         };
         
+        // Añadir evento al botón de saltar
         skipButton.addEventListener('click', closeModal);
         
-        // Cargar la API de YouTube
-        if (!window.YT) {
-            // Si la API de YouTube no está cargada, cargarla
+        // Establecer un límite de tiempo (30 segundos) para cerrar automáticamente
+        const autoCloseTimer = setTimeout(closeModal, 30000);
+        
+        // Cargar la API de YouTube si aún no está cargada
+        if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+            // Crear script para la API
             const tag = document.createElement('script');
             tag.src = 'https://www.youtube.com/iframe_api';
+            
+            // Callback cuando la API esté lista
+            window.onYouTubeIframeAPIReady = () => {
+                this.createYouTubePlayer(videoId, () => {
+                    clearTimeout(autoCloseTimer);
+                    closeModal();
+                });
+            };
+            
+            // Insertar script en el DOM
             const firstScriptTag = document.getElementsByTagName('script')[0];
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-            
-            // Definir la función onYouTubeIframeAPIReady
-            window.onYouTubeIframeAPIReady = () => {
-                this.createYouTubePlayer(videoId, closeModal);
-            };
         } else {
-            // Si ya está cargada, crear el reproductor directamente
-            this.createYouTubePlayer(videoId, closeModal);
+            // La API ya está cargada
+            this.createYouTubePlayer(videoId, () => {
+                clearTimeout(autoCloseTimer);
+                closeModal();
+            });
         }
-        
-        // También establecemos un tiempo para cerrar automáticamente
-        setTimeout(closeModal, 30000); // 30 segundos
     }
     
     /**
-     * Crea el reproductor de YouTube con la API de IFrame
+     * Crea un reproductor de YouTube en el DOM
      * @param {string} videoId - ID del video de YouTube
      * @param {Function} closeModal - Función para cerrar el modal
+     * @returns {object} - El reproductor creado
      */
     createYouTubePlayer(videoId, closeModal) {
-        const player = new YT.Player('youtube-player', {
+        // Crear contenedor para el video
+        const videoContainer = document.createElement('div');
+        videoContainer.className = 'video-container';
+        
+        // Crear elemento para el reproductor
+        const playerElement = document.createElement('div');
+        playerElement.id = 'youtubePlayer';
+        videoContainer.appendChild(playerElement);
+        
+        // Agregar al modal
+        const videoModal = document.getElementById('videoModal');
+        if (videoModal) {
+            videoModal.appendChild(videoContainer);
+        }
+        
+        // Crear reproductor usando la API de YouTube
+        return new YT.Player('youtubePlayer', {
+            height: '100%',
+            width: '100%',
             videoId: videoId,
             playerVars: {
                 'autoplay': 1,
                 'controls': 0,
+                'modestbranding': 1,
                 'rel': 0,
                 'showinfo': 0
             },
             events: {
                 'onReady': (event) => {
-                    // Establecer el volumen al 30% (0.3)
-                    event.target.setVolume(30);
+                    event.target.playVideo();
                 },
                 'onStateChange': (event) => {
-                    // Si el video termina, cerrar el modal
+                    // Cuando el video termina (estado 0), cerrar el modal
                     if (event.data === YT.PlayerState.ENDED) {
                         closeModal();
                     }
