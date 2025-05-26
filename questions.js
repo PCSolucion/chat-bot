@@ -1189,6 +1189,83 @@ export const questionsBase = [
         difficulty: 1
     },
     {
+        question: "¿Cómo se llama el artefacto que nos dá un 10% más de daño siempre que tengamos celeridad?",
+        options: {
+            A: "Ojo de Gorgona",
+            B: "Aquae Rejya",
+            C: "Concentración de Acérita",
+            D: "Inductor de Gorgona"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál es el cap o límite de Ojos de gorgona dañados que podemos obtener a la semana?",
+        options: {
+            A: "60",
+            B: "100",
+            C: "90",
+            D: "50"
+        },
+        correct: "C",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál es la cantidad máxima de Materia Oscura que nos puede dar una caja de Mutada 3 en oro?",
+        options: {
+            A: "40",
+            B: "30",
+            C: "100",
+            D: "50"
+        },
+        correct: "A",
+        difficulty: 3
+    },
+    {
+        question: "¿Qué artefacto Reduce un 20 % la duración base de tus estados negativos que no sean de control de multitudes.?",
+        options: {
+            A: "Vendas para los pies de acróbata",
+            B: "Guantes de liche",
+            C: "Zapatos de cuero alados",
+            D: "Venda para la cabeza de genio"
+        },
+        correct: "C",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál es el único artefacto que viene por defecto con las perk de Protección encantada y Aversión elemental?",
+        options: {
+            A: "Vendas para los pies de acróbata",
+            B: "Grebas rúnicas",
+            C: "Zapatos de cuero alados",
+            D: "Guantes de liche"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿Qué artefacto viene tiene por defecto la perk de Sanación esquiva?",
+        options: {
+            A: "Vendas para los pies de acróbata",
+            B: "Grebas rúnicas",
+            C: "Zapatos de cuero alados",
+            D: "Vestiduras de vampiro"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes materiales NO se usa para fabricas Esencia de Gorgonad?",
+        options: {
+            A: "Vendas para los pies de acróbata",
+            B: "Guantes de liche",
+            C: "Zapatos de cuero alados",
+            D: "Pertinacia"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
         question: "¿Qué porcentaje de protección elemental nos da la perk exclusiva del scutum artefacto actualmente?",
         options: {
             A: "10%",
@@ -1197,6 +1274,17 @@ export const questionsBase = [
             D: "25%"
         },
         correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿A que perk corresponde este descripción? Al atacar, infliges una acumulación de Desgarro del 4 %",
+        options: {
+            A: "Desgarro ávido",
+            B: "Desgarro desesperado",
+            C: "Encantamiento alterno",
+            D: "Acumulación demoledora"
+        },
+        correct: "D",
         difficulty: 2
     },
     {
