@@ -58,7 +58,7 @@ class MillionaireGame {
             startMenuElement.classList.add('hidden'); // Ocultar menú con transición
             // Esperar a que termine la transición para mostrar el modal
             setTimeout(() => {
-                usernameModalElement.style.display = 'flex';
+                usernameModalElement.classList.add('visible');
             }, 500); // 500ms coincide con la duración de la transición CSS
         });
 
@@ -75,7 +75,7 @@ class MillionaireGame {
             const username = document.getElementById('usernameInput').value.trim();
             if (username) {
                 this.userManager.createUser(username);
-                usernameModalElement.style.display = 'none';
+                usernameModalElement.classList.remove('visible');
                 // Aquí no ocultamos el menú principal porque ya está oculto
                 this.startGame(); 
             } else {

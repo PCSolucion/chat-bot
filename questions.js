@@ -1229,7 +1229,7 @@ export const questionsBase = [
             C: "Zapatos de cuero alados",
             D: "Venda para la cabeza de genio"
         },
-        correct: "C",
+        correct: "D",
         difficulty: 3
     },
     {
@@ -1453,7 +1453,7 @@ export const questionsBase = [
         difficulty: 1
     },
     {
-        question: "¿Cuantos Sellos cromáticos podemos conseguir tras superer la raid de la Gorgona?",
+        question: "¿Cuantos Sellos cromáticos podemos conseguir tras superar la raid de la Gorgona?",
         options: {
             A: "Ninguno",
             B: "Uno",
