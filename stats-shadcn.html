@@ -95,6 +95,36 @@
                     </div>
                 </div>
 
+                <!-- Leaderboard -->
+                <section class="stats-section leaderboard-section">
+                    <div class="section-header">
+                        <h2>
+                            <i class="fas fa-trophy"></i>
+                            Tabla de Clasificación
+                        </h2>
+                        <div class="leaderboard-filters">
+                            <select id="monthFilter" class="month-select">
+                                <option value="all">Todos los tiempos</option>
+                                <option value="current">Este mes</option>
+                                <option value="last">Mes anterior</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Posición</th>
+                                <th>Usuario</th>
+                                <th>Premio más alto</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardBody">
+                            <!-- Se llenará dinámicamente -->
+                        </tbody>
+                    </table>
+                </section>
+
                 <!-- Sección de gráficos -->
                 <section class="stats-section">
                     <div class="section-header">

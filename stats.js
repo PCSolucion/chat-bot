@@ -10,6 +10,7 @@ class StatsManager {
         this.loadUsersList();
         this.setupEventListeners();
         this.updateGlobalStats();
+        this.updateLeaderboard('all'); // Inicializar leaderboard
     }
 
     loadUsersList() {
@@ -90,6 +91,11 @@ class StatsManager {
         document.getElementById('cancelReset').addEventListener('click', () => {
             this.hideConfirmModal();
         });
+
+        // Evento para el filtro del leaderboard
+        document.getElementById('monthFilter').addEventListener('change', (e) => {
+            this.updateLeaderboard(e.target.value);
+        });
     }
 
     selectUser(username) {
@@ -105,6 +111,10 @@ class StatsManager {
         
         // Cargar estadísticas del usuario
         this.updateUserStats(username);
+
+        // Actualizar el leaderboard para reflejar el usuario actual
+        const monthFilter = document.getElementById('monthFilter').value;
+        this.updateLeaderboard(monthFilter);
     }
 
     updateGlobalStats() {
@@ -722,6 +732,110 @@ class StatsManager {
                 default: // 'all'
                 achievement.style.display = 'flex';
             }
+        });
+    }
+
+    updateLeaderboard(timeFilter) {
+        const users = this.userManager.getAllUsers().filter(username => username.toLowerCase() !== 'liukin');
+        let leaderboardData = [];
+
+        users.forEach(username => {
+            const stats = this.userManager.getStats(username);
+            if (!stats) return;
+
+            let validGames = stats.games;
+            let highestPrize = stats.highestPrize;
+            let dateOfHighestPrize = stats.lastGame ? stats.lastGame.date : new Date();
+
+            if (timeFilter !== 'all') {
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+
+                validGames = stats.games.filter(game => {
+                    const gameDate = new Date(game.date);
+                    if (timeFilter === 'current') {
+                        return gameDate.getMonth() === currentMonth && 
+                               gameDate.getFullYear() === currentYear;
+                    } else if (timeFilter === 'last') {
+                        const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+                        const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+                        return gameDate.getMonth() === lastMonth && 
+                               gameDate.getFullYear() === lastMonthYear;
+                    }
+                });
+
+                if (validGames.length > 0) {
+                    const highestPrizeGame = validGames.reduce((max, game) => 
+                        game.prize > max.prize ? game : max
+                    );
+                    highestPrize = highestPrizeGame.prize;
+                    dateOfHighestPrize = highestPrizeGame.date;
+                } else {
+                    return;
+                }
+            }
+
+            leaderboardData.push({
+                username,
+                prize: highestPrize,
+                date: new Date(dateOfHighestPrize)
+            });
+        });
+
+        // Ordenar por premio más alto
+        leaderboardData.sort((a, b) => b.prize - a.prize);
+
+        // Actualizar la tabla
+        const tbody = document.getElementById('leaderboardBody');
+        tbody.innerHTML = '';
+
+        leaderboardData.forEach((data, index) => {
+            const row = document.createElement('tr');
+            
+            // Añadir clase si es el usuario actual
+            if (data.username === this.currentUser) {
+                row.classList.add('current-user');
+                row.style.backgroundColor = 'var(--primary)';
+                row.style.color = 'white';
+            }
+            
+            // Crear celda de posición con medalla para los primeros 3
+            const rankCell = document.createElement('td');
+            if (index < 3) {
+                const medalIcon = document.createElement('i');
+                medalIcon.className = `fas fa-medal rank-${index + 1}`;
+                rankCell.appendChild(medalIcon);
+                rankCell.appendChild(document.createTextNode(` ${index + 1}º`));
+            } else {
+                rankCell.textContent = `${index + 1}º`;
+            }
+            rankCell.className = 'rank';
+            
+            const usernameCell = document.createElement('td');
+            usernameCell.textContent = data.username;
+            
+            const prizeCell = document.createElement('td');
+            prizeCell.textContent = `${data.prize.toLocaleString()} €`;
+            prizeCell.className = 'prize';
+            
+            const dateCell = document.createElement('td');
+            dateCell.textContent = data.date.toLocaleDateString();
+            
+            // Si es el usuario actual, aplicar estilos a todas las celdas
+            if (data.username === this.currentUser) {
+                [rankCell, usernameCell, prizeCell, dateCell].forEach(cell => {
+                    cell.style.backgroundColor = 'var(--primary)';
+                    cell.style.color = 'white';
+                });
+            }
+            
+            row.appendChild(rankCell);
+            row.appendChild(usernameCell);
+            row.appendChild(prizeCell);
+            row.appendChild(dateCell);
+            
+            tbody.appendChild(row);
         });
     }
 }

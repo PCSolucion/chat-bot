@@ -874,4 +874,213 @@ body, h1, h2, h3, p, span, div {
     justify-content: space-between;
     margin: 0.5rem 0;
   }
+}
+
+/* Estilos para el Leaderboard */
+.stats-content .stats-section.leaderboard-section {
+    background-color: var(--card);
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+    margin-bottom: 2rem;
+    opacity: 1;
+    pointer-events: auto;
+    filter: none;
+    position: relative;
+    z-index: 1;
+}
+
+.stats-content .stats-section.leaderboard-section::before,
+.stats-content .stats-section.leaderboard-section::after {
+    display: none;
+}
+
+.stats-content .stats-section.leaderboard-section .section-header {
+    border-bottom: 2px solid var(--primary);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    opacity: 1;
+}
+
+.stats-content .stats-section.leaderboard-section .section-header h2 {
+    color: var(--foreground);
+    font-size: 1.25rem;
+    font-weight: 600;
+    opacity: 1;
+}
+
+.stats-content .stats-section.leaderboard-section .section-header h2 i {
+    color: var(--primary);
+}
+
+.stats-content .stats-section.leaderboard-section .leaderboard-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+    opacity: 1;
+}
+
+.stats-content .stats-section.leaderboard-section .leaderboard-table th {
+    background-color: var(--secondary);
+    color: var(--foreground);
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--border);
+    opacity: 1;
+}
+
+.stats-content .stats-section.leaderboard-section .leaderboard-table td {
+    background-color: var(--card);
+    color: var(--foreground);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 1rem;
+    opacity: 1;
+}
+
+.stats-content .stats-section.leaderboard-section .leaderboard-table tr:hover td {
+    background-color: var(--accent);
+}
+
+.stats-content .stats-section.leaderboard-section .leaderboard-table tr.current-user td {
+    background-color: var(--primary) !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+.stats-content .stats-section.leaderboard-section .leaderboard-table tr.current-user:hover td {
+    background-color: hsl(217.2 91.2% 45.9%) !important;
+}
+
+.stats-content .stats-section.leaderboard-section .leaderboard-table tr.current-user .prize {
+    color: white !important;
+}
+
+.stats-content .stats-section.leaderboard-section .month-select {
+    background-color: var(--secondary);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 1;
+}
+
+.stats-content .stats-section.leaderboard-section .month-select:hover {
+    border-color: var(--primary);
+}
+
+.stats-content .stats-section.leaderboard-section .month-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Asegurar que todos los elementos dentro del leaderboard sean visibles */
+.stats-content .stats-section.leaderboard-section *,
+.stats-content .stats-section.leaderboard-section *::before,
+.stats-content .stats-section.leaderboard-section *::after {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    filter: none !important;
+}
+
+/* Estilos para la sección de detalles del jugador */
+.stats-content .stats-section:last-child {
+    background-color: var(--card);
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+    margin-bottom: 2rem;
+    opacity: 1;
+    pointer-events: auto;
+    filter: none;
+    position: relative;
+    z-index: 1;
+}
+
+.stats-content .stats-section:last-child::before,
+.stats-content .stats-section:last-child::after {
+    display: none;
+}
+
+.stats-content .stats-section:last-child .section-header {
+    border-bottom: 2px solid var(--primary);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    opacity: 1;
+}
+
+.stats-content .stats-section:last-child .section-header h2 {
+    color: var(--foreground);
+    font-size: 1.25rem;
+    font-weight: 600;
+    opacity: 1;
+}
+
+.stats-content .stats-section:last-child .section-header h2 i {
+    color: var(--primary);
+}
+
+.stats-content .stats-section:last-child .player-details-grid {
+    opacity: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stats-content .stats-section:last-child .player-detail-item {
+    background-color: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    opacity: 1;
+}
+
+.stats-content .stats-section:last-child .detail-label {
+    color: var(--foreground);
+    opacity: 0.7;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.stats-content .stats-section:last-child .detail-value {
+    color: var(--foreground);
+    font-weight: 600;
+    font-size: 1rem;
+    opacity: 1;
+}
+
+.stats-content .stats-section:last-child .btn {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Asegurar que todos los elementos dentro de la sección sean visibles */
+.stats-content .stats-section:last-child *,
+.stats-content .stats-section:last-child *::before,
+.stats-content .stats-section:last-child *::after {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    filter: none !important;
+}
+
+/* Estilos para la fila del usuario actual */
+#leaderboardBody tr.current-user td {
+    background-color: var(--primary) !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+#leaderboardBody tr.current-user:hover td {
+    background-color: hsl(217.2 91.2% 45.9%) !important;
+}
+
+#leaderboardBody tr.current-user .prize {
+    color: white !important;
 } 
