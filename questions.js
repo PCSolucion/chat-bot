@@ -428,6 +428,72 @@ export const questionsBase = [
         difficulty: 2
     },
     {
+        question: "¿Cuál es el máximo de sal de azoth que podemos acumular fuera de los viales?",
+        options: {
+            A: "50.000",
+            B: "100.000",
+            C: "200.000",
+            D: "300.000"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿Qué rango de PVP tenemos si hemos completado 125 seguimientos de PVP (Nivel 125 de PVP)?",
+        options: {
+            A: "Plata",
+            B: "Oro",
+            C: "Platino",
+            D: "Diamante"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cómo se llama el título que obtenemos por alcalzar nivel 200 en seguimiento de PVP?",
+        options: {
+            A: "Señor de PVP",
+            B: "Leyenda de JcJ",
+            C: "Deidad de JcJ",
+            D: "Bestia de JcJ"
+        },
+        correct: "C",
+        difficulty: 1
+    },
+    {
+        question: "¿Cómo se llama la perk de las bolsas que hace que los efectos de las comidas duren más?",
+        options: {
+            A: "Consumo duradero",
+            B: "Consumo prolongado",
+            C: "Consumo eterno",
+            D: "Consumo eterno"
+        },
+        correct: "A",
+        difficulty: 1
+    },
+    {
+        question: "¿Cuál de las siguientes canciones existe en el menú de selección de canciones de New World?",
+        options: {
+            A: "Concha Satisfactoria",
+            B: "Querido señor Harrison",
+            C: "Prisa del Prospectante",
+            D: "El camino de la grieta"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes ingredientes NO hace falta para eleaborar Amanecer del Desierto?",
+        options: {
+            A: "Trozo de cactus",
+            B: "Agua",
+            C: "Miel",
+            D: "Azoth"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
         question: "¿Cuál de los siguientes nameds pertenece a la mazmorra de Amrine?",
         options: {
             A: "Zippy",
@@ -436,6 +502,28 @@ export const questionsBase = [
             D: "Benat"
         },
         correct: "A",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué bonus nos dá el fuerte de Costa de Zozobra?",
+        options: {
+            A: "Bonificación de fabricación global",
+            B: "Poner campamento sin recursos",
+            C: "Reducción de impuesto global",
+            D: "Viajes rápidos gratis"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿El fuerte de que región nos dá el buff de +10% a la cantidad de recolección ?",
+        options: {
+            A: "Costa de Zozobra",
+            B: "Arenas de Azufre",
+            C: "Cayos de Alfanje",
+            D: "Altos de Escamanegra"
+        },
+        correct: "B",
         difficulty: 2
     },
     {
@@ -1484,6 +1572,17 @@ export const questionsBase = [
         },
         correct: "D",
         difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes rangos de compañía NO existe en New World?",
+        options: {
+            A: "Cónsul",
+            B: "Oficial",
+            C: "Gobernador",
+            D: "Tesorero"
+        },
+        correct: "D",
+        difficulty: 1
     },
     {
         question: "¿A que elemento es más vulnerable la Baronesa Hain?",
