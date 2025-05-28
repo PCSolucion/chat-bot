@@ -10,7 +10,7 @@ import SpeechManager from './speech-manager.js';
 import { questionsBase } from './questions.js';
 import configManager from './config.js';
 
-class GameController {
+export default class GameController {
     /**
      * @param {Object} options - Opciones de configuración
      */
@@ -63,6 +63,16 @@ class GameController {
         
         // Referencia al settingsController (se asignará en main.js)
         this.settingsController = null;
+        
+        this.timePerQuestion = [];
+        this.lifelinesUsed = {
+            fifty: false,
+            audience: false,
+            phone: false
+        };
+        this.username = null;
+        this.timerEnabled = true;
+        this.setupGame();
     }
 
     /**
@@ -148,6 +158,38 @@ class GameController {
             phoneMessageContainer: document.getElementById('phoneMessageContainer'),
             audienceChart: document.getElementById('audienceChart')
         });
+        
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        // Escuchar eventos del juego
+        document.addEventListener('questionAnswered', (event) => {
+            const { correct, time } = event.detail;
+            this.timePerQuestion.push(time);
+            
+            if (correct) {
+                this.correctAnswers++;
+                this.currentPrize = this.getPrizeForLevel(this.currentLevel);
+                this.currentLevel++;
+            } else {
+                this.wrongAnswers++;
+                this.endGame('wrong');
+            }
+        });
+
+        document.addEventListener('lifelineUsed', (event) => {
+            const { lifeline } = event.detail;
+            this.lifelinesUsed[lifeline] = true;
+        });
+
+        document.addEventListener('gameQuit', () => {
+            this.endGame('quit');
+        });
+
+        document.addEventListener('gameWon', () => {
+            this.endGame('won');
+        });
     }
 
     /**
@@ -202,6 +244,12 @@ class GameController {
         this.correctAnswers = 0;
         this.wrongAnswers = 0;
         this.currentPrize = 0;
+        this.timePerQuestion = [];
+        this.lifelinesUsed = {
+            fifty: false,
+            audience: false,
+            phone: false
+        };
         
         // Cargar y agrupar las preguntas por dificultad
         const allQuestions = [...questionsBase];
@@ -494,11 +542,16 @@ class GameController {
             correctAnswers: this.correctAnswers,
             wrongAnswers: this.wrongAnswers,
             prize: isWin ? this.currentPrize : this.calculateGuaranteedPrize(),
-            highestLevelReached: this.currentLevel
+            highestLevelReached: this.currentLevel,
+            date: new Date().toISOString(),
+            lifelines: this.lifelinesUsed,
+            timePerQuestion: this.timePerQuestion,
+            maxPossiblePrize: this.getPrizeForLevel(15),
+            withTimer: this.timerEnabled
         };
         
         // Actualizar estadísticas del usuario
-        this.userManager.updateStats(gameResult);
+        this.userManager.updateStats(this.username, gameResult);
         
         // Mostrar mensaje
         if (isWin) {
@@ -699,6 +752,33 @@ class GameController {
             this.audioManager.playSound('suspense');
         }
     }
-}
 
-export default GameController; 
+    getPrizeForLevel(level) {
+        const prizes = {
+            1: 100,
+            2: 250,
+            3: 500,
+            4: 750,
+            5: 1500,
+            6: 2500,
+            7: 5000,
+            8: 10000,
+            9: 15000,
+            10: 20000,
+            11: 30000,
+            12: 50000,
+            13: 100000,
+            14: 300000,
+            15: 1000000
+        };
+        return prizes[level] || 0;
+    }
+
+    setUsername(username) {
+        this.username = username;
+    }
+
+    setTimerEnabled(enabled) {
+        this.timerEnabled = enabled;
+    }
+} 

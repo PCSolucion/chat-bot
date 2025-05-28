@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificaciones - ¿Quién quiere ser legendario?</title>
+    <link rel="icon" href="favicon-darker.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="leaderboard.css">
+</head>
+<body>
+    <div class="leaderboard-container">
+        <div class="leaderboard-header">
+            <h1>🏆 Clasificaciones</h1>
+            <a href="index.html" class="back-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver al Menú
+            </a>
+        </div>
+
+        <div class="filters-section">
+            <div class="filter-group">
+                <label for="timeRange">Período:</label>
+                <select id="timeRange" class="filter-select">
+                    <option value="all">Todo el tiempo</option>
+                    <option value="today">Hoy</option>
+                    <option value="week">Última semana</option>
+                    <option value="month">Último mes</option>
+                    <option value="year">Último año</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="sortBy">Ordenar por:</label>
+                <select id="sortBy" class="filter-select">
+                    <option value="prize">Por premio</option>
+                    <option value="avgTime">Por tiempo medio</option>
+                    <option value="correctAnswers">Por respuestas correctas</option>
+                    <option value="gamesPlayed">Por partidas jugadas</option>
+                </select>
+            </div>
+            <button id="resetFilters" class="filter-button">Reiniciar filtros</button>
+        </div>
+
+        <div class="leaderboard-tabs">
+            <button class="tab-button active" data-tab="general">General</button>
+            <button class="tab-button" data-tab="lifelines">Comodines</button>
+            <button class="tab-button" data-tab="speed">Velocidad</button>
+            <button class="tab-button" data-tab="streaks">Rachas</button>
+        </div>
+
+        <div class="tab-content active" id="general">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Pos.</th>
+                        <th>Jugador</th>
+                        <th>Premio máximo</th>
+                        <th>Partidas</th>
+                        <th>% Aciertos</th>
+                        <th>Nivel máx.</th>
+                        <th>Última partida</th>
+                    </tr>
+                </thead>
+                <tbody id="generalTableBody">
+                    <!-- Se llenará dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-content" id="lifelines">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Pos.</th>
+                        <th>Jugador</th>
+                        <th>Comodín favorito</th>
+                        <th>Veces usado</th>
+                        <th>% Éxito</th>
+                        <th>Primer comodín</th>
+                        <th>Nivel medio</th>
+                    </tr>
+                </thead>
+                <tbody id="lifelinesTableBody">
+                    <!-- Se llenará dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-content" id="speed">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Pos.</th>
+                        <th>Jugador</th>
+                        <th>Tiempo medio</th>
+                        <th>Respuesta más rápida</th>
+                        <th>Nivel más rápido</th>
+                        <th>Sin temporizador</th>
+                        <th>Total preguntas</th>
+                    </tr>
+                </thead>
+                <tbody id="speedTableBody">
+                    <!-- Se llenará dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-content" id="streaks">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Pos.</th>
+                        <th>Jugador</th>
+                        <th>Racha actual</th>
+                        <th>Mejor racha</th>
+                        <th>Rachas perfectas</th>
+                        <th>Sin comodines</th>
+                        <th>Total rachas</th>
+                    </tr>
+                </thead>
+                <tbody id="streaksTableBody">
+                    <!-- Se llenará dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="module" src="leaderboard.js"></script>
+</body>
+</html> 
