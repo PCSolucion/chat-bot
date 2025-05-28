@@ -15,6 +15,11 @@ class SettingsController {
         this.timerDuration = document.getElementById('timerDuration');
         this.showTimer = document.getElementById('showTimer');
         
+        // Elementos de sonido
+        this.effectsVolume = document.getElementById('effectsVolume');
+        this.musicVolume = document.getElementById('musicVolume');
+        this.enableSpeech = document.getElementById('enableSpeech');
+        
         // Campos de premios
         this.prizeInputs = {};
         for (let i = 1; i <= 15; i++) {
@@ -22,6 +27,7 @@ class SettingsController {
         }
         
         this.setupEventListeners();
+        this.setupVolumeControls();
     }
     
     /**
@@ -54,6 +60,30 @@ class SettingsController {
                 this.closeSettingsModal();
             }
         });
+    }
+    
+    /**
+     * Configura los controles de volumen
+     */
+    setupVolumeControls() {
+        const updateVolumeValue = (slider) => {
+            const valueSpan = slider.parentElement.querySelector('.volume-value');
+            if (valueSpan) {
+                valueSpan.textContent = `${slider.value}%`;
+            }
+        };
+
+        if (this.effectsVolume) {
+            this.effectsVolume.addEventListener('input', () => {
+                updateVolumeValue(this.effectsVolume);
+            });
+        }
+
+        if (this.musicVolume) {
+            this.musicVolume.addEventListener('input', () => {
+                updateVolumeValue(this.musicVolume);
+            });
+        }
     }
     
     /**
@@ -92,6 +122,27 @@ class SettingsController {
         if (this.showTimer) {
             this.showTimer.checked = config.timer.showTimer !== false;
         }
+
+        // Cargar configuración de sonido
+        if (this.effectsVolume) {
+            this.effectsVolume.value = (config.sounds.effectsVolume * 100) || 70;
+            const effectsValueSpan = this.effectsVolume.parentElement.querySelector('.volume-value');
+            if (effectsValueSpan) {
+                effectsValueSpan.textContent = `${this.effectsVolume.value}%`;
+            }
+        }
+
+        if (this.musicVolume) {
+            this.musicVolume.value = (config.sounds.musicVolume * 100) || 50;
+            const musicValueSpan = this.musicVolume.parentElement.querySelector('.volume-value');
+            if (musicValueSpan) {
+                musicValueSpan.textContent = `${this.musicVolume.value}%`;
+            }
+        }
+
+        if (this.enableSpeech) {
+            this.enableSpeech.checked = config.sounds.enableSpeech !== false;
+        }
         
         // Cargar configuración de premios
         for (let i = 1; i <= 15; i++) {
@@ -111,6 +162,14 @@ class SettingsController {
             showTimer: this.showTimer.checked
         };
         configManager.updateConfig('timer', timerConfig);
+
+        // Guardar configuración de sonido
+        const soundsConfig = {
+            effectsVolume: parseFloat(this.effectsVolume.value) / 100 || 0.7,
+            musicVolume: parseFloat(this.musicVolume.value) / 100 || 0.5,
+            enableSpeech: this.enableSpeech.checked
+        };
+        configManager.updateConfig('sounds', soundsConfig);
         
         // Guardar configuración de premios
         const prizesConfig = {};
