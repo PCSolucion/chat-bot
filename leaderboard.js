@@ -52,35 +52,37 @@ class LeaderboardManager {
     }
     
     getFilteredStats(timeRange) {
-        const users = this.userManager.getAllUsers();
-        const stats = users.map(username => {
-            const userStats = this.userManager.getStats(username);
-            if (!userStats) return null;
+        const allStats = [];
+        const users = this.userManager.getAllUsers().filter(username => username.toLowerCase() !== 'liukin');
+        
+        users.forEach(username => {
+            const stats = this.userManager.getStats(username);
+            if (!stats) return;
 
-            return {
+            allStats.push({
                 username,
-                maxPrize: userStats.highestPrize || 0,
-                gamesPlayed: userStats.gamesPlayed || 0,
-                correctAnswers: userStats.totalCorrect || 0,
-                totalAnswers: (userStats.totalCorrect || 0) + (userStats.totalWrong || 0),
-                maxLevel: userStats.lastGame ? userStats.lastGame.highestLevelReached : 0,
-                lastPlayed: userStats.lastGame ? userStats.lastGame.date : null,
-                lifelines: userStats.lifelines || {},
-                firstLifeline: userStats.firstLifeline,
-                totalLevel: userStats.games ? userStats.games.reduce((sum, game) => sum + (game.highestLevelReached || 0), 0) : 0,
-                totalTime: userStats.totalTime || 0,
-                fastestAnswer: userStats.fastestAnswer,
-                fastestLevel: userStats.fastestLevel,
-                gamesWithoutTimer: userStats.gamesWithoutTimer || 0,
-                currentStreak: userStats.currentStreak || 0,
-                bestStreak: userStats.bestStreak || 0,
-                perfectStreaks: userStats.perfectStreaks || 0,
-                noLifelineStreaks: userStats.noLifelineStreaks || 0,
-                totalStreaks: userStats.totalStreaks || 0
-            };
-        }).filter(stat => stat !== null);
+                maxPrize: stats.highestPrize || 0,
+                gamesPlayed: stats.gamesPlayed || 0,
+                correctAnswers: stats.totalCorrect || 0,
+                totalAnswers: (stats.totalCorrect || 0) + (stats.totalWrong || 0),
+                maxLevel: stats.lastGame ? stats.lastGame.highestLevelReached : 0,
+                lastPlayed: stats.lastGame ? stats.lastGame.date : null,
+                lifelines: stats.lifelines || {},
+                firstLifeline: stats.firstLifeline,
+                totalLevel: stats.games ? stats.games.reduce((sum, game) => sum + (game.highestLevelReached || 0), 0) : 0,
+                totalTime: stats.totalTime || 0,
+                fastestAnswer: stats.fastestAnswer,
+                fastestLevel: stats.fastestLevel,
+                gamesWithoutTimer: stats.gamesWithoutTimer || 0,
+                currentStreak: stats.currentStreak || 0,
+                bestStreak: stats.bestStreak || 0,
+                perfectStreaks: stats.perfectStreaks || 0,
+                noLifelineStreaks: stats.noLifelineStreaks || 0,
+                totalStreaks: stats.totalStreaks || 0
+            });
+        });
 
-        if (timeRange === 'all') return stats;
+        if (timeRange === 'all') return allStats;
         
         const now = new Date();
         const filterDate = new Date();
@@ -100,7 +102,7 @@ class LeaderboardManager {
                 break;
         }
         
-        return stats.filter(stat => stat.lastPlayed && new Date(stat.lastPlayed) >= filterDate);
+        return allStats.filter(stat => stat.lastPlayed && new Date(stat.lastPlayed) >= filterDate);
     }
     
     updateLeaderboard() {
