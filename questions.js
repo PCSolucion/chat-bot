@@ -229,6 +229,17 @@ export const questionsBase = [
         category: "general"
     },
     {
+        question: "¿Cuál de los siguienetes artefactos viene con una perk exclusiva de JcJ?",
+        options: {
+            A: "Justicia",
+            B: "Vestiduras de vampiro",
+            C: "Caos",
+            D: "Lanzavirotes"
+        },
+        correct: "B",
+        difficulty: 2,
+    },
+    {
         question: "¿Como se llama la habilidad pasiva de la espada que permite obtener celeridad hacer un ataque crítico?",
         options: {
             A: "Castigo célere",
@@ -379,6 +390,61 @@ export const questionsBase = [
             B: "Zapatos de cuero alados",
             C: "Sombrero de mago gris",
             D: "Guantes de gul"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál es el único artefacto que viene por defecto con la perk de Consciencia aguda?",
+        options: {
+            A: "Bebesangre",
+            B: "Anj",
+            C: "Banda elemental",
+            D: "Fénix"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuántos arquetipos distintos hay en New World para elegir al principio del juego?",
+        options: {
+            A: "6",
+            B: "7",
+            C: "4",
+            D: "10"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades de la manopla de vacío es compatible con gemas de amenaza o provocación?",
+        options: {
+            A: "Filo de vacío",
+            B: "Grito petrificante",
+            C: "Orbe de Podredumbre",
+            D: "Ruptura de esencia"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades de la manopla de vacío otorga Fortificación (Obtención de armadura) al portador?",
+        options: {
+            A: "Filo de vacío",
+            B: "Olvido",
+            C: "Orbe de Podredumbre",
+            D: "Ruptura de esencia"
+        },
+        correct: "A",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades de la manopla de vacío ralentiza (Reduce velocidad de movimiento que no lleva a inmovilizar) al enemigo?",
+        options: {
+            A: "Filo de vacío",
+            B: "Olvido",
+            C: "Orbe de Podredumbre",
+            D: "Atadura funesta"
         },
         correct: "C",
         difficulty: 2
