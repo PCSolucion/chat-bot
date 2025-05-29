@@ -157,39 +157,37 @@ class LifelineManager {
         iconDiv.className = 'audience-icon';
         chart.appendChild(iconDiv);
 
-        const percentagesDiv = document.createElement('div');
-        percentagesDiv.className = 'audience-percentages';
-        chart.appendChild(percentagesDiv);
-
         const barsDiv = document.createElement('div');
         barsDiv.className = 'audience-bars';
         chart.appendChild(barsDiv);
 
-        const valueElements = [];
         const barElements = [];
 
         ['A', 'B', 'C', 'D'].forEach(option => {
-            const percentageValueDiv = document.createElement('div');
-            percentageValueDiv.className = 'audience-percentage-value';
-            percentageValueDiv.textContent = `${percentages[option]}%`;
-            percentageValueDiv.style.opacity = '0';
-            percentagesDiv.appendChild(percentageValueDiv);
-            valueElements.push(percentageValueDiv);
-
             const barContainer = document.createElement('div');
             barContainer.className = 'audience-bar-container';
 
+            const barWrapper = document.createElement('div');
+            barWrapper.className = 'audience-bar-wrapper';
+            
             const barDiv = document.createElement('div');
             barDiv.className = 'audience-bar';
-            barDiv.style.setProperty('--final-height', `${percentages[option]}px`);
-            barContainer.appendChild(barDiv);
+            barDiv.style.setProperty('--final-height', `${percentages[option]}%`);
             barElements.push(barDiv);
-
+            
             const labelDiv = document.createElement('div');
             labelDiv.className = 'audience-bar-label';
             labelDiv.textContent = option;
-            barContainer.appendChild(labelDiv);
             
+            const percentageDiv = document.createElement('div');
+            percentageDiv.className = 'audience-percentage-value';
+            percentageDiv.textContent = `${percentages[option]}%`;
+            percentageDiv.style.opacity = '0';
+
+            barWrapper.appendChild(barDiv);
+            barContainer.appendChild(barWrapper);
+            barContainer.appendChild(labelDiv);
+            barContainer.appendChild(percentageDiv);
             barsDiv.appendChild(barContainer);
         });
 
@@ -202,8 +200,10 @@ class LifelineManager {
         });
        
         setTimeout(() => {
-            valueElements.forEach(el => el.style.opacity = '1');
-        }, 5000);
+            chart.querySelectorAll('.audience-percentage-value').forEach(el => {
+                el.style.opacity = '1';
+            });
+        }, 1500);
     }
 
     /**
