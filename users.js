@@ -59,10 +59,63 @@ class UserManager {
             prize: gameResult.prize,
             correctAnswers: gameResult.correctAnswers,
             wrongAnswers: gameResult.wrongAnswers,
-            highestLevelReached: gameResult.highestLevelReached || 0
+            highestLevelReached: gameResult.highestLevelReached || 0,
+            timePerAnswer: gameResult.timePerAnswer || [],
+            usedLifelines: gameResult.usedLifelines || [],
+            timeToCompleteLevel: gameResult.timeToCompleteLevel || 0
         };
 
+        if (gameResult.correctAnswers > 0 && gameResult.wrongAnswers === 0) {
+            user.currentStreak = (user.currentStreak || 0) + 1;
+            user.bestStreak = Math.max(user.bestStreak || 0, user.currentStreak);
+            
+            if (gameResult.correctAnswers >= 5) {
+                user.perfectStreaks = (user.perfectStreaks || 0) + 1;
+            }
+        } else {
+            user.currentStreak = 0;
+        }
+
+        if (gameResult.usedLifelines && gameResult.usedLifelines.length === 0) {
+            user.noLifelineStreaks = (user.noLifelineStreaks || 0) + 1;
+        }
+
+        if (gameResult.timePerAnswer && gameResult.timePerAnswer.length > 0) {
+            const fastAnswers = gameResult.timePerAnswer.filter(time => time < 5).length;
+            user.fastAnswers = (user.fastAnswers || 0) + fastAnswers;
+
+            const minTime = Math.min(...gameResult.timePerAnswer);
+            if (!user.fastestAnswer || minTime < user.fastestAnswer) {
+                user.fastestAnswer = minTime;
+            }
+        }
+
+        if (gameResult.timeToCompleteLevel) {
+            if (!user.fastestLevel || gameResult.timeToCompleteLevel < user.fastestLevel) {
+                user.fastestLevel = gameResult.timeToCompleteLevel;
+            }
+        }
+
+        if (gameResult.usedLifelines) {
+            user.lifelines = user.lifelines || {};
+            gameResult.usedLifelines.forEach(lifeline => {
+                user.lifelines[lifeline] = (user.lifelines[lifeline] || 0) + 1;
+            });
+
+            if (gameResult.usedLifelines.length > 0 && !user.firstLifeline) {
+                user.firstLifeline = gameResult.usedLifelines[0];
+            }
+        }
+
+        if (gameResult.withoutTimer) {
+            user.gamesWithoutTimer = (user.gamesWithoutTimer || 0) + 1;
+        }
+
+        if (!user.games) user.games = [];
         user.games.push(user.lastGame);
+
+        user.totalTime = (user.totalTime || 0) + (gameResult.totalTime || 0);
+
         this.saveUsers();
         
         console.log("Estadísticas actualizadas:", {
@@ -91,7 +144,6 @@ class UserManager {
 
     resetUserStats(username) {
         if (this.users[username]) {
-            // Mantener el username pero reiniciar todas las estadísticas
             this.users[username] = {
                 gamesPlayed: 0,
                 totalCorrect: 0,
@@ -107,5 +159,4 @@ class UserManager {
     }
 }
 
-// Exportar la clase para poder importarla en otros archivos
 export default UserManager; 

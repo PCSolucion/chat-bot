@@ -1,5 +1,6 @@
 // Importar las dependencias necesarias
 import UserManager from './users.js';
+import AchievementsManager from './achievements.js';
 
 class LeaderboardManager {
     constructor() {
@@ -9,6 +10,7 @@ class LeaderboardManager {
         this.tabButtons = document.querySelectorAll('.tab-button');
         this.tabContents = document.querySelectorAll('.tab-content');
         this.userManager = new UserManager();
+        this.achievementsManager = new AchievementsManager();
         
         this.setupEventListeners();
         this.loadInitialData();
@@ -106,24 +108,17 @@ class LeaderboardManager {
     }
     
     updateLeaderboard() {
-        const stats = this.getFilteredStats(this.timeRange.value);
+        const timeRange = this.timeRange.value;
         const sortBy = this.sortBy.value;
-        const activeTab = document.querySelector('.tab-button.active').dataset.tab;
-        
-        switch (activeTab) {
-            case 'general':
-                this.updateGeneralTab(stats, sortBy);
-                break;
-            case 'lifelines':
-                this.updateLifelinesTab(stats, sortBy);
-                break;
-            case 'speed':
-                this.updateSpeedTab(stats, sortBy);
-                break;
-            case 'streaks':
-                this.updateStreaksTab(stats, sortBy);
-                break;
-        }
+        const stats = this.getFilteredStats(timeRange);
+
+        // Actualizar todas las pestañas
+        this.updateGeneralTab(stats, sortBy);
+        this.updateLifelinesTab(stats, sortBy);
+        this.updateSpeedTab(stats, sortBy);
+        this.updateStreaksTab(stats, sortBy);
+        this.updateAchievementsTab(stats[0]); // Mostrar logros del jugador actual
+        this.updateHallOfFame(); // Actualizar el Hall of Fame
     }
     
     updateGeneralTab(stats, sortBy) {
@@ -242,6 +237,126 @@ class LeaderboardManager {
                 <td>${stat.totalStreaks}</td>
             </tr>
         `).join('');
+    }
+    
+    updateAchievementsTab(stats) {
+        const achievementsGrid = document.getElementById('achievementsGrid');
+        if (!achievementsGrid) return;
+
+        const unlockedAchievements = this.achievementsManager.checkAchievements(stats);
+        const progress = this.achievementsManager.getAchievementProgress(stats);
+        
+        achievementsGrid.innerHTML = Object.entries(this.achievementsManager.achievements)
+            .map(([key, achievement]) => {
+                const isUnlocked = unlockedAchievements.some(a => a.id === key);
+                const progressValue = progress[key];
+                
+                return `
+                    <div class="achievement-card ${isUnlocked ? 'unlocked' : ''}">
+                        <span class="achievement-icon">${achievement.icon}</span>
+                        <h3 class="achievement-name">${achievement.name}</h3>
+                        <p class="achievement-description">${achievement.description}</p>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: ${progressValue}%"></div>
+                        </div>
+                        <div class="achievement-progress-text">${Math.round(progressValue)}%</div>
+                    </div>
+                `;
+            })
+            .join('');
+    }
+
+    updateHallOfFame() {
+        const users = this.userManager.getAllUsers();
+        let records = {
+            highestPrize: { value: 0, holder: '', date: null },
+            longestStreak: { value: 0, holder: '', date: null },
+            fastestAnswer: { value: Infinity, holder: '', date: null },
+            mostAchievements: { value: 0, holder: '', date: null },
+            highestAccuracy: { value: 0, holder: '', date: null },
+            mostGames: { value: 0, holder: '', date: null }
+        };
+
+        users.forEach(username => {
+            const stats = this.userManager.getStats(username);
+            if (!stats) return;
+
+            // Mayor premio
+            if (stats.highestPrize > records.highestPrize.value) {
+                records.highestPrize = {
+                    value: stats.highestPrize,
+                    holder: username,
+                    date: stats.lastGame ? stats.lastGame.date : null
+                };
+            }
+
+            // Racha más larga
+            if (stats.bestStreak > records.longestStreak.value) {
+                records.longestStreak = {
+                    value: stats.bestStreak,
+                    holder: username,
+                    date: stats.lastGame ? stats.lastGame.date : null
+                };
+            }
+
+            // Respuesta más rápida
+            if (stats.fastestAnswer && stats.fastestAnswer < records.fastestAnswer.value) {
+                records.fastestAnswer = {
+                    value: stats.fastestAnswer,
+                    holder: username,
+                    date: stats.lastGame ? stats.lastGame.date : null
+                };
+            }
+
+            // Más logros
+            const achievementsCount = this.achievementsManager.checkAchievements(stats).length;
+            if (achievementsCount > records.mostAchievements.value) {
+                records.mostAchievements = {
+                    value: achievementsCount,
+                    holder: username,
+                    date: new Date().toISOString()
+                };
+            }
+
+            // Mayor precisión
+            const accuracy = stats.totalCorrect / (stats.totalCorrect + stats.totalWrong) * 100;
+            if (accuracy > records.highestAccuracy.value && stats.gamesPlayed >= 10) {
+                records.highestAccuracy = {
+                    value: accuracy,
+                    holder: username,
+                    date: stats.lastGame ? stats.lastGame.date : null
+                };
+            }
+
+            // Más partidas
+            if (stats.gamesPlayed > records.mostGames.value) {
+                records.mostGames = {
+                    value: stats.gamesPlayed,
+                    holder: username,
+                    date: stats.lastGame ? stats.lastGame.date : null
+                };
+            }
+        });
+
+        // Actualizar la UI
+        this.updateRecordCard('highestPrize', records.highestPrize, value => `${value.toLocaleString()}€`);
+        this.updateRecordCard('longestStreak', records.longestStreak, value => `${value} partidas`);
+        this.updateRecordCard('fastestAnswer', records.fastestAnswer, value => `${value.toFixed(2)}s`);
+        this.updateRecordCard('mostAchievements', records.mostAchievements, value => `${value} logros`);
+        this.updateRecordCard('highestAccuracy', records.highestAccuracy, value => `${value.toFixed(1)}%`);
+        this.updateRecordCard('mostGames', records.mostGames, value => `${value} partidas`);
+    }
+
+    updateRecordCard(recordId, record, formatValue) {
+        const valueElement = document.getElementById(`${recordId}Record`);
+        const holderElement = document.getElementById(`${recordId}Holder`);
+        const dateElement = document.getElementById(`${recordId}Date`);
+
+        if (valueElement && holderElement && dateElement) {
+            valueElement.textContent = record.value ? formatValue(record.value) : '-';
+            holderElement.textContent = record.holder || '-';
+            dateElement.textContent = record.date ? new Date(record.date).toLocaleDateString() : '-';
+        }
     }
     
     getLifelineName(code) {

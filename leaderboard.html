@@ -9,6 +9,7 @@
     <link rel="apple-touch-icon" href="favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="leaderboard.css">
+    <link rel="stylesheet" href="achievements.css">
 </head>
 <body>
     <div class="leaderboard-container">
@@ -50,6 +51,8 @@
             <button class="tab-button" data-tab="lifelines">Comodines</button>
             <button class="tab-button" data-tab="speed">Velocidad</button>
             <button class="tab-button" data-tab="streaks">Rachas</button>
+            <button class="tab-button" data-tab="achievements">Logros</button>
+            <button class="tab-button" data-tab="hall-of-fame">Salón de la Fama</button>
         </div>
 
         <div class="tab-content active" id="general">
@@ -126,6 +129,58 @@
                     <!-- Se llenará dinámicamente -->
                 </tbody>
             </table>
+        </div>
+
+        <div class="tab-content" id="achievements">
+            <div class="achievements-container">
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="hall-of-fame">
+            <div class="hall-of-fame">
+                <h2 class="hall-of-fame-title">🏆 Salón de la Fama 🏆</h2>
+                <div class="hall-of-fame-grid">
+                    <div class="record-card">
+                        <div class="record-title">Mayor Premio</div>
+                        <div class="record-value" id="highestPrizeRecord">-</div>
+                        <div class="record-holder" id="highestPrizeHolder">-</div>
+                        <div class="record-date" id="highestPrizeDate">-</div>
+                    </div>
+                    <div class="record-card">
+                        <div class="record-title">Racha Más Larga</div>
+                        <div class="record-value" id="longestStreakRecord">-</div>
+                        <div class="record-holder" id="longestStreakHolder">-</div>
+                        <div class="record-date" id="longestStreakDate">-</div>
+                    </div>
+                    <div class="record-card">
+                        <div class="record-title">Respuesta Más Rápida</div>
+                        <div class="record-value" id="fastestAnswerRecord">-</div>
+                        <div class="record-holder" id="fastestAnswerHolder">-</div>
+                        <div class="record-date" id="fastestAnswerDate">-</div>
+                    </div>
+                    <div class="record-card">
+                        <div class="record-title">Más Logros Desbloqueados</div>
+                        <div class="record-value" id="mostAchievementsRecord">-</div>
+                        <div class="record-holder" id="mostAchievementsHolder">-</div>
+                        <div class="record-date" id="mostAchievementsDate">-</div>
+                    </div>
+                    <div class="record-card">
+                        <div class="record-title">Mayor Precisión</div>
+                        <div class="record-value" id="highestAccuracyRecord">-</div>
+                        <div class="record-holder" id="highestAccuracyHolder">-</div>
+                        <div class="record-date" id="highestAccuracyDate">-</div>
+                    </div>
+                    <div class="record-card">
+                        <div class="record-title">Más Partidas Jugadas</div>
+                        <div class="record-value" id="mostGamesRecord">-</div>
+                        <div class="record-holder" id="mostGamesHolder">-</div>
+                        <div class="record-date" id="mostGamesDate">-</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

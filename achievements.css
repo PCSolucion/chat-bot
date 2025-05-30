@@ -1,0 +1,198 @@
+.achievements-container {
+    padding: 2rem;
+    background: var(--background);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.achievement-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-card.unlocked {
+    border-color: var(--primary);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+}
+
+.achievement-card.unlocked::before {
+    content: '🏆';
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+.achievement-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+    text-align: center;
+}
+
+.achievement-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--foreground);
+}
+
+.achievement-description {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.achievement-progress {
+    width: 100%;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.achievement-progress-bar {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.achievement-progress-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+/* Hall of Fame Styles */
+.hall-of-fame {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--card);
+    border-radius: 1rem;
+    border: 2px solid var(--primary);
+}
+
+.hall-of-fame-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--foreground);
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.hall-of-fame-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.record-card {
+    background: var(--background);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.record-card:hover {
+    transform: translateY(-5px);
+}
+
+.record-title {
+    font-size: 1.1rem;
+    color: var(--foreground);
+    margin-bottom: 0.5rem;
+}
+
+.record-value {
+    font-size: 2rem;
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.record-holder {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.record-date {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+}
+
+/* Animaciones */
+@keyframes unlockAnimation {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.achievement-card.just-unlocked {
+    animation: unlockAnimation 0.5s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .achievements-container {
+        padding: 1rem;
+    }
+
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hall-of-fame-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .achievement-icon {
+        font-size: 2rem;
+    }
+
+    .achievement-name {
+        font-size: 1.1rem;
+    }
+}
+
+/* Tema Oscuro */
+@media (prefers-color-scheme: dark) {
+    .achievement-card {
+        background: var(--card-dark);
+    }
+
+    .achievement-progress {
+        background: var(--accent-dark);
+    }
+
+    .hall-of-fame {
+        background: var(--card-dark);
+    }
+
+    .record-card {
+        background: var(--background-dark);
+    }
+} 
