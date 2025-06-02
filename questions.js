@@ -229,6 +229,17 @@ export const questionsBase = [
         category: "general"
     },
     {
+        question: "¿Cuál de los siguienetes artefactos viene con una perk exclusiva de JcJ?",
+        options: {
+            A: "Justicia",
+            B: "Vestiduras de vampiro",
+            C: "Caos",
+            D: "Lanzavirotes"
+        },
+        correct: "B",
+        difficulty: 2,
+    },
+    {
         question: "¿Como se llama la habilidad pasiva de la espada que permite obtener celeridad hacer un ataque crítico?",
         options: {
             A: "Castigo célere",
@@ -384,6 +395,61 @@ export const questionsBase = [
         difficulty: 2
     },
     {
+        question: "¿Cuál es el único artefacto que viene por defecto con la perk de Consciencia aguda?",
+        options: {
+            A: "Bebesangre",
+            B: "Anj",
+            C: "Banda elemental",
+            D: "Fénix"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuántos arquetipos distintos hay en New World para elegir al principio del juego?",
+        options: {
+            A: "6",
+            B: "7",
+            C: "4",
+            D: "10"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades de la manopla de vacío es compatible con gemas de amenaza o provocación?",
+        options: {
+            A: "Filo de vacío",
+            B: "Grito petrificante",
+            C: "Orbe de Podredumbre",
+            D: "Ruptura de esencia"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades de la manopla de vacío otorga Fortificación (Obtención de armadura) al portador?",
+        options: {
+            A: "Filo de vacío",
+            B: "Olvido",
+            C: "Orbe de Podredumbre",
+            D: "Ruptura de esencia"
+        },
+        correct: "A",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades de la manopla de vacío ralentiza (Reduce velocidad de movimiento que no lleva a inmovilizar) al enemigo?",
+        options: {
+            A: "Filo de vacío",
+            B: "Olvido",
+            C: "Orbe de Podredumbre",
+            D: "Atadura funesta"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
         question: "¿Como se llama el artefacto que si nos golpean deja sangrado en el enemigo?",
         options: {
             A: "Michael",
@@ -428,6 +494,72 @@ export const questionsBase = [
         difficulty: 2
     },
     {
+        question: "¿Cuál es el máximo de sal de azoth que podemos acumular fuera de los viales?",
+        options: {
+            A: "50.000",
+            B: "100.000",
+            C: "200.000",
+            D: "300.000"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿Qué rango de PVP tenemos si hemos completado 125 seguimientos de PVP (Nivel 125 de PVP)?",
+        options: {
+            A: "Plata",
+            B: "Oro",
+            C: "Platino",
+            D: "Diamante"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cómo se llama el título que obtenemos por alcalzar nivel 200 en seguimiento de PVP?",
+        options: {
+            A: "Señor de PVP",
+            B: "Leyenda de JcJ",
+            C: "Deidad de JcJ",
+            D: "Bestia de JcJ"
+        },
+        correct: "C",
+        difficulty: 1
+    },
+    {
+        question: "¿Cómo se llama la perk de las bolsas que hace que los efectos de las comidas duren más?",
+        options: {
+            A: "Consumo duradero",
+            B: "Consumo prolongado",
+            C: "Consumo eterno",
+            D: "Consumo eterno"
+        },
+        correct: "A",
+        difficulty: 1
+    },
+    {
+        question: "¿Cuál de las siguientes canciones existe en el menú de selección de canciones de New World?",
+        options: {
+            A: "Concha Satisfactoria",
+            B: "Querido señor Harrison",
+            C: "Prisa del Prospectante",
+            D: "El camino de la grieta"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes ingredientes NO hace falta para eleaborar Amanecer del Desierto?",
+        options: {
+            A: "Trozo de cactus",
+            B: "Agua",
+            C: "Miel",
+            D: "Azoth"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
         question: "¿Cuál de los siguientes nameds pertenece a la mazmorra de Amrine?",
         options: {
             A: "Zippy",
@@ -436,6 +568,28 @@ export const questionsBase = [
             D: "Benat"
         },
         correct: "A",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué bonus nos dá el fuerte de Costa de Zozobra?",
+        options: {
+            A: "Bonificación de fabricación global",
+            B: "Poner campamento sin recursos",
+            C: "Reducción de impuesto global",
+            D: "Viajes rápidos gratis"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿El fuerte de que región nos dá el buff de +10% a la cantidad de recolección ?",
+        options: {
+            A: "Costa de Zozobra",
+            B: "Arenas de Azufre",
+            C: "Cayos de Alfanje",
+            D: "Altos de Escamanegra"
+        },
+        correct: "B",
         difficulty: 2
     },
     {
@@ -912,17 +1066,6 @@ export const questionsBase = [
         difficulty: 1
     },
     {
-        question: "¿En cuál de las siguientes ciudades NO se puede recoger plátanos?",
-        options: {
-            A: "Riscos del Monarca",
-            B: "Altos de Escamanegra",
-            C: "Cayos de Alfanje",
-            D: "Tierras Salvajes Elíseas"
-        },
-        correct: "A",
-        difficulty: 1
-    },
-    {
         question: "¿Que porcentaje reduce la duración de daño con el tiempo el Amanecer del Desierto?",
         options: {
             A: "22 %",
@@ -942,17 +1085,6 @@ export const questionsBase = [
             D: "35%"
         },
         correct: "D",
-        difficulty: 1
-    },
-    {
-        question: "¿El Azufre es un recurso de Tier...?",
-        options: {
-            A: "Tier V",
-            B: "Tier II",
-            C: "Tier III",
-            D: "Tier IV"
-        },
-        correct: "C",
         difficulty: 1
     },
     {
@@ -977,6 +1109,28 @@ export const questionsBase = [
         },
         correct: "C",
         difficulty: 2
+    },
+    {
+        question: "¿A qué nivel desbloqueamos la última mejora de velocidad de montura en la profesión de Monta?",
+        options: {
+            A: "150",
+            B: "200",
+            C: "250",
+            D: "225"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "Cuál es el nivel máximo de territorio que podemos tener en el juego?",
+        options: {
+            A: "100",
+            B: "200",
+            C: "300",
+            D: "400"
+        },
+        correct: "C",
+        difficulty: 1
     },
     {
         question: "¿Quién suelta el artefacto del estoque llamado Filo de Dorgort?",
@@ -1178,6 +1332,83 @@ export const questionsBase = [
         difficulty: 1
     },
     {
+        question: "¿Cómo se llama el artefacto que nos dá un 10% más de daño siempre que tengamos celeridad?",
+        options: {
+            A: "Ojo de Gorgona",
+            B: "Aquae Rejya",
+            C: "Concentración de Acérita",
+            D: "Inductor de Gorgona"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál es el cap o límite de Ojos de gorgona dañados que podemos obtener a la semana?",
+        options: {
+            A: "60",
+            B: "100",
+            C: "90",
+            D: "50"
+        },
+        correct: "C",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál es la cantidad máxima de Materia Oscura que nos puede dar una caja de Mutada 3 en oro?",
+        options: {
+            A: "40",
+            B: "30",
+            C: "100",
+            D: "50"
+        },
+        correct: "A",
+        difficulty: 3
+    },
+    {
+        question: "¿Qué artefacto Reduce un 20 % la duración base de tus estados negativos que no sean de control de multitudes.?",
+        options: {
+            A: "Vendas para los pies de acróbata",
+            B: "Guantes de liche",
+            C: "Zapatos de cuero alados",
+            D: "Venda para la cabeza de genio"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál es el único artefacto que viene por defecto con las perk de Protección encantada y Aversión elemental?",
+        options: {
+            A: "Vendas para los pies de acróbata",
+            B: "Grebas rúnicas",
+            C: "Zapatos de cuero alados",
+            D: "Guantes de liche"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿Qué artefacto viene tiene por defecto la perk de Sanación esquiva?",
+        options: {
+            A: "Vendas para los pies de acróbata",
+            B: "Grebas rúnicas",
+            C: "Zapatos de cuero alados",
+            D: "Vestiduras de vampiro"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes materiales NO se usa para fabricas Esencia de Gorgonad?",
+        options: {
+            A: "Vendas para los pies de acróbata",
+            B: "Guantes de liche",
+            C: "Zapatos de cuero alados",
+            D: "Pertinacia"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
         question: "¿Qué porcentaje de protección elemental nos da la perk exclusiva del scutum artefacto actualmente?",
         options: {
             A: "10%",
@@ -1186,6 +1417,17 @@ export const questionsBase = [
             D: "25%"
         },
         correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿A que perk corresponde este descripción? Al atacar, infliges una acumulación de Desgarro del 4 %",
+        options: {
+            A: "Desgarro ávido",
+            B: "Desgarro desesperado",
+            C: "Encantamiento alterno",
+            D: "Acumulación demoledora"
+        },
+        correct: "D",
         difficulty: 2
     },
     {
@@ -1222,6 +1464,61 @@ export const questionsBase = [
         difficulty: 1
     },
     {
+        question: "¿Cómo se llama el recolectable que nos permite abrir la primera puerta de la mazmorra de Génesis?",
+        options: {
+            A: "Infectita",
+            B: "Plaga concentrada",
+            C: "Roca de la plaga",
+            D: "Piedra sin purificar"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿Cómo se llama el ítem de hace que salga el árbol instantáneo que debemos defender en la mazmorra de Génesis?",
+        options: {
+            A: "Semilla Infecta",
+            B: "Semilla de Azoth",
+            C: "Semilla de la plaga",
+            D: "Semilla purificada"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cómo se llama el enemigo con nombre de la habitación extra de Génesis?",
+        options: {
+            A: "O'Dus",
+            B: "Tolos",
+            C: "Kotemos",
+            D: "Morphian"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuántos enemigos debemos derrotar en Génesis para obtener el multiplicador en Génesis?",
+        options: {
+            A: "100",
+            B: "60",
+            C: "75",
+            D: "80"
+        },
+        correct: "B",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuántos recursos o gatherables tenemos que recoger en Génesis para que nos cuente ese multiplicador?",
+        options: {
+            A: "10",
+            B: "14",
+            C: "12",
+            D: "8"
+        },
+        correct: "A",
+        difficulty: 3
+    },
+    {
         question: "¿Como se llama el último jefe de la raid de Winter?",
         options: {
             A: "Constructo Invernal",
@@ -1255,7 +1552,7 @@ export const questionsBase = [
         difficulty: 1
     },
     {
-        question: "¿De que color es la barra de vida lateralde los miembros del grupo al que pertenecemos?",
+        question: "¿De que color es la barra de vida lateral de los miembros del grupo al que pertenecemos?",
         options: {
             A: "Rojo",
             B: "Azul",
@@ -1299,7 +1596,7 @@ export const questionsBase = [
         difficulty: 1
     },
     {
-        question: "¿Cuantos Sellos cromáticos podemos conseguir tras superer la raid de la Gorgona?",
+        question: "¿Cuantos Sellos cromáticos podemos conseguir tras superar la raid de la Gorgona?",
         options: {
             A: "Ninguno",
             B: "Uno",
@@ -1330,6 +1627,17 @@ export const questionsBase = [
         },
         correct: "D",
         difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes rangos de compañía NO existe en New World?",
+        options: {
+            A: "Cónsul",
+            B: "Oficial",
+            C: "Gobernador",
+            D: "Tesorero"
+        },
+        correct: "D",
+        difficulty: 1
     },
     {
         question: "¿A que elemento es más vulnerable la Baronesa Hain?",
@@ -1384,17 +1692,6 @@ export const questionsBase = [
             D: "Uno"
         },
         correct: "A",
-        difficulty: 1
-    },
-    {
-        question: "¿Typhon, el segundo jefe de la raid de la Gorgona, a cuantas personas marca en la fase de las espinas ?",
-        options: {
-            A: "Una",
-            B: "Tres",
-            C: "Ninguna",
-            D: "A todos"
-        },
-        correct: "B",
         difficulty: 1
     },
     {
@@ -1550,6 +1847,28 @@ export const questionsBase = [
         },
         correct: "D",
         difficulty: 2
+    },
+    {
+        question: "¿Cuántas casillas tiene una tarjeta de actividad del pase de Temporada?",
+        options: {
+            A: "9",
+            B: "12",
+            C: "15",
+            D: "16"
+        },
+        correct: "D",
+        difficulty: 1
+    },
+    {
+        question: "¿Completando los capítulos de Aventura del pase de temporada podemos obtener un trofeo que nos dará un buff de experiencia de Temporada. De cuánto es este buff?",
+        options: {
+            A: "5%",
+            B: "10%",
+            C: "15%",
+            D: "20%"
+        },
+        correct: "A",
+        difficulty: 3
     },
     {
         question: "¿Cual de los siguientes artefactos viene con la perk Alma de curación o Healing Heart?",
@@ -1931,7 +2250,7 @@ export const questionsBase = [
             A: "Fuego",
             B: "Alma",
             C: "Muerte",
-            D: "Fuego"
+            D: "Tierra"
         },
         correct: "B",
         difficulty: 2
@@ -2102,7 +2421,128 @@ export const questionsBase = [
         correct: "C",
         difficulty: 1
     },
-    
+    {
+        question: "¿Cuál es la cantidad máxima de atributo que nos puede dar una pieza de ropa?",
+        options: {
+            A: "32",
+            B: "36",
+            C: "38",
+            D: "45"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
+        question: "¿Además de la habilidad Tajo volador, que otra habilidad de la espada puede causar Lentitud?",
+        options: {
+            A: "Escudazo",
+            B: "Ariete",
+            C: "Torbellino",
+            D: "Alzamiento"
+        },
+        correct: "B",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades del Martillo NO tiene coraje o no puede llgar a tenerlo mediante ninguna mejora?",
+        options: {
+            A: "Senda del destino",
+            B: "Mazazo",
+            C: "Frenesí demoledor",
+            D: "Sacudida"
+        },
+        correct: "A",
+        difficulty: 2
+    },
+    {
+        question: "¿Un ataque pesado del Filo de la manopla de vacío hace daño de...?",
+        options: {
+            A: "Vacío",
+            B: "Corte",
+            C: "Estocada",
+            D: "Impacto"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Además de aplicar fortalecimiento al equipo, la habilidad de Olvido hace que...?",
+        options: {
+            A: "Si nos golpean restauramos vida",
+            B: "Si golpeamos restauramos vida",
+            C: "Si golpeamos debilitamos al enemigo",
+            D: "Si golpeamos causamos lentitud al enemigo"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades del mangual no es compatible con gemas de provocación o no provoca amenaza?",
+        options: {
+            A: "Testarazo",
+            B: "Zancadilla",
+            C: "Embestida",
+            D: "Ninguna provoca amenaza"
+        },
+        correct: "B",
+        difficulty: 1
+    },
+    {
+        question: "¿Cuál de las siguientes habilidades del Mangual NO tiene Coraje?",
+        options: {
+            A: "Aniquilación arcana",
+            B: "Vórtice arcano",
+            C: "Erupción arcana",
+            D: "Testarazo"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes artefactos nos manda hacer las mazmorras de Enéada y Profundidades para desbloquearlo?",
+        options: {
+            A: "La Carnicera",
+            B: "Filo de Dorgort",
+            C: "Congelación Letal",
+            D: "Chispa de Mjölnir"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál de los siguientes artefactos nos manda matar al Alto sacerdote Oseguera para desbloquearlo?",
+        options: {
+            A: "Inexpugnable",
+            B: "Otzi",
+            C: "Heceta",
+            D: "Trsna"
+        },
+        correct: "C",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál de los siguientes artefactos nos manda matar derrotar a Chardis para desbloquearlo?",
+        options: {
+            A: "Conductores de Azoth",
+            B: "Sombrero de mago Gris",
+            C: "Vendas para los pies de acróbata",
+            D: "Cronómetro perdido"
+        },
+        correct: "D",
+        difficulty: 3
+    },
+    {
+        question: "¿Cuál es la rareza máxima de los trofeos?",
+        options: {
+            A: "Tier II Poco común ",
+            B: "Tier III Raro",
+            C: "Tier IV Épico",
+            D: "Tier V Legendario"
+        },
+        correct: "D",
+        difficulty: 1
+    },
+
     {
         question: "¿A que tipo de daño es más débil el enemigo Matriarca Medusa?",
         options: {
