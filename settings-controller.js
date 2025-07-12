@@ -14,6 +14,7 @@ class SettingsController {
         // Elementos del formulario
         this.timerDuration = document.getElementById('timerDuration');
         this.showTimer = document.getElementById('showTimer');
+        this.gameSelection = document.getElementById('gameSelection');
         
         // Campos de premios
         this.prizeInputs = {};
@@ -93,6 +94,12 @@ class SettingsController {
             this.showTimer.checked = config.timer.showTimer !== false;
         }
         
+        // Cargar configuración del juego seleccionado
+        if (this.gameSelection) {
+            const selectedGame = localStorage.getItem('selectedGame') || 'New World Aeternum';
+            this.gameSelection.value = selectedGame;
+        }
+        
         // Cargar configuración de premios
         for (let i = 1; i <= 15; i++) {
             if (this.prizeInputs[i]) {
@@ -111,6 +118,24 @@ class SettingsController {
             showTimer: this.showTimer.checked
         };
         configManager.updateConfig('timer', timerConfig);
+        
+        // Guardar configuración del juego seleccionado
+        if (this.gameSelection) {
+            const previousGame = localStorage.getItem('selectedGame');
+            const newGame = this.gameSelection.value;
+            localStorage.setItem('selectedGame', newGame);
+            
+            // Si el juego cambió, notificar al juego principal
+            if (previousGame !== newGame) {
+                // Disparar evento personalizado para notificar el cambio de juego
+                document.dispatchEvent(new CustomEvent('gameChanged', { 
+                    detail: { 
+                        previousGame: previousGame, 
+                        newGame: newGame 
+                    } 
+                }));
+            }
+        }
         
         // Guardar configuración de premios
         const prizesConfig = {};

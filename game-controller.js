@@ -7,7 +7,7 @@ import LifelineManager from './lifeline-manager.js';
 import UIController from './ui-controller.js';
 import AudioManager from './audio-manager.js';
 import SpeechManager from './speech-manager.js';
-import { questionsBase } from './questions.js';
+import { gameQuestions } from './questions.js';
 import configManager from './config.js';
 
 class GameController {
@@ -23,7 +23,11 @@ class GameController {
         this.correctAnswers = 0;
         this.wrongAnswers = 0;
         this.currentPrize = 0;
-        this.questions = [...questionsBase]; // Copiar las preguntas para poder barajarlas
+        
+        // Cargar el juego seleccionado desde localStorage o usar el por defecto
+        const savedGame = localStorage.getItem('selectedGame');
+        this.selectedGame = savedGame && gameQuestions[savedGame] ? savedGame : "New World Aeternum";
+        this.questions = [...gameQuestions[this.selectedGame]]; // Copiar las preguntas para poder barajarlas
         
         // Inicializar managers
         this.userManager = new UserManager();
@@ -63,6 +67,53 @@ class GameController {
         
         // Referencia al settingsController (se asignará en main.js)
         this.settingsController = null;
+        
+        // Event listener para cambios de juego desde ajustes
+        document.addEventListener('gameChanged', (event) => {
+            const { newGame } = event.detail;
+            this.changeGame(newGame);
+        });
+    }
+
+    /**
+     * Cambia el juego seleccionado
+     * @param {string} gameName - Nombre del juego
+     */
+    changeGame(gameName) {
+        console.log('GameController: Cambiando juego a:', gameName);
+        
+        if (gameQuestions[gameName]) {
+            this.selectedGame = gameName;
+            this.questions = [...gameQuestions[gameName]];
+            console.log('GameController: Preguntas cargadas:', this.questions.length);
+            
+            // Guardar la selección en localStorage
+            localStorage.setItem('selectedGame', gameName);
+            
+            // Si el juego ya está iniciado, reiniciarlo con las nuevas preguntas
+            if (this.uiController && this.uiController.isGameActive()) {
+                console.log('GameController: Reiniciando juego con nuevas preguntas...');
+                this.resetGame();
+            }
+        } else {
+            console.error('GameController: Juego no encontrado:', gameName);
+        }
+    }
+
+    /**
+     * Obtiene el juego seleccionado
+     * @returns {string} Nombre del juego seleccionado
+     */
+    getSelectedGame() {
+        return this.selectedGame;
+    }
+
+    /**
+     * Obtiene la lista de juegos disponibles
+     * @returns {Array} Lista de nombres de juegos
+     */
+    getAvailableGames() {
+        return Object.keys(gameQuestions);
     }
 
     /**
@@ -203,8 +254,8 @@ class GameController {
         this.wrongAnswers = 0;
         this.currentPrize = 0;
         
-        // Cargar y agrupar las preguntas por dificultad
-        const allQuestions = [...questionsBase];
+        // Cargar y agrupar las preguntas por dificultad del juego seleccionado
+        const allQuestions = [...gameQuestions[this.selectedGame]];
         this.questionsByDifficulty = {
             1: allQuestions.filter(q => q.difficulty === 1),
             2: allQuestions.filter(q => q.difficulty === 2),

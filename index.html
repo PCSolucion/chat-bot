@@ -40,6 +40,13 @@
                         <p>Ver todas las preguntas organizadas</p>
                     </div>
                 </a>
+                <div class="menu-option" id="gameSelectorBtn">
+                    <div class="option-icon">🎮</div>
+                    <div class="option-text">
+                        <h2>Seleccionar Juego</h2>
+                        <p>Elige las preguntas del juego</p>
+                    </div>
+                </div>
                 <div class="menu-option" id="settingsBtn">
                     <div class="option-icon">⚙️</div>
                     <div class="option-text">
@@ -63,11 +70,55 @@
         </div>
     </div>
 
+    <!-- Modal para seleccionar juego -->
+    <div id="gameSelectorModal" class="modal" style="display: none;">
+        <div class="modal-content dark-theme">
+            <span class="close" id="closeGameSelector">&times;</span>
+            <h2>Seleccionar Juego</h2>
+            <div class="game-selector">
+                <p>Elige el juego del que quieres que sean las preguntas:</p>
+                <div class="game-options">
+                    <div class="game-option" data-game="New World Aeternum">
+                        <div class="game-icon">🌍</div>
+                        <div class="game-info">
+                            <h3>New World Aeternum</h3>
+                            <p>Preguntas sobre el MMORPG de Amazon Games</p>
+                        </div>
+                        <div class="game-check">✓</div>
+                    </div>
+                    <div class="game-option" data-game="Mafia 1">
+                        <div class="game-icon">🎭</div>
+                        <div class="game-info">
+                            <h3>Mafia 1</h3>
+                            <p>Preguntas sobre el clásico juego de mafia</p>
+                        </div>
+                        <div class="game-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-selector-buttons">
+                <button id="saveGameSelection" class="menu-btn">Guardar Selección</button>
+                <button id="cancelGameSelection" class="menu-btn menu-btn-secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de ajustes -->
     <div id="settingsModal" class="modal" style="display: none;">
         <div class="modal-content settings-modal">
             <span class="close" id="closeSettings">&times;</span>
             <h2>Ajustes del Juego</h2>
+            
+            <div class="settings-section">
+                <h3>Juego de Preguntas</h3>
+                <div class="setting-item">
+                    <label for="gameSelection">Seleccionar juego:</label>
+                    <select id="gameSelection">
+                        <option value="New World Aeternum">New World Aeternum</option>
+                        <option value="Mafia 1">Mafia 1</option>
+                    </select>
+                </div>
+            </div>
             
             <div class="settings-section">
                 <h3>Temporizador</h3>

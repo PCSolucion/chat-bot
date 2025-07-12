@@ -94,6 +94,13 @@ class UIController {
         this.elements.exitGameButton = document.getElementById('exitGameBtn');
         this.elements.gameSettingsButton = document.getElementById('gameSettingsBtn');
         this.elements.startTimerButton = document.getElementById('startTimerBtn');
+        
+        // Elementos del selector de juegos
+        this.elements.gameSelectorBtn = document.getElementById('gameSelectorBtn');
+        this.elements.gameSelectorModal = document.getElementById('gameSelectorModal');
+        this.elements.closeGameSelector = document.getElementById('closeGameSelector');
+        this.elements.cancelGameSelection = document.getElementById('cancelGameSelection');
+        this.elements.saveGameSelection = document.getElementById('saveGameSelection');
     }
 
     /**
@@ -180,6 +187,31 @@ class UIController {
         if (this.elements.startTimerButton) {
             this.elements.startTimerButton.addEventListener('click', () => {
                 this.callbacks.onStartTimer();
+            });
+        }
+        
+        // Event listeners para el selector de juegos
+        if (this.elements.gameSelectorBtn) {
+            this.elements.gameSelectorBtn.addEventListener('click', () => {
+                this.showGameSelector();
+            });
+        }
+
+        if (this.elements.closeGameSelector) {
+            this.elements.closeGameSelector.addEventListener('click', () => {
+                this.hideGameSelector();
+            });
+        }
+
+        if (this.elements.cancelGameSelection) {
+            this.elements.cancelGameSelection.addEventListener('click', () => {
+                this.hideGameSelector();
+            });
+        }
+
+        if (this.elements.saveGameSelection) {
+            this.elements.saveGameSelection.addEventListener('click', () => {
+                this.saveGameSelection();
             });
         }
     }
@@ -544,6 +576,88 @@ class UIController {
         const regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : url;
+    }
+
+    /**
+     * Muestra el selector de juegos
+     */
+    showGameSelector() {
+        const modal = this.elements.gameSelectorModal;
+        const gameOptions = modal.querySelectorAll('.game-option');
+        
+        // Marcar el juego actualmente seleccionado
+        gameOptions.forEach(option => {
+            option.classList.remove('selected');
+            const currentGame = localStorage.getItem('selectedGame') || 'New World Aeternum';
+            if (option.dataset.game === currentGame) {
+                option.classList.add('selected');
+            }
+        });
+
+        // Remover event listeners existentes para evitar duplicados
+        gameOptions.forEach(option => {
+            option.removeEventListener('click', this.handleGameOptionClick);
+        });
+
+        // Agregar event listeners para las opciones de juego
+        this.handleGameOptionClick = (clickedOption) => {
+            gameOptions.forEach(opt => opt.classList.remove('selected'));
+            clickedOption.classList.add('selected');
+        };
+
+        gameOptions.forEach(option => {
+            option.addEventListener('click', () => this.handleGameOptionClick(option));
+        });
+
+        modal.style.display = 'flex';
+    }
+
+    /**
+     * Oculta el selector de juegos
+     */
+    hideGameSelector() {
+        if (this.elements.gameSelectorModal) {
+            this.elements.gameSelectorModal.style.display = 'none';
+        }
+    }
+
+    /**
+     * Guarda la selección de juego
+     */
+    saveGameSelection() {
+        const selectedOption = document.querySelector('.game-option.selected');
+        console.log('UIController: Opción seleccionada:', selectedOption);
+        
+        if (selectedOption) {
+            const gameName = selectedOption.dataset.game;
+            console.log('UIController: Nombre del juego seleccionado:', gameName);
+            
+            // Guardar la selección en localStorage
+            localStorage.setItem('selectedGame', gameName);
+            
+            // Disparar evento para notificar al GameController
+            document.dispatchEvent(new CustomEvent('gameChanged', { 
+                detail: { 
+                    previousGame: localStorage.getItem('selectedGame'), 
+                    newGame: gameName 
+                } 
+            }));
+            
+            this.hideGameSelector();
+            
+            // Mostrar confirmación
+            alert(`Juego cambiado a: ${gameName}`);
+        } else {
+            console.error('UIController: No se encontró ninguna opción seleccionada');
+        }
+    }
+
+    /**
+     * Verifica si el juego está activo
+     * @returns {boolean} true si el juego está activo
+     */
+    isGameActive() {
+        return this.isGameVisible();
     }
 }
 

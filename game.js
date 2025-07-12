@@ -1,5 +1,5 @@
 // Importar las preguntas desde el archivo questions.js
-import questions from './questions.js';
+import { gameQuestions } from './questions.js';
 import UserManager from './users.js';
 
 class MillionaireGame {
@@ -11,7 +11,10 @@ class MillionaireGame {
         this.correctAnswers = 0;
         this.wrongAnswers = 0;
         this.currentPrize = 0;
-        this.questions = questions; // Usar las preguntas importadas
+        // Cargar el juego seleccionado desde localStorage o usar el por defecto
+        const savedGame = localStorage.getItem('selectedGame');
+        this.selectedGame = savedGame && gameQuestions[savedGame] ? savedGame : "New World Aeternum";
+        this.questions = gameQuestions[this.selectedGame]; // Usar las preguntas del juego seleccionado
         
         this.lifelines = {
             fifty: true,
@@ -49,6 +52,94 @@ class MillionaireGame {
         this.setupStartMenu();
     }
 
+    // Método para cambiar el juego seleccionado
+    changeGame(gameName) {
+        console.log('Cambiando juego a:', gameName);
+        console.log('Juegos disponibles:', Object.keys(gameQuestions));
+        console.log('Preguntas del juego seleccionado:', gameQuestions[gameName]);
+        
+        if (gameQuestions[gameName]) {
+            this.selectedGame = gameName;
+            this.questions = gameQuestions[gameName];
+            console.log('Preguntas cargadas:', this.questions.length);
+            
+            // Guardar la selección en localStorage
+            localStorage.setItem('selectedGame', gameName);
+            
+            // Si el juego ya está iniciado, reiniciarlo con las nuevas preguntas
+            if (document.querySelector('.game-container').style.display === 'flex') {
+                console.log('Reiniciando juego con nuevas preguntas...');
+                this.resetGame();
+            }
+        } else {
+            console.error('Juego no encontrado:', gameName);
+        }
+    }
+
+    // Método para obtener el juego seleccionado
+    getSelectedGame() {
+        return this.selectedGame;
+    }
+
+    // Método para obtener la lista de juegos disponibles
+    getAvailableGames() {
+        return Object.keys(gameQuestions);
+    }
+
+    // Método para mostrar el selector de juegos
+    showGameSelector() {
+        const modal = document.getElementById('gameSelectorModal');
+        const gameOptions = modal.querySelectorAll('.game-option');
+        
+        // Marcar el juego actualmente seleccionado
+        gameOptions.forEach(option => {
+            option.classList.remove('selected');
+            if (option.dataset.game === this.selectedGame) {
+                option.classList.add('selected');
+            }
+        });
+
+        // Remover event listeners existentes para evitar duplicados
+        gameOptions.forEach(option => {
+            option.removeEventListener('click', this.handleGameOptionClick);
+        });
+
+        // Agregar event listeners para las opciones de juego
+        this.handleGameOptionClick = (clickedOption) => {
+            gameOptions.forEach(opt => opt.classList.remove('selected'));
+            clickedOption.classList.add('selected');
+        };
+
+        gameOptions.forEach(option => {
+            option.addEventListener('click', () => this.handleGameOptionClick(option));
+        });
+
+        modal.style.display = 'flex';
+    }
+
+    // Método para ocultar el selector de juegos
+    hideGameSelector() {
+        document.getElementById('gameSelectorModal').style.display = 'none';
+    }
+
+    // Método para guardar la selección de juego
+    saveGameSelection() {
+        const selectedOption = document.querySelector('.game-option.selected');
+        console.log('Opción seleccionada:', selectedOption);
+        
+        if (selectedOption) {
+            const gameName = selectedOption.dataset.game;
+            console.log('Nombre del juego seleccionado:', gameName);
+            this.changeGame(gameName);
+            this.hideGameSelector();
+            
+            // Mostrar confirmación
+            alert(`Juego cambiado a: ${gameName}`);
+        } else {
+            console.error('No se encontró ninguna opción seleccionada');
+        }
+    }
+
     setupStartMenu() {
         const startMenuElement = document.getElementById('startMenu');
         const usernameModalElement = document.getElementById('usernameModal');
@@ -82,6 +173,29 @@ class MillionaireGame {
                 alert('Por favor, ingresa un nombre de usuario');
             }
         });
+
+        // Event listeners para el selector de juegos
+        document.getElementById('gameSelectorBtn').addEventListener('click', () => {
+            this.showGameSelector();
+        });
+
+        document.getElementById('closeGameSelector').addEventListener('click', () => {
+            this.hideGameSelector();
+        });
+
+        document.getElementById('cancelGameSelection').addEventListener('click', () => {
+            this.hideGameSelector();
+        });
+
+        document.getElementById('saveGameSelection').addEventListener('click', () => {
+            this.saveGameSelection();
+        });
+
+        // Event listener para cambios de juego desde ajustes
+        document.addEventListener('gameChanged', (event) => {
+            const { newGame } = event.detail;
+            this.changeGame(newGame);
+        });
     }
 
     startGame() {
@@ -101,8 +215,8 @@ class MillionaireGame {
         this.lifelineButtons = document.querySelectorAll('.lifeline-btn');
         this.timerElement = document.querySelector('.timer');
 
-        // Barajar las preguntas al inicio del juego
-        this.questions = this.shuffleArray([...this.questions]);
+        // Recargar y barajar las preguntas del juego seleccionado
+        this.questions = this.shuffleArray([...gameQuestions[this.selectedGame]]);
 
         this.setupEventListeners();
         this.updateMoneyTree();
@@ -716,7 +830,8 @@ class MillionaireGame {
             button.classList.remove('correct', 'wrong');
         });
 
-        this.questions = this.shuffleArray([...this.questions]);
+        // Recargar las preguntas del juego seleccionado
+        this.questions = this.shuffleArray([...gameQuestions[this.selectedGame]]);
         this.updateMoneyTree();
         this.loadQuestion();
     }
