@@ -1827,6 +1827,28 @@ export const questionsBase = [
         difficulty: 2
     },
     {
+        question: "¿Qué artefacto incluye de serie la perk Acumulacion demoledora?",
+        options: {
+            A: "Heceta",
+            B: "Fractura/Fracture",
+            C: "Oleada creciente/Crescent's Wave",
+            D: "Caos/Chaos"
+        },
+        correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Qué artefacto incluye de serie la perk Golpes de la plaga/Plagued Strikes?",
+        options: {
+            A: "Ingenio/Wit",
+            B: "Tempest Fury",
+            C: "Pestilencia",
+            D: "Martillo de choque/Hammer of Yeet"
+        },
+        correct: "D",
+        difficulty: 2
+    },
+    {
         question: "¿A qué artefacto pertenece la perk llamada Ingravidez?",
         options: {
             A: "Cólera de la naturaleza",
@@ -1846,6 +1868,17 @@ export const questionsBase = [
             D: "Baliza"
         },
         correct: "C",
+        difficulty: 2
+    },
+    {
+        question: "¿Cuál de los siguientes artefactos tienen la perk de Libertad?",
+        options: {
+            A: "Vestiduras de vampiro",
+            B: "Conductores de Azoth",
+            C: "Vendas para los pies de acróbata",
+            D: "Heraldo de la plaga"
+        },
+        correct: "D",
         difficulty: 2
     },
     {
