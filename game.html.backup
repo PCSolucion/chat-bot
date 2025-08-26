@@ -243,11 +243,9 @@
                                 
                                 // Iniciar juego con usuario
                                 if (gameController) {
-                                    // Mostrar video de intro
-                                    showIntroVideo(() => {
-                                        gameContainer.style.display = 'flex';
-                                        gameController.startGame(username);
-                                    });
+                                    // Iniciar juego directamente sin video de introducción
+                                    gameContainer.style.display = 'flex';
+                                    gameController.startGame(username);
                                 }
                             } else {
                                 alert('Por favor, ingresa un nombre de usuario');
@@ -261,12 +259,10 @@
                 // MODO INVITADO: Ir directo al video y juego
                 console.log("Iniciando modo invitado");
                 
-                // Mostrar video de introducción y luego iniciar juego
+                // Iniciar juego directamente sin video de introducción
                 if (gameController) {
-                    showIntroVideo(() => {
-                        if (gameContainer) gameContainer.style.display = 'flex';
-                        gameController.handleGuestMode();
-                    });
+                    if (gameContainer) gameContainer.style.display = 'flex';
+                    gameController.handleGuestMode();
                 }
             } else {
                 // Modo no reconocido, redirigir al menú principal
@@ -333,64 +329,7 @@
             }
         }
         
-        // Muestra el video de introducción
-        function showIntroVideo(onVideoEnd) {
-            // Crear el modal para el video
-            const videoModal = document.createElement('div');
-            videoModal.style.position = 'fixed';
-            videoModal.style.top = '0';
-            videoModal.style.left = '0';
-            videoModal.style.width = '100%';
-            videoModal.style.height = '100%';
-            videoModal.style.backgroundColor = 'rgba(0, 0, 0, 0.95)';
-            videoModal.style.zIndex = '9999';
-            videoModal.style.display = 'flex';
-            videoModal.style.justifyContent = 'center';
-            videoModal.style.alignItems = 'center';
-            
-            // Botón de saltar
-            const skipButton = document.createElement('button');
-            skipButton.textContent = 'Saltar Intro';
-            skipButton.style.position = 'absolute';
-            skipButton.style.bottom = '30px';
-            skipButton.style.padding = '12px 24px';
-            skipButton.style.backgroundColor = '#e50914';
-            skipButton.style.color = 'white';
-            skipButton.style.border = 'none';
-            skipButton.style.borderRadius = '5px';
-            skipButton.style.cursor = 'pointer';
-            skipButton.style.fontSize = '16px';
-            skipButton.style.fontWeight = 'bold';
-            skipButton.style.zIndex = '10000';
-            
-            // Crear iframe para YouTube
-            const iframe = document.createElement('iframe');
-            iframe.width = '80%';
-            iframe.height = '80%';
-            iframe.style.border = 'none';
-            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-            iframe.src = `https://www.youtube.com/embed/GAIpU21qSlo?autoplay=1&controls=0&rel=0`;
-            iframe.allowFullscreen = true;
-            
-            // Función para cerrar
-            const closeModal = () => {
-                if (document.body.contains(videoModal)) {
-                    document.body.removeChild(videoModal);
-                    if (onVideoEnd) onVideoEnd();
-                }
-            };
-            
-            // Evento para saltar
-            skipButton.addEventListener('click', closeModal);
-            
-            // Agregar elementos al modal
-            videoModal.appendChild(iframe);
-            videoModal.appendChild(skipButton);
-            document.body.appendChild(videoModal);
-            
-            // Cierre automático
-            setTimeout(closeModal, 30000);
-        }
+        // Eliminado: función de video de introducción
     </script>
 </body>
 </html> 

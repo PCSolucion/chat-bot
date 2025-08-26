@@ -1133,40 +1133,7 @@ body::before {
     opacity: 1;
 }
 
-.video-container {
-    width: 100%;
-    max-width: 800px;
-    aspect-ratio: 16 / 9;
-    border-radius: 0.375rem;
-    overflow: hidden;
-    border: 1px solid hsl(240 5% 26.9%);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-}
-
-#videoModal {
-    background-color: rgba(0, 0, 0, 0.9);
-}
-
-.skip-video-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: hsl(0 72.2% 50.6%);
-    color: hsl(0 0% 98%);
-    border: none;
-    border-radius: 0.375rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 150ms ease;
-    z-index: 3000;
-    line-height: 1.5;
-}
-
-.skip-video-btn:hover {
-    background-color: hsl(0 72.2% 40.6%);
-}
+ 
 
 /* Estilos para controles de volumen */
 .volume-slider {

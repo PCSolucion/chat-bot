@@ -127,11 +127,8 @@ class UIController {
         if (this.elements.guestModeButton) {
             this.elements.guestModeButton.addEventListener('click', () => {
                 this.hideStartMenu();
-                // Mostrar video de YouTube antes de iniciar el juego
-                this.showYoutubeVideo('https://youtu.be/GAIpU21qSlo?feature=shared', () => {
-                    // Callback que se ejecuta cuando termina el video
-                    this.callbacks.onGuestModeSelected();
-                });
+                // Iniciar juego directamente sin video de introducción
+                this.callbacks.onGuestModeSelected();
             });
         }
 
@@ -149,11 +146,8 @@ class UIController {
                 const username = this.elements.usernameInput.value.trim();
                 if (username) {
                     this.hideUsernameModal();
-                    // Mostrar video de YouTube antes de iniciar el juego
-                    this.showYoutubeVideo('https://youtu.be/GAIpU21qSlo?feature=shared', () => {
-                        // Callback que se ejecuta cuando termina el video
-                        this.callbacks.onStartGame(username);
-                    });
+                    // Iniciar juego directamente sin video de introducción
+                    this.callbacks.onStartGame(username);
                 } else {
                     alert('Por favor, ingresa un nombre de usuario');
                 }
@@ -454,128 +448,7 @@ class UIController {
                this.elements.gameContainer.style.display !== 'none';
     }
 
-    /**
-     * Muestra un video de YouTube en un modal
-     * @param {string} videoUrl - URL del video de YouTube
-     * @param {Function} onVideoEnd - Callback al finalizar el video
-     */
-    showYoutubeVideo(videoUrl, onVideoEnd) {
-        // Crear modal de video
-        const videoModal = document.createElement('div');
-        videoModal.id = 'videoModal';
-        videoModal.classList.add('modal', 'visible');
-        
-        // Extraer el ID del video de la URL
-        const videoId = this.extractYoutubeId(videoUrl);
-        document.body.appendChild(videoModal);
-        
-        // Añadir botón para saltar video
-        const skipButton = document.createElement('button');
-        skipButton.textContent = 'Saltar';
-        skipButton.className = 'skip-video-btn';
-        videoModal.appendChild(skipButton);
-        
-        // Función para cerrar el modal
-        const closeModal = () => {
-            videoModal.classList.remove('visible');
-            setTimeout(() => {
-                document.body.removeChild(videoModal);
-                if (typeof onVideoEnd === 'function') {
-                    onVideoEnd();
-                }
-            }, 300);
-        };
-        
-        // Añadir evento al botón de saltar
-        skipButton.addEventListener('click', closeModal);
-        
-        // Establecer un límite de tiempo (30 segundos) para cerrar automáticamente
-        const autoCloseTimer = setTimeout(closeModal, 30000);
-        
-        // Cargar la API de YouTube si aún no está cargada
-        if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
-            // Crear script para la API
-            const tag = document.createElement('script');
-            tag.src = 'https://www.youtube.com/iframe_api';
-            
-            // Callback cuando la API esté lista
-            window.onYouTubeIframeAPIReady = () => {
-                this.createYouTubePlayer(videoId, () => {
-                    clearTimeout(autoCloseTimer);
-                    closeModal();
-                });
-            };
-            
-            // Insertar script en el DOM
-            const firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        } else {
-            // La API ya está cargada
-            this.createYouTubePlayer(videoId, () => {
-                clearTimeout(autoCloseTimer);
-                closeModal();
-            });
-        }
-    }
     
-    /**
-     * Crea un reproductor de YouTube en el DOM
-     * @param {string} videoId - ID del video de YouTube
-     * @param {Function} closeModal - Función para cerrar el modal
-     * @returns {object} - El reproductor creado
-     */
-    createYouTubePlayer(videoId, closeModal) {
-        // Crear contenedor para el video
-        const videoContainer = document.createElement('div');
-        videoContainer.className = 'video-container';
-        
-        // Crear elemento para el reproductor
-        const playerElement = document.createElement('div');
-        playerElement.id = 'youtubePlayer';
-        videoContainer.appendChild(playerElement);
-        
-        // Agregar al modal
-        const videoModal = document.getElementById('videoModal');
-        if (videoModal) {
-            videoModal.appendChild(videoContainer);
-        }
-        
-        // Crear reproductor usando la API de YouTube
-        return new YT.Player('youtubePlayer', {
-            height: '100%',
-            width: '100%',
-            videoId: videoId,
-            playerVars: {
-                'autoplay': 1,
-                'controls': 0,
-                'modestbranding': 1,
-                'rel': 0,
-                'showinfo': 0
-            },
-            events: {
-                'onReady': (event) => {
-                    event.target.playVideo();
-                },
-                'onStateChange': (event) => {
-                    // Cuando el video termina (estado 0), cerrar el modal
-                    if (event.data === YT.PlayerState.ENDED) {
-                        closeModal();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Extrae el ID de un video de YouTube a partir de la URL
-     * @param {string} url - URL del video de YouTube
-     * @returns {string} ID del video
-     */
-    extractYoutubeId(url) {
-        const regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : url;
-    }
 }
 
 export default UIController; 
